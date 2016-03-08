@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-us" dir="ltr">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <base href="/">
+        <title><?= $this->escape($page_title) ?></title>
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+        <script src="vendor/jquery/jquery-2.2.1.min.js"></script>
+        <script src="vendor/jquery/jquery.form.min.js"></script>
+
+        <link rel="stylesheet" href="vendor/uikit/uikit.almost-flat.min.css">
+        <link rel="stylesheet" href="vendor/uikit/notify.almost-flat.min.css">
+        <script src="vendor/uikit/uikit.min.js"></script>
+        <script src="vendor/uikit/notify.min.js"></script>
+
+        <!-- Codemirror and marked dependencies -->
+        <link rel="stylesheet" href="vendor/codemirror/codemirror.css">
+        <script src="vendor/codemirror/codemirror.js"></script>
+        <script src="vendor/codemirror/markdown.js"></script>
+        <script src="vendor/codemirror/gfm.js"></script>
+        <script src="vendor/codemirror/overlay.js"></script>
+        <script src="vendor/marked/marked.js"></script>
+
+        <!-- HTML editor CSS and JavaScript -->
+        <link rel="stylesheet" href="vendor/uikit/htmleditor.almost-flat.min.css">
+        <script src="vendor/uikit/htmleditor.min.js"></script>
+
+        <script src="scripts/page/all.js"></script>
+        <script src="scripts/page/article.js"></script>
+
+        <link rel="stylesheet" href="styles/tinyblog.css">
+    </head>
+
+    <body>
+
+        <div class="uk-container uk-container-center uk-margin-top uk-margin-bottom tb-container">
+
+            <?= $main_menu ?>
+
+            <div>
+                <?= $content ?>
+            </div>
+
+            <div class="uk-panel uk-panel-box uk-margin-large-top uk-grid tb-footer">
+                <div class="uk-width-1-2 uk-text-left uk-padding-remove">
+                    Powered by:
+                    <a href="http://php.net">PHP</a>,
+                    <a href="http://mariadb.org">MariaDB</a>,
+                    <a href="https://github.com/nullptr-cc/yen2">Yen</a>,
+                    <a href="http://getuikit.com">UIkit</a>
+                </div>
+                <div class="uk-width-1-2 uk-text-right">
+                    &copy; 2016 <a href="http://www.nullptr.cc">nullptr.cc</a>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>

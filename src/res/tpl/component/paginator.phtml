@@ -1,0 +1,21 @@
+<ul class="uk-pagination tb-pagination">
+
+    <?php if ($newer): ?>
+    <li class="uk-pagination-previous">
+        <a href="<?= $newer ?>">
+            <span class="uk-icon-arrow-left"></span>
+            Newer
+        </a>
+    </li>
+    <?php endif ?>
+
+    <?php if ($older): ?>
+    <li class="uk-pagination-next">
+        <a href="<?= $older ?>">
+            Older
+            <span class="uk-icon-arrow-right"></span>
+        </a>
+    </li>
+    <?php endif ?>
+
+</ul>

@@ -1,0 +1,21 @@
+{
+    "name": "nullptr/tinyblog-yen",
+    "description": "Simple Blog application for Yen usage demonstration.",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Egor V. Derevyankin",
+            "email": "egor@nullptr.cc"
+        }
+    ],
+    "require": {
+        "michelf/php-markdown": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yen\\": ["src/lib/Yen"],
+            "Yada\\": ["src/lib/Yada"],
+            "TinyBlog\\": ["src/app/TinyBlog"]
+        }
+    }
+}

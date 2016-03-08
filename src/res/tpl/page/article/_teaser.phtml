@@ -1,0 +1,17 @@
+<article class="uk-article">
+
+    <h1 class="uk-article-title">
+        <a href="<?= $this->link_to()->article($article) ?>"><?= $article->title() ?></a>
+    </h1>
+
+    <p class="uk-article-meta">
+        Written by <?= $article->author()->nickname() ?> on <?= $article->created()->format('d F Y') ?>.
+    </p>
+
+    <?= $article->teaser() ?>
+
+    <p>
+        <a href="<?= $this->link_to()->article($article) ?>">Continue Reading</a>
+    </p>
+
+</article>

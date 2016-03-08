@@ -1,0 +1,3 @@
+/ => main
+@article /a/:article_id => /article/view
+/* => $uri

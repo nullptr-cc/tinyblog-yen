@@ -1,0 +1,9 @@
+base_url = "http://<SITE_HOST>:9988/"
+
+[db]
+dsn = "mysql:host=<DB_HOST>;dbname=<DB_NAME>;charset=utf8"
+username = "<DB_USERNAME>"
+password = "<DB_PASSWORD>"
+
+[disqus]
+siteid = "<DISQUS_SITEID>"

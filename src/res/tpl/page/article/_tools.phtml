@@ -1,0 +1,21 @@
+<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click', pos:'bottom-right'}">
+    <button class="uk-button uk-button-small">
+        <span class="uk-icon-cogs"></span>
+    </button>
+    <div class="uk-dropdown" style="max-width: 120px">
+        <ul class="uk-nav uk-nav-dropdown uk-text-left">
+            <li class="uk-dropdown-close">
+                <a href="<?= $this->link_to()->edit_article($article) ?>">
+                    <span class="uk-icon-edit"></span>
+                    Edit
+                </a>
+            </li>
+            <li class="uk-dropdown-close">
+                <a href="javascript:void(0)" data-article-delete="<?= $article->id() ?>">
+                    <span class="uk-icon-remove"></span>
+                    Delete
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

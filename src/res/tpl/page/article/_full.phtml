@@ -1,0 +1,17 @@
+<article class="uk-article">
+
+    <div class="uk-grid">
+        <h1 class="uk-article-title uk-width-9-10">
+            <?= $article->title() ?>
+        </h1>
+        <div class="uk-width-1-10 uk-text-right" id="article-tools">
+            <?= $article_tools ?>
+        </div>
+    </div>
+
+    <p class="uk-article-meta">
+        Written by <?= $article->author()->nickname() ?> on <?= $article->created()->format('d F Y') ?>.
+    </p>
+
+    <?= $article->body()->html() ?>
+</article>
