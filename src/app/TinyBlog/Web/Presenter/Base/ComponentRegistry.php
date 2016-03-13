@@ -5,7 +5,7 @@ namespace TinyBlog\Web\Presenter\Base;
 use Yen\Util\Contract\IClassResolver;
 use TinyBlog\Core\Contract\IDependencyContainer;
 
-class ComponentRegistry extends \Yen\Presenter\ComponentRegistry
+class ComponentRegistry extends \Yen\Util\CommonRegistry implements IComponents
 {
     protected $dc;
 
@@ -13,6 +13,11 @@ class ComponentRegistry extends \Yen\Presenter\ComponentRegistry
     {
         parent::__construct($resolver);
         $this->dc = $dc;
+    }
+
+    public function getComponent($name)
+    {
+        return $this->get($name);
     }
 
     protected function createExistent($classname)

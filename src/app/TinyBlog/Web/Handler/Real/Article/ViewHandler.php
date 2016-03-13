@@ -19,6 +19,9 @@ class ViewHandler extends BaseHandler
             return $this->notFound('page not found');
         };
 
-        return $this->ok('Page/Article/View', $article);
+        return $this->ok(
+            'Page/Article/View',
+            ['article' => $article]
+        );
     }
 }

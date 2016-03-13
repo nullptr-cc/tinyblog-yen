@@ -2,22 +2,24 @@
 
 namespace TinyBlog\Web\Presenter\Page;
 
-use Yen\Presenter\Contract\IComponentRegistry;
 use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Web\Presenter\Base\CommonPage;
+use TinyBlog\Web\Presenter\Base\IComponents;
 
 class Main extends CommonPage
 {
     protected $url_builder;
 
-    public function __construct(IDependencyContainer $dc, IComponentRegistry $components)
+    public function __construct(IDependencyContainer $dc, IComponents $components)
     {
         parent::__construct($dc, $components);
         $this->url_builder = $dc->getTools()->getUrlBuilder();
     }
 
-    public function present(array $articles, array $paging)
+    public function present(array $data)
     {
+        $articles = $data['articles'];
+        $paging = $data['paging'];
         $content = $this->getContent($articles, $paging);
 
         return $this->render($content);

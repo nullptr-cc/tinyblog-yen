@@ -28,6 +28,9 @@ class EditHandler extends BaseHandler
             return $this->forbidden('');
         };
 
-        return $this->ok('Page/Article/Edit', $article);
+        return $this->ok(
+            'Page/Article/Edit',
+            ['article' => $article]
+        );
     }
 }

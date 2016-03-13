@@ -17,6 +17,9 @@ class CreateHandler extends BaseHandler
 
         $article = new Article();
 
-        return $this->ok('Page/Article/Create', $article);
+        return $this->ok(
+            'Page/Article/Create',
+            ['article' => $article]
+        );
     }
 }

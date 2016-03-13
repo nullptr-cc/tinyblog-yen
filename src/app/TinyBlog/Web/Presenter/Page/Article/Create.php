@@ -7,10 +7,10 @@ use TinyBlog\Type\IArticle;
 
 class Create extends CommonPage
 {
-    public function present(IArticle $article)
+    public function present(array $data)
     {
         return $this->render(
-            $this->getContent($article),
+            $this->getContent($data['article']),
             $this->getPageTitle()
         );
     }

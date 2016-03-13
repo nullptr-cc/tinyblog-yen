@@ -27,10 +27,12 @@ class MainHandler extends BaseHandler
 
         return $this->ok(
             'Page/Main',
-            $result->articles,
             [
-                'num' => $data->getPageNum(),
-                'count' => $result->page_count
+                'articles' => $result->articles,
+                'paging' => [
+                    'num' => $data->getPageNum(),
+                    'count' => $result->page_count
+                ]
             ]
         );
     }
