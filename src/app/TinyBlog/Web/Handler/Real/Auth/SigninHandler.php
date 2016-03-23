@@ -3,12 +3,18 @@
 namespace TinyBlog\Web\Handler\Real\Auth;
 
 use Yen\Http\Contract\IServerRequest;
+use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\SignInData;
 
 class SigninHandler extends AjaxHandler
 {
-    public function onPost(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_POST];
+    }
+
+    public function handle(IServerRequest $request)
     {
         $data = SignInData::createFromRequest($request);
 

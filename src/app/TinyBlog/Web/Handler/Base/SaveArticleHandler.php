@@ -3,6 +3,7 @@
 namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Http\Contract\IServerRequest;
+use Yen\Http\Contract\IRequest;
 use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Type\IArticleInitData;
 use TinyBlog\Web\RequestData\ArticleData;
@@ -19,7 +20,12 @@ abstract class SaveArticleHandler extends AjaxHandler
 
     abstract protected function saveArticle(IArticleInitData $data);
 
-    public function onPost(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_POST];
+    }
+
+    public function handle(IServerRequest $request)
     {
         $auth_user = $this->getAuthUser();
         if (!$auth_user) {

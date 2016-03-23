@@ -3,26 +3,32 @@
 namespace TinyBlog\Web\Handler\Real;
 
 use Yen\Http\Contract\IServerRequest;
+use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\RequestData\ArticleListData;
-use \TinyBlog\Web\Handler\Base\BaseHandler;
+use \TinyBlog\Web\Handler\Base\CommonHandler;
 
-class MainHandler extends BaseHandler
+class MainHandler extends CommonHandler
 {
     const ARTICLE_PER_PAGE = 3;
 
-    public function onGet(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_GET];
+    }
+
+    public function handle(IServerRequest $request)
     {
         $data = ArticleListData::createFromRequest($request);
         $article_finder = $this->domain_registry->getArticleFinder();
 
-        try {
-            $result = $article_finder->getArticlesListRange(
-                ['created_at' => 'desc'],
-                $data->getPageNum(),
-                self::ARTICLE_PER_PAGE
-            );
-        } catch (\OutOfRangeException $ex) {
-            return $this->notFound('page not found');
+        $result = $article_finder->getArticlesListRange(
+            ['created_at' => 'desc'],
+            $data->getPageNum(),
+            self::ARTICLE_PER_PAGE
+        );
+
+        if ($result->page_count && !count($result->articles)) {
+            return $this->notFound();
         };
 
         return $this->ok(

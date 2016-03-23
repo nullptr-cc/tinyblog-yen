@@ -30,19 +30,20 @@ class ArticleFinder
     {
         $fetcher = $this->da->getArticleWithUserFetcher();
         $count = $fetcher->count();
-
         $page_count = ceil($count / $per_page);
+
+        $return = (object)['page_count' => $page_count, 'articles' => []];
+
         if ($page_num < 1 || ($page_count && $page_num > $page_count)) {
-            throw new \OutOfRangeException('invalid page number');
+            return $return;
         };
 
-        $articles = [];
         $rows = $fetcher->find($order, ($page_num - 1) * $per_page, $per_page);
         foreach ($rows as $row) {
-            $articles[] = $this->makeArticleWithUser($row);
+            $return->articles[] = $this->makeArticleWithUser($row);
         };
 
-        return (object)compact('page_count', 'articles');
+        return $return;
     }
 
     protected function makeArticleWithUser(array $data)

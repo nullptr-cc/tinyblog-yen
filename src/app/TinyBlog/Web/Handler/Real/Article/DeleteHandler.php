@@ -3,12 +3,18 @@
 namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
+use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
 
 class DeleteHandler extends AjaxHandler
 {
-    public function onPost(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_POST];
+    }
+
+    public function handle(IServerRequest $request)
     {
         $data = ArticleDeleteData::createFromRequest($request);
         $finder = $this->domain_registry->getArticleFinder();

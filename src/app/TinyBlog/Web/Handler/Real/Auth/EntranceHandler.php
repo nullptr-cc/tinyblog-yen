@@ -3,11 +3,17 @@
 namespace TinyBlog\Web\Handler\Real\Auth;
 
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\Base\BaseHandler;
+use Yen\Http\Contract\IRequest;
+use TinyBlog\Web\Handler\Base\CommonHandler;
 
-class EntranceHandler extends BaseHandler
+class EntranceHandler extends CommonHandler
 {
-    public function onGet(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_GET];
+    }
+
+    public function handle(IServerRequest $request)
     {
         if ($this->authenticator->getAuthUser()) {
             return $this->forbidden('Already signed in');

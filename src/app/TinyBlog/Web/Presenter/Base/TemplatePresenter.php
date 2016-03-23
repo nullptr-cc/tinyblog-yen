@@ -4,24 +4,20 @@ namespace TinyBlog\Web\Presenter\Base;
 
 use Yen\Renderer\Contract\ITemplateRenderer;
 
-class TemplatePresenter extends \Yen\Presenter\TemplatePresenter
+class TemplatePresenter
 {
+    protected $renderer;
     protected $components;
 
     public function __construct(ITemplateRenderer $renderer, IComponents $components)
     {
-        parent::__construct($renderer);
+        $this->renderer = $renderer;
         $this->components = $components;
     }
 
-    public function errorNotFound()
+    public function present($cname, array $data = [])
     {
-        $content = $this->render('Error/NotFound', []);
-        return parent::errorNotFound()->withBody($content);
-    }
-
-    protected function render($cname, array $params)
-    {
-        return $this->components->getComponent($cname)->present($params);
+        $component = $this->components->getComponent($cname);
+        return $component->present($data);
     }
 }

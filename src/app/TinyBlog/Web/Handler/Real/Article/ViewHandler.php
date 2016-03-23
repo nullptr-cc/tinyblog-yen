@@ -3,12 +3,18 @@
 namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\Base\BaseHandler;
+use Yen\Http\Contract\IRequest;
+use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Web\RequestData\ArticleViewData;
 
-class ViewHandler extends BaseHandler
+class ViewHandler extends CommonHandler
 {
-    public function onGet(IServerRequest $request)
+    public function getAllowedMethods()
+    {
+        return [IRequest::METHOD_GET];
+    }
+
+    public function handle(IServerRequest $request)
     {
         $data = ArticleViewData::createFromRequest($request);
         $finder = $this->domain_registry->getArticleFinder();
@@ -16,7 +22,7 @@ class ViewHandler extends BaseHandler
         try {
             $article = $finder->getArticle($data->getArticleId());
         } catch (\InvalidArgumentException $ex) {
-            return $this->notFound('page not found');
+            return $this->notFound();
         };
 
         return $this->ok(

@@ -2,8 +2,11 @@
 
 namespace TinyBlog\Web;
 
-use Yen\Http;
+use Yen\Http\Contract\IResponse;
+use Yen\Http\ServerRequest;
+use Yen\Http\Response;
 use Yen\Settings\Contract\ISettings;
+use Exception;
 
 class Application
 {
@@ -16,19 +19,22 @@ class Application
 
     public function run()
     {
+        $deps = $this->createDependencyContainer();
         $request = $this->createServerRequest();
 
         try {
-            $fc = $this->createFrontController();
+            $fc = $this->createFrontController($deps);
+            $deps->getSession()->resume($request);
             $response = $fc->processRequest($request);
-        } catch (\Exception $error) {
+            $deps->getSession()->suspend();
+        } catch (Exception $error) {
             $response = $this->createErrorResponse($error);
         };
 
         return $this->emitHttpResponse($response);
     }
 
-    protected function emitHttpResponse(Http\Contract\IResponse $response)
+    protected function emitHttpResponse(IResponse $response)
     {
         while (ob_get_level()) {
             ob_end_clean();
@@ -41,7 +47,7 @@ class Application
         printf('%s', $response->getBody());
     }
 
-    protected function createErrorResponse(\Exception $error)
+    protected function createErrorResponse(Exception $error)
     {
         $body = sprintf(
             "%s with '%s' in %s:%d\n%s",
@@ -52,7 +58,7 @@ class Application
             $error->getTraceAsString()
         );
 
-        return new \Yen\Http\Response(
+        return new Response(
             500,
             ['Content-Type' => 'text/plain;charset=utf-8'],
             $body
@@ -64,10 +70,8 @@ class Application
         return new \TinyBlog\Core\DependencyContainer($this->settings);
     }
 
-    protected function createFrontController()
+    protected function createFrontController($deps)
     {
-        $deps = $this->createDependencyContainer();
-
         return new \Yen\Core\FrontController(
             $deps->getRouter(),
             $deps->getHandlerRegistry()
@@ -76,6 +80,6 @@ class Application
 
     protected function createServerRequest()
     {
-        return new Http\ServerRequest($_SERVER, $_GET, $_POST, $_COOKIE, Http\ServerRequest::fillFiles($_FILES));
+        return new ServerRequest($_SERVER, $_GET, $_POST, $_COOKIE, ServerRequest::fillFiles($_FILES));
     }
 }

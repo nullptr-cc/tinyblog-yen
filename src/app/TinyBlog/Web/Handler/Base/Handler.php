@@ -2,12 +2,14 @@
 
 namespace TinyBlog\Web\Handler\Base;
 
-use Yen\Http\Contract\IServerRequest;
-use Yen\Http\Contract\IResponse;
+use Yen\Handler\Contract\IHandler;
+use Yen\Handler\HandlerResponseHelpers;
 use TinyBlog\Core\Contract\IDependencyContainer;
 
-abstract class BaseHandler extends \Yen\Handler\Handler
+abstract class Handler implements IHandler
 {
+    use HandlerResponseHelpers;
+
     protected $presenter;
     protected $url_builder;
     protected $session;
@@ -21,26 +23,6 @@ abstract class BaseHandler extends \Yen\Handler\Handler
         $this->session = $dc->getSession();
         $this->authenticator = $dc->getUserAuthenticator();
         $this->domain_registry = $dc->getDomainRegistry();
-    }
-
-    protected function beforeHandle(IServerRequest $request)
-    {
-        $this->session->resume($request);
-    }
-
-    protected function afterHandle(IServerRequest $request, IResponse $response)
-    {
-        $this->session->suspend();
-    }
-
-    protected function getPresenter()
-    {
-        return $this->presenter;
-    }
-
-    protected function getErrorPresenter()
-    {
-        return $this->presenter;
     }
 
     protected function getAuthUser()

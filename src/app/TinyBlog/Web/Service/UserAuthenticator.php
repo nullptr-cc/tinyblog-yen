@@ -2,7 +2,7 @@
 
 namespace TinyBlog\Web\Service;
 
-use Yen\Web\Session\Contract\ISession;
+use Yen\Session\Contract\ISession;
 use TinyBlog\Domain\Service\UserFinder;
 use TinyBlog\Type\IUser;
 

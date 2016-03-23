@@ -46,6 +46,11 @@ class DependencyContainer implements Contract\IDependencyContainer
         return $this->lazy('json_presenter', [$this, 'makeJsonPresenter']);
     }
 
+    public function getJsonRenderer()
+    {
+        return $this->lazy('json_renderer', [$this, 'makeJsonRenderer']);
+    }
+
     public function getDataAccessRegistry()
     {
         return $this->lazy('data_access_registry', [$this, 'makeDataAccessRegistry']);
@@ -100,7 +105,7 @@ class DependencyContainer implements Contract\IDependencyContainer
 
     protected function makeHtmlRenderer()
     {
-        return new \Yen\Renderer\HtmlRenderer(
+        return new \Yen\Renderer\HtmlTemplateRenderer(
             $this->settings->get('templates'),
             $this->makeRendererPluginRegistry()
         );
@@ -123,6 +128,11 @@ class DependencyContainer implements Contract\IDependencyContainer
         return new \Yen\Presenter\DataPresenter(
             new \Yen\Renderer\JsonRenderer()
         );
+    }
+
+    protected function makeJsonRenderer()
+    {
+        return new \Yen\Renderer\JsonRenderer();
     }
 
     protected function makeSqlDriver()
@@ -158,7 +168,7 @@ class DependencyContainer implements Contract\IDependencyContainer
 
     protected function makeSession()
     {
-        return new \Yen\Web\Session\Session();
+        return new \Yen\Session\Session();
     }
 
     protected function makeUserAuthenticator()
