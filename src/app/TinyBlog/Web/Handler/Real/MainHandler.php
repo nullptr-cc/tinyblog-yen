@@ -5,7 +5,7 @@ namespace TinyBlog\Web\Handler\Real;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\RequestData\ArticleListData;
-use \TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\CommonHandler;
 
 class MainHandler extends CommonHandler
 {
@@ -19,7 +19,7 @@ class MainHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleListData::createFromRequest($request);
-        $article_finder = $this->domain_registry->getArticleFinder();
+        $article_finder = $this->domain->getArticleFinder();
 
         $result = $article_finder->getArticlesListRange(
             ['created_at' => 'desc'],

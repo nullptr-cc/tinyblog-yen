@@ -2,21 +2,23 @@
 
 namespace TinyBlog\Web\Presenter\Base;
 
-use TinyBlog\Core\Contract\IDependencyContainer;
+use TinyBlog\Web\WebRegistry;
 
 abstract class BaseComponent
 {
-    protected $renderer;
+    protected $web;
     protected $components;
+    protected $renderer;
     protected $authenticator;
     protected $settings;
 
-    public function __construct(IDependencyContainer $dc, IComponents $components)
+    public function __construct(WebRegistry $web, ComponentRegistry $components)
     {
-        $this->renderer = $dc->getHtmlRenderer();
+        $this->web = $web;
         $this->components = $components;
-        $this->authenticator = $dc->getUserAuthenticator();
-        $this->settings = $dc->getSettings();
+        $this->renderer = $web->getHtmlRenderer();
+        $this->authenticator = $web->getUserAuthenticator();
+        $this->settings = $web->getSettings();
     }
 
     public function __invoke(...$args)

@@ -3,16 +3,16 @@
 namespace TinyBlog\Web\Presenter\Base;
 
 use Yen\Util\Contract\IClassResolver;
-use TinyBlog\Core\Contract\IDependencyContainer;
+use TinyBlog\Web\WebRegistry;
 
 class PluginRegistry extends \Yen\Util\PluginRegistry
 {
-    protected $deps;
+    protected $web;
 
-    public function __construct(IDependencyContainer $deps, IClassResolver $resolver)
+    public function __construct(WebRegistry $web, IClassResolver $resolver)
     {
         parent::__construct($resolver);
-        $this->deps = $deps;
+        $this->web = $web;
     }
 
     protected function make($name)
@@ -22,7 +22,7 @@ class PluginRegistry extends \Yen\Util\PluginRegistry
 
     protected function createExistent($classname)
     {
-        return new $classname($this->deps);
+        return new $classname($this->web);
     }
 
     protected function snakeToCamel($string)

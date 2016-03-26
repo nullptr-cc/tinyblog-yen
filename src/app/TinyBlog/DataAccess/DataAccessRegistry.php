@@ -2,15 +2,18 @@
 
 namespace TinyBlog\DataAccess;
 
-use Yada\Driver;
+use Yen\Settings\Contract\ISettings;
+use Yada\Driver as YadaDriver;
 
 class DataAccessRegistry
 {
+    protected $settings;
     protected $sql_driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(ISettings $settings)
     {
-        $this->sql_driver = $sql_driver;
+        $this->settings = $settings;
+        $this->sql_driver = $this->makeSqlDriver();
     }
 
     public function getArticleSaver()
@@ -26,5 +29,14 @@ class DataAccessRegistry
     public function getUserFetcher()
     {
         return new User\UserFetcher($this->sql_driver);
+    }
+
+    protected function makeSqlDriver()
+    {
+        return new YadaDriver(
+            $this->settings->get('dsn'),
+            $this->settings->get('username'),
+            $this->settings->get('password')
+        );
     }
 }

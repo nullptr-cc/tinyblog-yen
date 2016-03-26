@@ -15,7 +15,7 @@ class EntranceHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        if ($this->authenticator->getAuthUser()) {
+        if ($this->getAuthUser()) {
             return $this->forbidden('Already signed in');
         };
 

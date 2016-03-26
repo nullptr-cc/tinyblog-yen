@@ -1,12 +1,13 @@
 <?php
 
-namespace TinyBlog\Domain\Validator;
+namespace TinyBlog\Web\Service;
 
-use TinyBlog\Type\IArticleInitData;
+use TinyBlog\Web\RequestData\ArticleData;
+use TinyBlog\Type\ValidationResult;
 
-class ArticleValidator
+class ArticleDataValidator
 {
-    public function validate(IArticleInitData $data)
+    public function validate(ArticleData $data)
     {
         $errors = [];
 
@@ -18,6 +19,6 @@ class ArticleValidator
             $errors['body'] = 'empty body';
         };
 
-        return new Result(!count($errors), $errors);
+        return new ValidationResult(!count($errors), $errors);
     }
 }

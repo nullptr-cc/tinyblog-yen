@@ -4,10 +4,9 @@ namespace TinyBlog\Web\RequestData;
 
 use Yen\Util\Extractor;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Type\IArticleInitData;
 use DateTimeInterface;
 
-class ArticleData implements IArticleInitData
+class ArticleData
 {
     protected $article_id;
     protected $title;
@@ -61,5 +60,15 @@ class ArticleData implements IArticleInitData
             $this->body,
             $created_at
         );
+    }
+
+    public function dump()
+    {
+        return [
+            'article_id' => $this->article_id,
+            'title' => $this->title,
+            'body' => $this->body,
+            'created_at' => $this->created_at
+        ];
     }
 }

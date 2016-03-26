@@ -6,19 +6,30 @@ abstract class CommonHandler extends Handler
 {
     protected function ok($component, array $data = [])
     {
-        $doc = $this->presenter->present($component, $data);
+        $doc = $this->getHtmlComponent($component)->present($data);
         return $this->responseOk($doc);
+    }
+
+    protected function error()
+    {
+        $doc = $this->getHtmlComponent('Error/Internal')->present();
+        return $this->responseNotFound($doc);
     }
 
     protected function notFound()
     {
-        $doc = $this->presenter->present('Error/NotFound');
+        $doc = $this->getHtmlComponent('Error/NotFound')->present();
         return $this->responseNotFound($doc);
     }
 
     protected function forbidden()
     {
-        $doc = $this->presenter->present('Error/Forbidden');
+        $doc = $this->getHtmlComponent('Error/Forbidden')->present();
         return $this->responseForbidden($doc);
+    }
+
+    protected function getHtmlComponent($name)
+    {
+        return $this->web->getHtmlComponents()->getComponent($name);
     }
 }

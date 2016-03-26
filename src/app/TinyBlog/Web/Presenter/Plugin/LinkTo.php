@@ -3,14 +3,16 @@
 namespace TinyBlog\Web\Presenter\Plugin;
 
 use Yen\Http\Uri;
-use TinyBlog\Core\Contract\IDependencyContainer;
-use TinyBlog\Type\IArticle;
+use TinyBlog\Web\WebRegistry;
+use TinyBlog\Type\Article;
 
 class LinkTo
 {
-    public function __construct(IDependencyContainer $dc)
+    protected $url_builder;
+
+    public function __construct(WebRegistry $web)
     {
-        $this->url_builder = $dc->getTools()->getUrlBuilder();
+        $this->url_builder = $web->getUrlBuilder();
     }
 
     public function __invoke()
@@ -23,12 +25,12 @@ class LinkTo
         return $this->url_builder->buildMainPageUrl();
     }
 
-    public function article(IArticle $article)
+    public function article(Article $article)
     {
         return $this->url_builder->buildArticleUrl($article);
     }
 
-    public function edit_article(IArticle $article)
+    public function edit(Article $article)
     {
         return $this->url_builder->build(
             Uri::createFromString('/article/edit'),

@@ -3,7 +3,7 @@
 namespace TinyBlog\DataAccess\Article;
 
 use Yada\Driver;
-use TinyBlog\Type\IArticle;
+use TinyBlog\Type\Article;
 
 class ArticleSaver
 {
@@ -14,7 +14,7 @@ class ArticleSaver
         $this->sql_driver = $sql_driver;
     }
 
-    public function insertArticle(IArticle $article)
+    public function insertArticle(Article $article)
     {
         $sql =
             'insert into `article`
@@ -37,7 +37,7 @@ class ArticleSaver
         ];
     }
 
-    public function updateArticle(IArticle $article)
+    public function updateArticle(Article $article)
     {
         $sql =
             'update `article`
@@ -59,7 +59,7 @@ class ArticleSaver
         return true;
     }
 
-    public function deleteArticle(IArticle $article)
+    public function deleteArticle(Article $article)
     {
         $sql = 'delete from `article` where `id` = :id';
 

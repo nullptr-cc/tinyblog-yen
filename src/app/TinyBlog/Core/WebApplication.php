@@ -1,14 +1,15 @@
 <?php
 
-namespace TinyBlog\Web;
+namespace TinyBlog\Core;
 
 use Yen\Http\Contract\IResponse;
 use Yen\Http\ServerRequest;
 use Yen\Http\Response;
 use Yen\Settings\Contract\ISettings;
+use Yen\Core\FrontController;
 use Exception;
 
-class Application
+class WebApplication
 {
     protected $settings;
 
@@ -19,14 +20,14 @@ class Application
 
     public function run()
     {
-        $deps = $this->createDependencyContainer();
+        $deps = $this->createDependencies();
         $request = $this->createServerRequest();
 
         try {
             $fc = $this->createFrontController($deps);
-            $deps->getSession()->resume($request);
+            $deps->getWeb()->getSession()->resume($request);
             $response = $fc->processRequest($request);
-            $deps->getSession()->suspend();
+            $deps->getWeb()->getSession()->suspend();
         } catch (Exception $error) {
             $response = $this->createErrorResponse($error);
         };
@@ -65,16 +66,16 @@ class Application
         );
     }
 
-    protected function createDependencyContainer()
+    protected function createDependencies()
     {
-        return new \TinyBlog\Core\DependencyContainer($this->settings);
+        return new Dependencies($this->settings);
     }
 
     protected function createFrontController($deps)
     {
-        return new \Yen\Core\FrontController(
-            $deps->getRouter(),
-            $deps->getHandlerRegistry()
+        return new FrontController(
+            $deps->getWeb()->getRouter(),
+            $deps->getWeb()->getHandlerRegistry()
         );
     }
 

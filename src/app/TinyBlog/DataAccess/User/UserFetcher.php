@@ -3,41 +3,61 @@
 namespace TinyBlog\DataAccess\User;
 
 use Yada\Driver;
+use TinyBlog\Type\User;
 
 class UserFetcher
 {
-    protected $sql_driver;
+    protected $driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(Driver $driver)
     {
-        $this->sql_driver = $sql_driver;
+        $this->driver = $driver;
     }
 
-    public function findById($id)
+    /**
+     * @return User[]
+     */
+    public function fetchById($id)
     {
         $sql = 'select * from user where id = :id';
 
-        $row =
-            $this->sql_driver
+        $stmt =
+            $this->driver
                  ->prepare($sql)
                  ->bindValue(':id', $id, \PDO::PARAM_INT)
-                 ->execute()
-                 ->fetch();
+                 ->execute();
 
-        return $row;
+        $result = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $result[] = $this->makeUser($row);
+        };
+
+        return $result;
     }
 
-    public function findByUsername($username)
+    /**
+     * @return User[]
+     */
+    public function fetchByUsername($username)
     {
         $sql = 'select * from user where username = :username';
 
-        $row =
-            $this->sql_driver
+        $stmt =
+            $this->driver
                  ->prepare($sql)
                  ->bindValue(':username', $username, \PDO::PARAM_STR)
-                 ->execute()
-                 ->fetch();
+                 ->execute();
 
-        return $row;
+        $result = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $result[] = $this->makeUser($row);
+        };
+
+        return $result;
+    }
+
+    protected function makeUser(array $raw)
+    {
+        return new User($raw);
     }
 }

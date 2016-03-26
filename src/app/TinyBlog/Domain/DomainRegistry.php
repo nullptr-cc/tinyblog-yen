@@ -2,33 +2,40 @@
 
 namespace TinyBlog\Domain;
 
-use TinyBlog\Core\Contract\IDependencyContainer;
+use TinyBlog\DataAccess\DataAccessRegistry;
+use TinyBlog\Tool\ToolRegistry;
+use TinyBlog\Domain\Article\ArticleFinder;
+use TinyBlog\Domain\Article\ArticleEditor;
+use TinyBlog\Domain\Article\ArticleValidator;
+use TinyBlog\Domain\User\UserFinder;
 
 class DomainRegistry
 {
-    protected $dc;
+    protected $dar;
+    protected $tools;
 
-    public function __construct(IDependencyContainer $dc)
+    public function __construct(DataAccessRegistry $dar, ToolRegistry $tools)
     {
-        $this->dc = $dc;
+        $this->dar = $dar;
+        $this->tools = $tools;
     }
 
     public function getArticleFinder()
     {
-        return new Service\ArticleFinder($this->dc->getDataAccessRegistry());
+        return new ArticleFinder($this->dar);
     }
 
     public function getUserFinder()
     {
-        return new Service\UserFinder($this->dc->getDataAccessRegistry());
+        return new UserFinder($this->dar);
     }
 
     public function getArticleEditor()
     {
-        return new Service\ArticleEditor(
-            $this->dc->getDataAccessRegistry()->getArticleSaver(),
-            $this->dc->getTools()->getMarkdownTransformer(),
-            $this->dc->getTools()->getTeaserMaker()
+        return new ArticleEditor(
+            $this->dar->getArticleSaver(),
+            $this->tools->getMarkdownTransformer(),
+            $this->tools->getTeaserMaker()
         );
     }
 }

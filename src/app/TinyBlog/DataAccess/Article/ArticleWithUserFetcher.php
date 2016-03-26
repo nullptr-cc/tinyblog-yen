@@ -3,6 +3,10 @@
 namespace TinyBlog\DataAccess\Article;
 
 use Yada\Driver;
+use TinyBlog\Type\Article;
+use TinyBlog\Type\User;
+use TinyBlog\Type\Content;
+use DateTimeImmutable;
 
 class ArticleWithUserFetcher
 {
@@ -26,7 +30,7 @@ class ArticleWithUserFetcher
                  ->execute()
                  ->fetch();
 
-        return $row;
+        return $this->makeArticleWithUser($row);
     }
 
     public function count()
@@ -45,7 +49,13 @@ class ArticleWithUserFetcher
             $this->makeLimitString($skip, $limit)
         );
 
-        return $this->sql_driver->query($sql)->fetchAll();
+        $rows = $this->sql_driver->query($sql)->fetchAll();
+        $articles = [];
+        foreach ($rows as $row) {
+            $articles[] = $this->makeArticleWithUser($row);
+        };
+
+        return $articles;
     }
 
     protected function makeOrderString(array $order)
@@ -69,5 +79,24 @@ class ArticleWithUserFetcher
         };
 
         return sprintf('limit %d, %d', $skip, $limit);
+    }
+
+    protected function makeArticleWithUser(array $data)
+    {
+        $author = new User([
+            'id' => $data['author_id'],
+            'nickname' => $data['nickname']
+        ]);
+
+        $article = new Article([
+            'id' => $data['id'],
+            'author' => $author,
+            'title' => $data['title'],
+            'body' => new Content($data['body_raw'], $data['body_html']),
+            'teaser' => $data['teaser'],
+            'created_at' => new DateTimeImmutable($data['created_at'] . 'Z')
+        ]);
+
+        return $article;
     }
 }

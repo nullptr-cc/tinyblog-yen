@@ -3,8 +3,8 @@
 namespace TinyBlog\Web\Service;
 
 use Yen\Session\Contract\ISession;
-use TinyBlog\Domain\Service\UserFinder;
-use TinyBlog\Type\IUser;
+use TinyBlog\Domain\User\UserFinder;
+use TinyBlog\Type\User;
 
 class UserAuthenticator
 {
@@ -27,7 +27,7 @@ class UserAuthenticator
         return $user;
     }
 
-    public function setAuthUser(IUser $user)
+    public function setAuthUser(User $user)
     {
         $this->session->getStorage('auth')->set('user_id', $user->getId());
 

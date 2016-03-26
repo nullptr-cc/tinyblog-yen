@@ -1,13 +1,10 @@
 <?php
 
-namespace TinyBlog\Domain\Model;
+namespace TinyBlog\Type;
 
-use TinyBlog\Type\IArticle;
-use TinyBlog\Type\IUser;
-use TinyBlog\Type\Content;
 use DateTimeInterface;
 
-class Article implements IArticle
+class Article
 {
     protected $id;
     protected $author;
@@ -24,6 +21,8 @@ class Article implements IArticle
 
         if (isset($init_data['author'])) {
             $this->setAuthor($init_data['author']);
+        } else {
+            $this->setAuthor(new User());
         };
 
         if (isset($init_data['title'])) {
@@ -80,7 +79,7 @@ class Article implements IArticle
         $this->id = intval($id);
     }
 
-    protected function setAuthor(IUser $author)
+    protected function setAuthor(User $author)
     {
         $this->author = $author;
     }
@@ -110,7 +109,7 @@ class Article implements IArticle
         return $this->with(['id' => $id]);
     }
 
-    public function withAuthor(IUser $author)
+    public function withAuthor(User $author)
     {
         return $this->with(['user' => $author]);
     }

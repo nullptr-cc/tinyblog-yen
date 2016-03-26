@@ -2,20 +2,10 @@
 
 namespace TinyBlog\Web\Presenter\Page;
 
-use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Web\Presenter\Base\CommonPage;
-use TinyBlog\Web\Presenter\Base\IComponents;
 
 class Main extends CommonPage
 {
-    protected $url_builder;
-
-    public function __construct(IDependencyContainer $dc, IComponents $components)
-    {
-        parent::__construct($dc, $components);
-        $this->url_builder = $dc->getTools()->getUrlBuilder();
-    }
-
     public function present(array $data)
     {
         $articles = $data['articles'];
@@ -31,7 +21,7 @@ class Main extends CommonPage
             return $this->renderer->render('page/empty_main', []);
         };
 
-        $base_url = $this->url_builder->buildMainPageUrl();
+        $base_url = $this->web->getUrlBuilder()->buildMainPageUrl();
         $paginator = $this->component('Paginator');
 
         return $this->renderer->render(

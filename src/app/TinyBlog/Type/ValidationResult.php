@@ -1,8 +1,8 @@
 <?php
 
-namespace TinyBlog\Domain\Validator;
+namespace TinyBlog\Type;
 
-class Result
+class ValidationResult
 {
     protected $valid;
     protected $errors;

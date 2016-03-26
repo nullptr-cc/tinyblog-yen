@@ -17,8 +17,8 @@ class DeleteHandler extends AjaxHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleDeleteData::createFromRequest($request);
-        $finder = $this->domain_registry->getArticleFinder();
-        $editor = $this->domain_registry->getArticleEditor();
+        $finder = $this->domain->getArticleFinder();
+        $editor = $this->domain->getArticleEditor();
 
         try {
             $article = $finder->getArticle($data->getArticleId());
@@ -30,7 +30,7 @@ class DeleteHandler extends AjaxHandler
         };
 
         return $this->ok([
-            'redirect_url' => $this->url_builder->buildMainPageUrl()
+            'redirect_url' => $this->web->getUrlBuilder()->buildMainPageUrl()
         ]);
     }
 }

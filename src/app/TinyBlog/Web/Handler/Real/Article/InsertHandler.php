@@ -3,16 +3,16 @@
 namespace TinyBlog\Web\Handler\Real\Article;
 
 use TinyBlog\Web\Handler\Base\SaveArticleHandler;
-use TinyBlog\Type\IArticleInitData;
+use TinyBlog\Web\RequestData\ArticleData;
 
 class InsertHandler extends SaveArticleHandler
 {
-    protected function saveArticle(IArticleInitData $data)
+    protected function saveArticle(ArticleData $data)
     {
-        $editor = $this->domain_registry->getArticleEditor();
+        $editor = $this->domain->getArticleEditor();
 
         return $editor->createArticle(
-            $data->withCreatedAt(new \DateTimeImmutable()),
+            $data->withCreatedAt(new \DateTimeImmutable())->dump(),
             $this->getAuthUser()
         );
     }

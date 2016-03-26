@@ -3,16 +3,16 @@
 namespace TinyBlog\Web\Handler\Real\Article;
 
 use TinyBlog\Web\Handler\Base\SaveArticleHandler;
-use TinyBlog\Type\IArticleInitData;
+use TinyBlog\Web\RequestData\ArticleData;
 
 class UpdateHandler extends SaveArticleHandler
 {
-    protected function saveArticle(IArticleInitData $data)
+    protected function saveArticle(ArticleData $data)
     {
-        $finder = $this->domain_registry->getArticleFinder();
-        $editor = $this->domain_registry->getArticleEditor();
+        $finder = $this->domain->getArticleFinder();
+        $editor = $this->domain->getArticleEditor();
         $article = $finder->getArticle($data->getArticleId());
 
-        return $editor->updateArticle($article, $data);
+        return $editor->updateArticle($article, $data->dump());
     }
 }

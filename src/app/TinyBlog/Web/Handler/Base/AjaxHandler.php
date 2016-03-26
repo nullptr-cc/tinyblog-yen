@@ -2,22 +2,29 @@
 
 namespace TinyBlog\Web\Handler\Base;
 
-use TinyBlog\Core\Contract\IDependencyContainer;
+use TinyBlog\Web\WebRegistry;
+use TinyBlog\Domain\DomainRegistry;
 
 abstract class AjaxHandler extends Handler
 {
     protected $json_renderer;
 
-    public function __construct(IDependencyContainer $dc)
+    public function __construct(WebRegistry $web, DomainRegistry $domain)
     {
-        parent::__construct($dc);
-        $this->json_renderer = $dc->getJsonRenderer();
+        parent::__construct($web, $domain);
+        $this->json_renderer = $web->getJsonRenderer();
     }
 
     protected function ok($data)
     {
         $doc = $this->json_renderer->render($data);
         return $this->responseOk($doc);
+    }
+
+    protected function error($message)
+    {
+        $doc = $this->json_renderer->render(['msg' => $message]);
+        return $this->responseError($doc);
     }
 
     protected function notFound($message)

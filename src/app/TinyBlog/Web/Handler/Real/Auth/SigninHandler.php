@@ -17,20 +17,21 @@ class SigninHandler extends AjaxHandler
     public function handle(IServerRequest $request)
     {
         $data = SignInData::createFromRequest($request);
+        $authenticator = $this->web->getUserAuthenticator();
 
-        if ($this->authenticator->getAuthUser()) {
+        if ($authenticator->getAuthUser()) {
             return $this->forbidden('Already signed in');
         };
 
         try {
-            $user = $this->authenticator->authenticate($data->username(), $data->password());
+            $user = $authenticator->authenticate($data->username(), $data->password());
         } catch (\InvalidArgumentException $ex) {
             return $this->badParams(['msg' => 'Invalid credentials']);
         };
 
-        $this->session->start();
-        $this->authenticator->setAuthUser($user);
+        $this->web->getSession()->start();
+        $authenticator->setAuthUser($user);
 
-        return $this->ok(['redirect_url' => $this->url_builder->buildMainPageUrl()]);
+        return $this->ok(['redirect_url' => $this->web->getUrlBuilder()->buildMainPageUrl()]);
     }
 }

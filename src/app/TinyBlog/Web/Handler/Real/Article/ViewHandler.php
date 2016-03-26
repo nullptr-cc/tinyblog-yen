@@ -17,7 +17,7 @@ class ViewHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleViewData::createFromRequest($request);
-        $finder = $this->domain_registry->getArticleFinder();
+        $finder = $this->domain->getArticleFinder();
 
         try {
             $article = $finder->getArticle($data->getArticleId());

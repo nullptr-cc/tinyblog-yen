@@ -1,13 +1,13 @@
 <?php
 
-namespace TinyBlog\Tool;
+namespace TinyBlog\Web\Service;
 
 use Yen\Http\Uri;
-use TinyBlog\Type\IArticle;
+use TinyBlog\Type\Article;
 
 class UrlBuilder extends \Yen\Util\UrlBuilder
 {
-    public function buildArticleUrl(IArticle $article)
+    public function buildArticleUrl(Article $article)
     {
         return $this->build(
             Uri::createFromString('route:article'),

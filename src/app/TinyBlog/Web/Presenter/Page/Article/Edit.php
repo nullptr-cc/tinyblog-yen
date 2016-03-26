@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Presenter\Page\Article;
 
 use TinyBlog\Web\Presenter\Base\CommonPage;
-use TinyBlog\Type\IArticle;
+use TinyBlog\Type\Article;
 
 class Edit extends CommonPage
 {
@@ -15,7 +15,7 @@ class Edit extends CommonPage
         );
     }
 
-    public function getContent(IArticle $article)
+    public function getContent(Article $article)
     {
         return $this->renderer->render(
             'page/article/edit',

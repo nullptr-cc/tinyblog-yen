@@ -16,13 +16,13 @@ class EditHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        $auth_user = $this->authenticator->getAuthUser();
+        $auth_user = $this->getAuthUser();
         if (!$auth_user) {
             return $this->forbidden('Not authorized');
         };
 
         $data = ArticleViewData::createFromRequest($request);
-        $finder = $this->domain_registry->getArticleFinder();
+        $finder = $this->domain->getArticleFinder();
 
         try {
             $article = $finder->getArticle($data->getArticleId());

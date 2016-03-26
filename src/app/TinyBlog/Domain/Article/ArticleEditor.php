@@ -1,12 +1,10 @@
 <?php
 
-namespace TinyBlog\Domain\Service;
+namespace TinyBlog\Domain\Article;
 
-use TinyBlog\Type\IArticleInitData;
-use TinyBlog\Type\IUser;
-use TinyBlog\Type\IArticle;
 use TinyBlog\Type\Content;
-use TinyBlog\Domain\Model\Article;
+use TinyBlog\Type\Article;
+use TinyBlog\Type\User;
 
 class ArticleEditor
 {
@@ -21,11 +19,11 @@ class ArticleEditor
         $this->teaser_maker = $teaser_maker;
     }
 
-    public function createArticle(IArticleInitData $data, IUser $author)
+    public function createArticle(array $data, User $author)
     {
         $init_data = [
             'author' => $author,
-            'created_at' => $data->getCreatedAt()
+            'created_at' => $data['created_at']
         ];
 
         $article = $this->fillArticle(new Article($init_data), $data);
@@ -34,7 +32,7 @@ class ArticleEditor
         return $article->withId($result->id);
     }
 
-    public function updateArticle(IArticle $article, IArticleInitData $data)
+    public function updateArticle(Article $article, array $data)
     {
         $article = $this->fillArticle($article, $data);
         $this->saver->updateArticle($article);
@@ -42,18 +40,18 @@ class ArticleEditor
         return $article;
     }
 
-    public function deleteArticle(IArticle $article)
+    public function deleteArticle(Article $article)
     {
         return $this->saver->deleteArticle($article);
     }
 
-    protected function fillArticle(IArticle $article, IArticleInitData $data)
+    protected function fillArticle(Article $article, array $data)
     {
-        $body_html = $this->md_transformer->toHtml($data->getBody());
-        $body = new Content($data->getBody(), $body_html);
+        $body_html = $this->md_transformer->toHtml($data['body']);
+        $body = new Content($data['body'], $body_html);
         $teaser = $this->teaser_maker->makeTeaser($body_html);
 
-        return $article->withTitle($data->getTitle())
+        return $article->withTitle($data['title'])
                        ->withBody($body)
                        ->withTeaser($teaser);
     }

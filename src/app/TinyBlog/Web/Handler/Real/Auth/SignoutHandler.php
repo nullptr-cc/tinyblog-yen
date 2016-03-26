@@ -15,12 +15,12 @@ class SignoutHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        if (!$this->authenticator->getAuthUser()) {
+        if (!$this->getAuthUser()) {
             return $this->forbidden('Not signed in');
         };
 
-        $this->session->stop();
+        $this->web->getSession()->stop();
 
-        return $this->redirect($this->url_builder->buildMainPageUrl());
+        return $this->redirect($this->web->getUrlBuilder()->buildMainPageUrl());
     }
 }

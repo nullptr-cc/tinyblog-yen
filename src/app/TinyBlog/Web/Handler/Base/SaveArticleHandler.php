@@ -4,21 +4,13 @@ namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Type\IArticleInitData;
+use TinyBlog\Web\WebRegistry;
 use TinyBlog\Web\RequestData\ArticleData;
 
 abstract class SaveArticleHandler extends AjaxHandler
 {
-    protected $validators;
-
-    public function __construct(IDependencyContainer $dc)
-    {
-        parent::__construct($dc);
-        $this->validators = $dc->getValidators();
-    }
-
-    abstract protected function saveArticle(IArticleInitData $data);
+    abstract protected function saveArticle(ArticleData $data);
 
     public function getAllowedMethods()
     {
@@ -33,7 +25,7 @@ abstract class SaveArticleHandler extends AjaxHandler
         };
 
         $data = ArticleData::createFromRequest($request);
-        $validator = $this->validators->getArticleValidator();
+        $validator = $this->web->getArticleDataValidator();
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
@@ -43,11 +35,11 @@ abstract class SaveArticleHandler extends AjaxHandler
         try {
             $article = $this->saveArticle($data);
         } catch (\Exception $ex) {
-            return $this->error(['msg' => 'Try again later: ' . $ex->getMessage()]);
+            return $this->error('Try again later: ' . $ex->getMessage());
         };
 
         return $this->ok([
-            'article_url' => $this->url_builder->buildArticleUrl($article)
+            'article_url' => $this->web->getUrlBuilder()->buildArticleUrl($article)
         ]);
     }
 }

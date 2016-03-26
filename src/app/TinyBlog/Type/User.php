@@ -1,10 +1,8 @@
 <?php
 
-namespace TinyBlog\Domain\Model;
+namespace TinyBlog\Type;
 
-use TinyBlog\Type\IUser;
-
-class User implements IUser
+class User
 {
     protected $id;
     protected $nickname;

@@ -4,7 +4,7 @@ namespace TinyBlog\Web\Presenter\Page\Article;
 
 use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Web\Presenter\Base\CommonPage;
-use TinyBlog\Type\IArticle;
+use TinyBlog\Type\Article;
 
 class View extends CommonPage
 {
@@ -16,7 +16,7 @@ class View extends CommonPage
         );
     }
 
-    protected function getContent(IArticle $article)
+    protected function getContent(Article $article)
     {
         $tools = '';
         $auth_user = $this->authenticator->getAuthUser();
@@ -35,7 +35,7 @@ class View extends CommonPage
         );
     }
 
-    protected function getPageTitle(IArticle $article)
+    protected function getPageTitle(Article $article)
     {
         return $article->title() . ' :: TinyBlog';
     }
