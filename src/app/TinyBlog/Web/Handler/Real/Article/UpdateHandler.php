@@ -10,9 +10,9 @@ class UpdateHandler extends SaveArticleHandler
     protected function saveArticle(ArticleData $data)
     {
         $finder = $this->domain->getArticleFinder();
-        $editor = $this->domain->getArticleEditor();
-        $article = $finder->getArticle($data->getArticleId());
+        $editor = $this->web->getArticleEditor();
+        $article = $finder->getArticleById($data->getArticleId());
 
-        return $editor->updateArticle($article, $data->dump());
+        return $editor->updateArticle($article, $data);
     }
 }

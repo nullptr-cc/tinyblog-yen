@@ -5,8 +5,7 @@ namespace TinyBlog\Domain;
 use TinyBlog\DataAccess\DataAccessRegistry;
 use TinyBlog\Tool\ToolRegistry;
 use TinyBlog\Domain\Article\ArticleFinder;
-use TinyBlog\Domain\Article\ArticleEditor;
-use TinyBlog\Domain\Article\ArticleValidator;
+use TinyBlog\Domain\Article\ArticleRepo;
 use TinyBlog\Domain\User\UserFinder;
 
 class DomainRegistry
@@ -30,12 +29,8 @@ class DomainRegistry
         return new UserFinder($this->dar);
     }
 
-    public function getArticleEditor()
+    public function getArticleRepo()
     {
-        return new ArticleEditor(
-            $this->dar->getArticleSaver(),
-            $this->tools->getMarkdownTransformer(),
-            $this->tools->getTeaserMaker()
-        );
+        return new ArticleRepo($this->dar->getArticleSaver());
     }
 }

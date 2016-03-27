@@ -10,35 +10,43 @@ use DateTimeImmutable;
 
 class ArticleWithUserFetcher
 {
-    protected $sql_driver;
+    protected $driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(Driver $driver)
     {
-        $this->sql_driver = $sql_driver;
+        $this->driver = $driver;
     }
 
-    public function findById($id)
+    /**
+     * @return Article[]
+     */
+    public function fetchById($id)
     {
         $sql =
             'select a.*, u.nickname from article as a inner join user as u on u.id = a.author_id' .
             ' where a.id = :id';
 
-        $row =
-            $this->sql_driver
+        $stmt =
+            $this->driver
                  ->prepare($sql)
                  ->bindValue(':id', $id, \PDO::PARAM_INT)
-                 ->execute()
-                 ->fetch();
+                 ->execute();
 
-        return $this->makeArticleWithUser($row);
+        return $this->makeResult($stmt->fetchAll());
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
-        return $this->sql_driver->query('select count(*) from article')->fetchColumn();
+        return $this->driver->query('select count(*) from article')->fetchColumn();
     }
 
-    public function find(array $order = [], $skip = null, $limit = null)
+    /**
+     * @return Article[]
+     */
+    public function fetch(array $order = [], $skip = null, $limit = null)
     {
         $sql = sprintf(
             'select a.*, u.nickname
@@ -49,13 +57,9 @@ class ArticleWithUserFetcher
             $this->makeLimitString($skip, $limit)
         );
 
-        $rows = $this->sql_driver->query($sql)->fetchAll();
-        $articles = [];
-        foreach ($rows as $row) {
-            $articles[] = $this->makeArticleWithUser($row);
-        };
+        $stmt = $this->driver->query($sql);
 
-        return $articles;
+        return $this->makeResult($stmt->fetchAll());
     }
 
     protected function makeOrderString(array $order)
@@ -79,6 +83,17 @@ class ArticleWithUserFetcher
         };
 
         return sprintf('limit %d, %d', $skip, $limit);
+    }
+
+    protected function makeResult(array $rows)
+    {
+        $articles = [];
+
+        foreach ($rows as $row) {
+            $articles[] = $this->makeArticleWithUser($row);
+        };
+
+        return $articles;
     }
 
     protected function makeArticleWithUser(array $data)

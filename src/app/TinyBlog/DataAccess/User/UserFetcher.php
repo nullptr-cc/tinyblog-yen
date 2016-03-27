@@ -24,15 +24,10 @@ class UserFetcher
         $stmt =
             $this->driver
                  ->prepare($sql)
-                 ->bindValue(':id', $id, \PDO::PARAM_INT)
+                 ->bindInt(':id', $id)
                  ->execute();
 
-        $result = [];
-        foreach ($stmt->fetchAll() as $row) {
-            $result[] = $this->makeUser($row);
-        };
-
-        return $result;
+        return $this->makeResult($stmt->fetchAll());
     }
 
     /**
@@ -45,11 +40,17 @@ class UserFetcher
         $stmt =
             $this->driver
                  ->prepare($sql)
-                 ->bindValue(':username', $username, \PDO::PARAM_STR)
+                 ->bindString(':username', $username)
                  ->execute();
 
+        return $this->makeResult($stmt->fetchAll());
+    }
+
+    protected function makeResult(array $rows)
+    {
         $result = [];
-        foreach ($stmt->fetchAll() as $row) {
+
+        foreach ($rows as $row) {
             $result[] = $this->makeUser($row);
         };
 

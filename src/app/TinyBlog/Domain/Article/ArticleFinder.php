@@ -5,30 +5,39 @@ namespace TinyBlog\Domain\Article;
 use TinyBlog\Type\Article;
 use TinyBlog\Type\User;
 use TinyBlog\Type\Content;
+use TinyBlog\DataAccess\DataAccessRegistry;
+use TinyBlog\Domain\Exception\ArticleNotFound;
 
 class ArticleFinder
 {
-    protected $da;
+    protected $dar;
 
-    public function __construct($da)
+    public function __construct(DataAccessRegistry $dar)
     {
-        $this->da = $da;
+        $this->dar = $dar;
     }
 
-    public function getArticle($article_id)
+    /**
+     * @return Article
+     */
+    public function getArticleById($article_id)
     {
-        $fetcher = $this->da->getArticleWithUserFetcher();
-        $article = $fetcher->findById($article_id);
-        if (!$article) {
-            throw new \InvalidArgumentException('invalid article id');
+        $fetcher = $this->dar->getArticleWithUserFetcher();
+        $articles = $fetcher->fetchById($article_id);
+
+        if (!count($articles)) {
+            throw new ArticleNotFound($article_id);
         };
 
-        return $article;
+        return $articles[0];
     }
 
+    /**
+     * @return stdClass { page_count : int, articles : Article[] }
+     */
     public function getArticlesListRange($order, $page_num, $per_page)
     {
-        $fetcher = $this->da->getArticleWithUserFetcher();
+        $fetcher = $this->dar->getArticleWithUserFetcher();
         $count = $fetcher->count();
         $page_count = ceil($count / $per_page);
 
@@ -38,7 +47,7 @@ class ArticleFinder
             return $return;
         };
 
-        $return->articles = $fetcher->find($order, ($page_num - 1) * $per_page, $per_page);
+        $return->articles = $fetcher->fetch($order, ($page_num - 1) * $per_page, $per_page);
 
         return $return;
     }

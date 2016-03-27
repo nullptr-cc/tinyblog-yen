@@ -6,6 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Web\RequestData\ArticleViewData;
+use TinyBlog\Domain\Exception\ArticleNotFound;
 
 class ViewHandler extends CommonHandler
 {
@@ -20,8 +21,8 @@ class ViewHandler extends CommonHandler
         $finder = $this->domain->getArticleFinder();
 
         try {
-            $article = $finder->getArticle($data->getArticleId());
-        } catch (\InvalidArgumentException $ex) {
+            $article = $finder->getArticleById($data->getArticleId());
+        } catch (ArticleNotFound $ex) {
             return $this->notFound();
         };
 

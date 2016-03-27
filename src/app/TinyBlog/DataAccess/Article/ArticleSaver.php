@@ -7,11 +7,11 @@ use TinyBlog\Type\Article;
 
 class ArticleSaver
 {
-    protected $sql_driver;
+    protected $driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(Driver $driver)
     {
-        $this->sql_driver = $sql_driver;
+        $this->driver = $driver;
     }
 
     public function insertArticle(Article $article)
@@ -22,18 +22,18 @@ class ArticleSaver
              values
              (:author_id, :title, :body_raw, :body_html, :teaser, :created_at)';
 
-        $this->sql_driver
+        $this->driver
              ->prepare($sql)
-             ->bindValue(':author_id', $article->getAuthor()->getId(), \PDO::PARAM_INT)
-             ->bindValue(':title', $article->getTitle(), \PDO::PARAM_STR)
-             ->bindValue(':body_raw', $article->getBody()->getSource(), \PDO::PARAM_STR)
-             ->bindValue(':body_html', $article->getBody()->getHtml(), \PDO::PARAM_STR)
-             ->bindValue(':teaser', $article->getTeaser(), \PDO::PARAM_STR)
-             ->bindValue(':created_at', $article->getCreatedAt()->format('Y-m-d H:i:s'), \PDO::PARAM_STR)
+             ->bindInt(':author_id', $article->getAuthor()->getId())
+             ->bindString(':title', $article->getTitle())
+             ->bindString(':body_raw', $article->getBody()->getSource())
+             ->bindString(':body_html', $article->getBody()->getHtml())
+             ->bindString(':teaser', $article->getTeaser())
+             ->bindDateTime(':created_at', $article->getCreatedAt())
              ->execute();
 
         return (object)[
-            'id' => $this->sql_driver->lastInsertId()
+            'id' => $this->driver->lastInsertId()
         ];
     }
 
@@ -47,13 +47,13 @@ class ArticleSaver
                  `teaser` = :teaser
              where id = :id';
 
-        $this->sql_driver
+        $this->driver
              ->prepare($sql)
-             ->bindValue(':title', $article->getTitle(), \PDO::PARAM_STR)
-             ->bindValue(':body_raw', $article->getBody()->getSource(), \PDO::PARAM_STR)
-             ->bindValue(':body_html', $article->getBody()->getHtml(), \PDO::PARAM_STR)
-             ->bindValue(':teaser', $article->getTeaser(), \PDO::PARAM_STR)
-             ->bindValue(':id', $article->getId(), \PDO::PARAM_INT)
+             ->bindString(':title', $article->getTitle())
+             ->bindString(':body_raw', $article->getBody()->getSource())
+             ->bindString(':body_html', $article->getBody()->getHtml())
+             ->bindString(':teaser', $article->getTeaser())
+             ->bindInt(':id', $article->getId())
              ->execute();
 
         return true;
@@ -63,9 +63,9 @@ class ArticleSaver
     {
         $sql = 'delete from `article` where `id` = :id';
 
-        $this->sql_driver
+        $this->driver
              ->prepare($sql)
-             ->bindValue(':id', $article->getId(), \PDO::PARAM_INT)
+             ->bindInt(':id', $article->getId())
              ->execute();
 
         return true;

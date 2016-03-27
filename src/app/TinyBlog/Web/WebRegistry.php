@@ -147,4 +147,13 @@ class WebRegistry
     {
         return new Service\ArticleDataValidator();
     }
+
+    public function getArticleEditor()
+    {
+        return new Service\ArticleEditor(
+            $this->domain->getArticleRepo(),
+            $this->tools->getMarkdownTransformer(),
+            $this->tools->getTeaserMaker()
+        );
+    }
 }
