@@ -31,6 +31,16 @@ class DataAccessRegistry
         return new User\UserFetcher($this->sql_driver);
     }
 
+    public function getCommentWithAuthorFetcher()
+    {
+        return new Comment\CommentWithAuthorFetcher($this->sql_driver);
+    }
+
+    public function getCommentSaver()
+    {
+        return new Comment\CommentSaver($this->sql_driver);
+    }
+
     protected function makeSqlDriver()
     {
         return new YadaDriver(

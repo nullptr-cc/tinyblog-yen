@@ -17,4 +17,15 @@ create table `article` (
     `created_at` datetime not null,
     primary key (`id`),
     foreign key (`author_id`) references `user` (`id`) on delete cascade
-)  engine = innodb default charset = utf8;
+) engine = innodb default charset = utf8;
+
+create table `comment` (
+    `id` int unsigned not null auto_increment,
+    `article_id` int unsigned not null,
+    `author_id` int unsigned not null,
+    `body` longtext not null,
+    `created_at` datetime not null,
+    primary key (`id`),
+    foreign key (`article_id`) references `article` (`id`) on delete cascade,
+    foreign key (`author_id`) references `user` (`id`) on delete cascade
+) engine = innodb default charset = utf8;

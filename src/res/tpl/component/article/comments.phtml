@@ -1,0 +1,7 @@
+<h3>Comments (<span id="comments_count"><?= count($comments) ?></span>)</h3>
+
+<ul class="uk-comment-list" id="article_comments">
+    <?php foreach ($comments as $comment): ?>
+        <?= $this->render('component/article/_comment', ['comment' => $comment]) ?>
+    <?php endforeach; ?>
+</ul>

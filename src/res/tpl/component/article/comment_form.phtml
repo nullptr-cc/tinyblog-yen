@@ -1,0 +1,13 @@
+<form action="comment/insert" method="post" class="uk-form uk-margin-large-top" id="comment_form">
+
+    <input type="hidden" name="article_id" value="<?= $article->id() ?>">
+
+    <div class="uk-form-row">
+        <textarea name="body" class="uk-width-1-1" rows="5" required></textarea>
+    </div>
+
+    <div class="uk-form-row uk-text-right">
+        <button type="submit" class="uk-button uk-button-primary">Add Comment</button>
+    </div>
+
+</form>

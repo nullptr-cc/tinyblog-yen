@@ -8,7 +8,9 @@
         Written by <?= $article->author()->nickname() ?> on <?= $article->created()->format('d F Y') ?>.
     </p>
 
-    <?= $article->teaser() ?>
+    <div class="tb-article">
+        <?= $article->teaser() ?>
+    </div>
 
     <p>
         <a href="<?= $this->link_to()->article($article) ?>">Continue Reading</a>

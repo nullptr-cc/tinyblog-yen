@@ -18,17 +18,22 @@ class ViewHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleViewData::createFromRequest($request);
-        $finder = $this->domain->getArticleFinder();
+        $afinder = $this->domain->getArticleFinder();
+        $cfinder = $this->domain->getCommentFinder();
 
         try {
-            $article = $finder->getArticleById($data->getArticleId());
+            $article = $afinder->getArticleById($data->getArticleId());
+            $comments = $cfinder->getArticleComments($article);
         } catch (ArticleNotFound $ex) {
             return $this->notFound();
         };
 
         return $this->ok(
             'Page/Article/View',
-            ['article' => $article]
+            [
+                'article' => $article,
+                'comments' => $comments
+            ]
         );
     }
 }

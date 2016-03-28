@@ -1,0 +1,11 @@
+<li class="tb-comment">
+    <div>
+        <header class="tb-comment-header">
+            <span class="tb-comment-author"><?= $comment->author()->nickname() ?></span>
+            <span class="tb-comment-meta"><?= $comment->created()->format('d M Y H:i') ?></span>
+        </header>
+        <div class="tb-comment-body">
+            <?= nl2br($this->escape($comment->body())) ?>
+        </div>
+    </div>
+</li>

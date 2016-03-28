@@ -10,3 +10,36 @@
 .tb-footer {
     margin-left: 0px;
 }
+
+.tb-comment {
+    border-top: solid 1px #ddd;
+    padding-top: 10px;
+}
+
+.tb-comment-header {
+    margin-bottom: 10px;
+    padding: 4px 0px;
+    font-size: 12px;
+}
+
+.tb-comment-author {
+    margin-right: 10px;
+}
+
+.tb-comment-meta {
+    color: #999;
+}
+
+.tb-comment-body {
+    padding: 0px;
+}
+
+.tb-article > p {
+    text-align: justify;
+    text-indent: 24px;
+}
+
+.tb-article > p img {
+    position: relative;
+    left: -24px;
+}

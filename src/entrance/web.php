@@ -6,9 +6,9 @@ $sarray = array_merge_recursive(
     parse_ini_file(getenv('TB_SETTINGS_INI'), true),
     [
         'web' => [
-            'routing_rules' => __DIR__ . '/../res/etc/routing.rules',
+            'routing_rules' => realpath(__DIR__ . '/../res/etc/routing.rules'),
             'templates' => [
-                'path' => __DIR__ . '/../res/tpl',
+                'path' => realpath(__DIR__ . '/../res/tpl'),
                 'ext' => '.phtml'
             ]
         ]

@@ -156,4 +156,14 @@ class WebRegistry
             $this->tools->getTeaserMaker()
         );
     }
+
+    public function getCommentDataValidator()
+    {
+        return new Service\CommentDataValidator();
+    }
+
+    public function getCommentEditor()
+    {
+        return new Service\CommentEditor($this->domain->getCommentRepo());
+    }
 }

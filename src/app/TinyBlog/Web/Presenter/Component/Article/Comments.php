@@ -7,13 +7,12 @@ use TinyBlog\Type\Article;
 
 class Comments extends BaseComponent
 {
-    public function present(Article $article)
+    public function present(array $comments)
     {
         return $this->renderer->render(
-            'component/article/disqus_comments',
+            'component/article/comments',
             [
-                'siteid' => $this->settings->get('disqus_siteid'),
-                'pageid' => 'article:' . $article->getId()
+                'comments' => $comments
             ]
         );
     }

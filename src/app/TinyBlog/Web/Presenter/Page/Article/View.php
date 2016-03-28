@@ -11,26 +11,35 @@ class View extends CommonPage
     public function present(array $data)
     {
         return $this->render(
-            $this->getContent($data['article']),
+            $this->getContent($data['article'], $data['comments']),
             $this->getPageTitle($data['article'])
         );
     }
 
-    protected function getContent(Article $article)
+    protected function getContent(Article $article, array $comments)
     {
-        $tools = '';
         $auth_user = $this->authenticator->getAuthUser();
+        $comments = $this->component('Article/Comments')->present($comments);
+        $tools = $cform = '';
+
         if ($auth_user && $auth_user->getId() == $article->author()->getId()) {
             $tools = $this->component('Article/Tools')->present($article);
         };
-        $comments = $this->component('Article/Comments')->present($article);
+
+        if ($auth_user) {
+            $cform = $this->renderer->render(
+                'component/article/comment_form',
+                ['article' => $article]
+            );
+        };
 
         return $this->renderer->render(
             'page/article/view',
             [
                 'article' => $article,
+                'article_tools' => $tools,
                 'comments' => $comments,
-                'article_tools' => $tools
+                'comment_form' => $cform
             ]
         );
     }
