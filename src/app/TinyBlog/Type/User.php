@@ -4,10 +4,15 @@ namespace TinyBlog\Type;
 
 class User
 {
+    const ROLE_NONE     = 0;
+    const ROLE_CONSUMER = 1;
+    const ROLE_AUTHOR   = 2;
+
     protected $id;
     protected $nickname;
     protected $username;
     protected $password;
+    protected $role;
 
     public function __construct(array $init_data = [])
     {
@@ -25,6 +30,12 @@ class User
 
         if (isset($init_data['password'])) {
             $this->setPassword($init_data['password']);
+        };
+
+        if (isset($init_data['role'])) {
+            $this->setRole($init_data['role']);
+        } else {
+            $this->setRole(self::ROLE_NONE);
         };
     }
 
@@ -48,6 +59,11 @@ class User
         $this->password = $password;
     }
 
+    protected function setRole($role)
+    {
+        $this->role = $role;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -66,6 +82,11 @@ class User
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
     }
 
     public function withId($id)
@@ -88,6 +109,13 @@ class User
         return $this->with(['password' => $password]);
     }
 
+    public function withRole($role)
+    {
+        $clone = clone $this;
+        $clone->setRole($role);
+        return $clone;
+    }
+
     public function id()
     {
         return $this->getId();
@@ -106,6 +134,11 @@ class User
     public function password()
     {
         return $this->getPassword();
+    }
+
+    public function role()
+    {
+        return $this->role;
     }
 
     protected function with(array $replacement)

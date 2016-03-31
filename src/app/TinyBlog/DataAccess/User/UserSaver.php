@@ -17,15 +17,16 @@ class UserSaver
     public function insert(User $user)
     {
         $sql = 'insert into `user`
-                (`username`, `nickname`, `password`)
+                (`username`, `nickname`, `password`, `role`)
                 values
-                (:username, :nickname, :password)';
+                (:username, :nickname, :password, :role)';
 
         $this->driver
              ->prepare($sql)
              ->bindString(':username', $user->getUsername())
              ->bindString(':nickname', $user->getNickname())
              ->bindString(':password', $user->getPassword())
+             ->bindString(':role', $user->getRole())
              ->execute();
 
         return (object)[

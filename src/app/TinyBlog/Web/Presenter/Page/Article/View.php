@@ -5,6 +5,7 @@ namespace TinyBlog\Web\Presenter\Page\Article;
 use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Web\Presenter\Base\CommonPage;
 use TinyBlog\Type\Article;
+use TinyBlog\Type\User;
 
 class View extends CommonPage
 {
@@ -22,11 +23,11 @@ class View extends CommonPage
         $comments = $this->component('Article/Comments')->present($comments);
         $tools = $cform = '';
 
-        if ($auth_user && $auth_user->getId() == $article->author()->getId()) {
+        if ($auth_user->getId() == $article->author()->getId()) {
             $tools = $this->component('Article/Tools')->present($article);
         };
 
-        if ($auth_user) {
+        if ($auth_user->getRole() >= User::ROLE_CONSUMER) {
             $cform = $this->renderer->render(
                 'component/article/comment_form',
                 ['article' => $article]

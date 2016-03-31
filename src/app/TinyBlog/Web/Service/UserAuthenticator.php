@@ -40,7 +40,7 @@ class UserAuthenticator
         try {
             return $this->user_srv->getById($user_id);
         } catch (\InvalidArgumentException $ex) {
-            return null;
+            return new User();
         };
     }
 }

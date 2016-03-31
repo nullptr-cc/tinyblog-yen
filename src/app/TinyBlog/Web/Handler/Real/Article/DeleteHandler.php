@@ -7,6 +7,7 @@ use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
 use TinyBlog\Domain\Exception\ArticleNotFound;
+use TinyBlog\Type\User;
 
 class DeleteHandler extends AjaxHandler
 {
@@ -17,6 +18,11 @@ class DeleteHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
+        $auth_user = $this->getAuthUser();
+        if ($auth_user->getRole() < User::ROLE_AUTHOR) {
+            return $this->forbidden('Not authorized');
+        };
+
         $data = ArticleDeleteData::createFromRequest($request);
         $finder = $this->domain->getArticleFinder();
         $repo = $this->domain->getArticleRepo();

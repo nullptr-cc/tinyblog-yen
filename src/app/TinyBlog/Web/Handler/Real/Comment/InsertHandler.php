@@ -7,6 +7,7 @@ use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\CommentData;
 use TinyBlog\Domain\Exception\ArticleNotFound;
+use TinyBlog\Type\User;
 
 class InsertHandler extends AjaxHandler
 {
@@ -18,7 +19,7 @@ class InsertHandler extends AjaxHandler
     public function handle(IServerRequest $request)
     {
         $auth_user = $this->getAuthUser();
-        if (!$auth_user) {
+        if ($auth_user->getRole() < User::ROLE_CONSUMER) {
             return $this->forbidden('Not authorized');
         };
 

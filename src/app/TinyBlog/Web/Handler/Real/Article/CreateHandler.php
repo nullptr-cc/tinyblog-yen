@@ -6,6 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Type\Article;
+use TinyBlog\Type\User;
 
 class CreateHandler extends CommonHandler
 {
@@ -17,7 +18,7 @@ class CreateHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $auth_user = $this->getAuthUser();
-        if (!$auth_user) {
+        if ($auth_user->getRole() < User::ROLE_AUTHOR) {
             return $this->forbidden('Not authorized');
         };
 

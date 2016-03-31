@@ -7,6 +7,7 @@ use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Web\RequestData\ArticleViewData;
 use TinyBlog\Domain\Exception\ArticleNotFound;
+use TinyBlog\Type\User;
 
 class EditHandler extends CommonHandler
 {
@@ -18,7 +19,7 @@ class EditHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $auth_user = $this->getAuthUser();
-        if (!$auth_user) {
+        if ($auth_user->getRole() < User::ROLE_AUTHOR) {
             return $this->forbidden('Not authorized');
         };
 

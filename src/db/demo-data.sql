@@ -2,7 +2,7 @@
 /*!40103 SET TIME_ZONE='+00:00' */;
 
 LOCK TABLES `user` WRITE;
-INSERT INTO `user` VALUES (1,'Mr. Demo','demo','$2y$10$o9uHy5pPRy4n314R2.uJnOP6uJKevtiVTmHB56peFnCX6Ui8qpXyy');
+INSERT INTO `user` VALUES (1,'Mr. Demo','demo','$2y$10$o9uHy5pPRy4n314R2.uJnOP6uJKevtiVTmHB56peFnCX6Ui8qpXyy', 2);
 UNLOCK TABLES;
 
 LOCK TABLES `article` WRITE;

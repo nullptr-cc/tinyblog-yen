@@ -4,10 +4,10 @@ namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Type\IArticleInitData;
 use TinyBlog\Web\WebRegistry;
 use TinyBlog\Web\RequestData\ArticleData;
 use TinyBlog\Domain\Exception\ArticleNotFound;
+use TinyBlog\Type\User;
 
 abstract class SaveArticleHandler extends AjaxHandler
 {
@@ -21,7 +21,7 @@ abstract class SaveArticleHandler extends AjaxHandler
     public function handle(IServerRequest $request)
     {
         $auth_user = $this->getAuthUser();
-        if (!$auth_user) {
+        if ($auth_user->getRole() < User::ROLE_AUTHOR) {
             return $this->forbidden('Not authorized');
         };
 

@@ -3,6 +3,7 @@ create table `user` (
     `nickname` varchar(255) not null,
     `username` varchar(255) not null,
     `password` varchar(255) not null,
+    `role` tinyint not null default 1,
     primary key (`id`),
     unique key (`nickname`)
 ) engine = innodb default charset = utf8;

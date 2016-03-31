@@ -6,6 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\SignInData;
+use TinyBlog\Type\User;
 
 class SigninHandler extends AjaxHandler
 {
@@ -19,7 +20,7 @@ class SigninHandler extends AjaxHandler
         $data = SignInData::createFromRequest($request);
         $authenticator = $this->web->getUserAuthenticator();
 
-        if ($authenticator->getAuthUser()) {
+        if ($authenticator->getAuthUser()->getRole() > User::ROLE_NONE) {
             return $this->forbidden('Already signed in');
         };
 

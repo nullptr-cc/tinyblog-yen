@@ -19,6 +19,10 @@ class BackHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
+        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+            return $this->forbidden('Already signed in');
+        };
+
         $provider = $this->domain->getOAuthProviderGithub();
 
         $code = $provider->grabAuthCode($request);
@@ -56,7 +60,8 @@ class BackHandler extends CommonHandler
         $user = new User([
             'username' => sprintf('oauth:%d:%d', $provider->getId(), $info->identifier()),
             'nickname' => $info->name(),
-            'password' => 'xxx'
+            'password' => 'xxx',
+            'role'     => User::ROLE_CONSUMER
         ]);
 
         $user = $this->domain->getUserRepo()->persist($user);
