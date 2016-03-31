@@ -31,6 +31,11 @@ class DataAccessRegistry
         return new User\UserFetcher($this->sql_driver);
     }
 
+    public function getUserSaver()
+    {
+        return new User\UserSaver($this->sql_driver);
+    }
+
     public function getCommentWithAuthorFetcher()
     {
         return new Comment\CommentWithAuthorFetcher($this->sql_driver);
@@ -39,6 +44,11 @@ class DataAccessRegistry
     public function getCommentSaver()
     {
         return new Comment\CommentSaver($this->sql_driver);
+    }
+
+    public function getOAuthUserStore()
+    {
+        return new OAuthUser\OAuthUserStore($this->sql_driver);
     }
 
     protected function makeSqlDriver()

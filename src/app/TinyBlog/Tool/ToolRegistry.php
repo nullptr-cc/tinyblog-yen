@@ -17,4 +17,12 @@ class ToolRegistry
     {
         return new TeaserMaker();
     }
+
+    public function getHttpClient()
+    {
+        return new \Yen\HttpClient\CurlHttpClient([
+            'connect_timeout' => 2,
+            'timeout' => 4
+        ]);
+    }
 }

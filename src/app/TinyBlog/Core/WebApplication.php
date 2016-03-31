@@ -81,6 +81,6 @@ class WebApplication
 
     protected function createServerRequest()
     {
-        return new ServerRequest($_SERVER, $_GET, $_POST, $_COOKIE, ServerRequest::fillFiles($_FILES));
+        return ServerRequest::createFromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
     }
 }

@@ -51,7 +51,8 @@ class Dependencies
     {
         return new DomainRegistry(
             $this->getDataAccess(),
-            $this->getTools()
+            $this->getTools(),
+            $this->settings
         );
     }
 

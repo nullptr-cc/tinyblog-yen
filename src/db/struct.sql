@@ -29,3 +29,12 @@ create table `comment` (
     foreign key (`article_id`) references `article` (`id`) on delete cascade,
     foreign key (`author_id`) references `user` (`id`) on delete cascade
 ) engine = innodb default charset = utf8;
+
+create table `oauth_user` (
+    `user_id` int unsigned not null,
+    `provider` smallint unsigned not null,
+    `identifier` varchar(255) not null,
+    primary key (`user_id`, `provider`),
+    unique key (`provider`, `identifier`),
+    foreign key (`user_id`) references `user` (`id`) on delete cascade
+) engine = innodb default charset = utf8;
