@@ -5,3 +5,12 @@ base_url = "http://<SITE_HOST>:9988/"
 dsn = "mysql:host=<DB_HOST>;dbname=<DB_NAME>;charset=utf8"
 username = "<DB_USERNAME>"
 password = "<DB_PASSWORD>"
+
+[github]
+client_id = "<GITHUB_CLIENT_ID>"
+client_secret = "<GITHUB_CLIENT_SECRET>"
+
+[google]
+client_id = "<GOOGLE_CLIENT_ID>"
+client_secret = "<GOOGLE_CLIENT_SECRET>"
+redirect_uri = "http://<SITE_HOST>:9988/auth/google/back"
