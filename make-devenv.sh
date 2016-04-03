@@ -12,7 +12,6 @@ read -p "Database host [localhost]: " db_host
 read -p "Database name [tinyblog]: " db_name
 read -p "Database username: " db_username
 read -p "Database password: " db_password
-read -p "Disqus site id (press ENTER for disable comments): " disqus_siteid
 
 if [ -z $site_host ]; then site_host="127.0.0.1"; fi
 if [ -z $db_host ]; then db_host='localhost'; fi
@@ -24,8 +23,7 @@ cat settings.ini-example |
     sed "s/<DB_HOST>/${db_host}/g" |
     sed "s/<DB_NAME>/${db_name}/g" |
     sed "s/<DB_USERNAME>/${db_username}/g" |
-    sed "s/<DB_PASSWORD>/${db_password}/g" |
-    sed "s/<DISQUS_SITEID>/${disqus_siteid}/g" > settings.ini
+    sed "s/<DB_PASSWORD>/${db_password}/g" > settings.ini
 
 echo
 echo "Fetching dependencies"
