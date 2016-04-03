@@ -61,6 +61,14 @@ class DomainRegistry
         );
     }
 
+    public function getOAuthProviderGoogle()
+    {
+        return new OAuth\ProviderGoogle(
+            $this->settings->get('google'),
+            $this->tools->getHttpClient()
+        );
+    }
+
     public function getOAuthUserRepo()
     {
         return new OAuth\OAuthUserRepo($this->dar->getOAuthUserStore());

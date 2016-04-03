@@ -43,3 +43,11 @@
     position: relative;
     left: -24px;
 }
+
+.tb-oauth-providers {
+    margin-top: 12px;
+}
+
+.tb-oauth-providers > a + a {
+    margin-left: 4px;
+}
