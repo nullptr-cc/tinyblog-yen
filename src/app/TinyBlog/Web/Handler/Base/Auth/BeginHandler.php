@@ -5,7 +5,7 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
-use TinyBlog\Type\User;
+use TinyBlog\User\User;
 
 abstract class BeginHandler extends CommonHandler
 {
@@ -22,8 +22,6 @@ abstract class BeginHandler extends CommonHandler
             return $this->forbidden('Already signed in');
         };
 
-        return $this->redirect(
-            $this->getProvider()->getAuthUrl()
-        );
+        return $this->redirect($this->getProvider()->getAuthUrl());
     }
 }

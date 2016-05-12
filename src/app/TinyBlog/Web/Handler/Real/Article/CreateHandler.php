@@ -5,8 +5,8 @@ namespace TinyBlog\Web\Handler\Real\Article;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
-use TinyBlog\Type\Article;
-use TinyBlog\Type\User;
+use TinyBlog\Article\Article;
+use TinyBlog\User\User;
 
 class CreateHandler extends CommonHandler
 {

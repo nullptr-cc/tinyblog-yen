@@ -4,24 +4,21 @@ namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Handler\Contract\IHandler;
 use Yen\Handler\HandlerResponseHelpers;
-use TinyBlog\Web\WebRegistry;
-use TinyBlog\Domain\DomainRegistry;
+use TinyBlog\Modules;
 
 abstract class Handler implements IHandler
 {
     use HandlerResponseHelpers;
 
-    protected $web;
-    protected $domain;
+    protected $modules;
 
-    public function __construct(WebRegistry $web, DomainRegistry $domain)
+    public function __construct(Modules $modules)
     {
-        $this->web = $web;
-        $this->domain = $domain;
+        $this->modules = $modules;
     }
 
     protected function getAuthUser()
     {
-        return $this->web->getUserAuthenticator()->getAuthUser();
+        return $this->modules->web()->getUserAuthenticator()->getAuthUser();
     }
 }

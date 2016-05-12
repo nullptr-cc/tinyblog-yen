@@ -4,8 +4,8 @@ namespace TinyBlog\Web\Presenter\Page\Article;
 
 use TinyBlog\Core\Contract\IDependencyContainer;
 use TinyBlog\Web\Presenter\Base\CommonPage;
-use TinyBlog\Type\Article;
-use TinyBlog\Type\User;
+use TinyBlog\Article\Article;
+use TinyBlog\User\User;
 
 class View extends CommonPage
 {

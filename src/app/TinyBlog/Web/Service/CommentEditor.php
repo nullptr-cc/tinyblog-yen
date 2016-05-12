@@ -2,10 +2,10 @@
 
 namespace TinyBlog\Web\Service;
 
-use TinyBlog\Domain\Comment\CommentRepo;
-use TinyBlog\Type\Article;
-use TinyBlog\Type\User;
-use TinyBlog\Type\Comment;
+use TinyBlog\Comment\CommentRepo;
+use TinyBlog\Article\Article;
+use TinyBlog\User\User;
+use TinyBlog\Comment\Comment;
 use TinyBlog\Web\RequestData\CommentData;
 use DateTimeInterface;
 

@@ -6,8 +6,8 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\CommentData;
-use TinyBlog\Domain\Exception\ArticleNotFound;
-use TinyBlog\Type\User;
+use TinyBlog\Article\EArticleNotFound;
+use TinyBlog\User\User;
 
 class InsertHandler extends AjaxHandler
 {
@@ -24,26 +24,26 @@ class InsertHandler extends AjaxHandler
         };
 
         $data = CommentData::createFromRequest($request);
-        $validator = $this->web->getCommentDataValidator();
+        $validator = $this->modules->web()->getCommentDataValidator();
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
             return $this->badParams($vr->getErrors());
         }
 
-        $afinder = $this->domain->getArticleFinder();
-        $ceditor = $this->web->getCommentEditor();
+        $afinder = $this->modules->article()->getArticleRepo();
+        $ceditor = $this->modules->web()->getCommentEditor();
 
         try {
             $article = $afinder->getArticleById($data->getArticleId());
             $comment = $ceditor->createComment($data, $article, $auth_user, new \DateTimeImmutable());
-        } catch (ArticleNotFound $ex) {
+        } catch (EArticleNotFound $ex) {
             return $this->badParams(['article_id' => 'Invalid article id']);
         } catch (\Exception $ex) {
             return $this->error('Something wrong: ' . $ex->getMessage());
         };
 
-        $html = $this->web->getHtmlRenderer()->render('component/article/_comment', ['comment' => $comment]);
+        $html = $this->modules->web()->getHtmlRenderer()->render('component/article/_comment', ['comment' => $comment]);
         return $this->ok(['comment_html' => $html->content()]);
     }
 }

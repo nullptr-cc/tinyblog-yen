@@ -5,7 +5,7 @@ namespace TinyBlog\Web\Handler\Real\Auth;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
-use TinyBlog\Type\User;
+use TinyBlog\User\User;
 
 class EntranceHandler extends CommonHandler
 {

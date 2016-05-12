@@ -6,7 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\SignInData;
-use TinyBlog\Type\User;
+use TinyBlog\User\User;
 
 class SigninHandler extends AjaxHandler
 {
@@ -17,12 +17,13 @@ class SigninHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
-        $data = SignInData::createFromRequest($request);
-        $authenticator = $this->web->getUserAuthenticator();
+        $authenticator = $this->modules->web()->getUserAuthenticator();
 
         if ($authenticator->getAuthUser()->getRole() > User::ROLE_NONE) {
             return $this->forbidden('Already signed in');
         };
+
+        $data = SignInData::createFromRequest($request);
 
         try {
             $user = $authenticator->authenticate($data->username(), $data->password());
@@ -30,9 +31,9 @@ class SigninHandler extends AjaxHandler
             return $this->badParams(['msg' => 'Invalid credentials']);
         };
 
-        $this->web->getSession()->start();
+        $this->modules->web()->getSession()->start();
         $authenticator->setAuthUser($user);
 
-        return $this->ok(['redirect_url' => $this->web->getUrlBuilder()->buildMainPageUrl()]);
+        return $this->ok(['redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()]);
     }
 }

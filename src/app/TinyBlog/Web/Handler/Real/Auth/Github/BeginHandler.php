@@ -8,6 +8,6 @@ class BeginHandler extends BaseBeginHandler
 {
     protected function getProvider()
     {
-        return $this->domain->getOAuthProviderGithub();
+        return $this->modules->oauth()->getProviderGithub();
     }
 }

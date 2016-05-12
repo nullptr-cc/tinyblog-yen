@@ -8,6 +8,6 @@ class BackHandler extends BaseBackHandler
 {
     protected function getProvider()
     {
-        return $this->domain->getOAuthProviderGithub();
+        return $this->modules->oauth()->getProviderGithub();
     }
 }

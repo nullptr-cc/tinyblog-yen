@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Service;
 
 use TinyBlog\Web\RequestData\ArticleData;
-use TinyBlog\Type\ValidationResult;
+use TinyBlog\Validation\ValidationResult;
 
 class ArticleDataValidator
 {

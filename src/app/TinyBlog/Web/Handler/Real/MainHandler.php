@@ -19,7 +19,7 @@ class MainHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleListData::createFromRequest($request);
-        $article_finder = $this->domain->getArticleFinder();
+        $article_finder = $this->modules->article()->getArticleRepo();
 
         $result = $article_finder->getArticlesListRange(
             ['created_at' => 'desc'],

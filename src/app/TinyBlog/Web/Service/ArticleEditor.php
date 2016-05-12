@@ -2,9 +2,9 @@
 
 namespace TinyBlog\Web\Service;
 
-use TinyBlog\Type\Article;
-use TinyBlog\Type\User;
-use TinyBlog\Type\Content;
+use TinyBlog\Article\Article;
+use TinyBlog\Article\Content;
+use TinyBlog\User\User;
 use TinyBlog\Web\RequestData\ArticleData;
 
 class ArticleEditor

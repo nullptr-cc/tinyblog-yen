@@ -9,7 +9,7 @@ class InsertHandler extends SaveArticleHandler
 {
     protected function saveArticle(ArticleData $data)
     {
-        $editor = $this->web->getArticleEditor();
+        $editor = $this->modules->web()->getArticleEditor();
 
         return $editor->createArticle(
             $data->withCreatedAt(new \DateTimeImmutable()),

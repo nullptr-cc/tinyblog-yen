@@ -30,6 +30,6 @@ abstract class CommonHandler extends Handler
 
     protected function getHtmlComponent($name)
     {
-        return $this->web->getHtmlComponents()->getComponent($name);
+        return $this->modules->web()->getHtmlComponents()->getComponent($name);
     }
 }

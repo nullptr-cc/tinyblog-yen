@@ -6,8 +6,8 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\WebRegistry;
 use TinyBlog\Web\RequestData\ArticleData;
-use TinyBlog\Domain\Exception\ArticleNotFound;
-use TinyBlog\Type\User;
+use TinyBlog\Article\EArticleNotFound;
+use TinyBlog\User\User;
 
 abstract class SaveArticleHandler extends AjaxHandler
 {
@@ -26,7 +26,7 @@ abstract class SaveArticleHandler extends AjaxHandler
         };
 
         $data = ArticleData::createFromRequest($request);
-        $validator = $this->web->getArticleDataValidator();
+        $validator = $this->modules->web()->getArticleDataValidator();
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
@@ -35,14 +35,14 @@ abstract class SaveArticleHandler extends AjaxHandler
 
         try {
             $article = $this->saveArticle($data);
-        } catch (ArticleNotFound $ex) {
+        } catch (EArticleNotFound $ex) {
             return $this->badParams(['article_id' => 'Invalid article ID']);
         } catch (\Exception $ex) {
             return $this->error('Try again later: ' . $ex->getMessage());
         };
 
         return $this->ok([
-            'article_url' => $this->web->getUrlBuilder()->buildArticleUrl($article)
+            'article_url' => $this->modules->web()->getUrlBuilder()->buildArticleUrl($article)
         ]);
     }
 }

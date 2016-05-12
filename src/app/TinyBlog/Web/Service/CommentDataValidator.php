@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Service;
 
 use TinyBlog\Web\RequestData\CommentData;
-use TinyBlog\Type\ValidationResult;
+use TinyBlog\Validation\ValidationResult;
 
 class CommentDataValidator
 {

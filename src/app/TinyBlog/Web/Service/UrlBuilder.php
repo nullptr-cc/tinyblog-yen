@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Service;
 
 use Yen\Http\Uri;
-use TinyBlog\Type\Article;
+use TinyBlog\Article\Article;
 
 class UrlBuilder extends \Yen\Util\UrlBuilder
 {

@@ -2,17 +2,16 @@
 
 namespace TinyBlog\Web\Handler\Base;
 
-use TinyBlog\Web\WebRegistry;
-use TinyBlog\Domain\DomainRegistry;
+use TinyBlog\Modules;
 
 abstract class AjaxHandler extends Handler
 {
     protected $json_renderer;
 
-    public function __construct(WebRegistry $web, DomainRegistry $domain)
+    public function __construct(Modules $modules)
     {
-        parent::__construct($web, $domain);
-        $this->json_renderer = $web->getJsonRenderer();
+        parent::__construct($modules);
+        $this->json_renderer = $modules->web()->getJsonRenderer();
     }
 
     protected function ok($data)

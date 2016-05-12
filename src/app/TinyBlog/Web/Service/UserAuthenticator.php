@@ -3,15 +3,15 @@
 namespace TinyBlog\Web\Service;
 
 use Yen\Session\Contract\ISession;
-use TinyBlog\Domain\User\UserFinder;
-use TinyBlog\Type\User;
+use TinyBlog\User\UserRepo;
+use TinyBlog\User\User;
 
 class UserAuthenticator
 {
     protected $session;
     protected $user_srv;
 
-    public function __construct(ISession $session, UserFinder $user_srv)
+    public function __construct(ISession $session, UserRepo $user_srv)
     {
         $this->session = $session;
         $this->user_srv = $user_srv;

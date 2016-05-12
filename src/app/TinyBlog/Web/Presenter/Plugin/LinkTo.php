@@ -3,14 +3,14 @@
 namespace TinyBlog\Web\Presenter\Plugin;
 
 use Yen\Http\Uri;
-use TinyBlog\Web\WebRegistry;
-use TinyBlog\Type\Article;
+use TinyBlog\Web\ModuleWeb;
+use TinyBlog\Article\Article;
 
 class LinkTo
 {
     protected $url_builder;
 
-    public function __construct(WebRegistry $web)
+    public function __construct(ModuleWeb $web)
     {
         $this->url_builder = $web->getUrlBuilder();
     }

@@ -5,10 +5,10 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
-use TinyBlog\Type\User;
-use TinyBlog\Type\OAuthUser;
-use TinyBlog\Domain\OAuth\IProvider;
-use TinyBlog\Domain\OAuth\UserInfo;
+use TinyBlog\User\User;
+use TinyBlog\OAuth\OAuthUser;
+use TinyBlog\OAuth\IProvider;
+use TinyBlog\OAuth\UserInfo;
 
 abstract class BackHandler extends CommonHandler
 {
@@ -42,7 +42,7 @@ abstract class BackHandler extends CommonHandler
             return $this->error();
         };
 
-        $repo = $this->domain->getOAuthUserRepo();
+        $repo = $this->modules->oauth()->getOAuthUserRepo();
         $res = $repo->find($provider->getId(), $info->identifier());
 
         if (!count($res)) {
@@ -51,10 +51,10 @@ abstract class BackHandler extends CommonHandler
             $user = $res[0]->getUser();
         };
 
-        $this->web->getSession()->start();
-        $this->web->getUserAuthenticator()->setAuthUser($user);
+        $this->modules->web()->getSession()->start();
+        $this->modules->web()->getUserAuthenticator()->setAuthUser($user);
 
-        return $this->redirect($this->web->getUrlBuilder()->buildMainPageUrl());
+        return $this->redirect($this->modules->web()->getUrlBuilder()->buildMainPageUrl());
     }
 
     protected function createUser(IProvider $provider, UserInfo $info)
@@ -66,7 +66,7 @@ abstract class BackHandler extends CommonHandler
             'role'     => User::ROLE_CONSUMER
         ]);
 
-        $user = $this->domain->getUserRepo()->persist($user);
+        $user = $this->modules->user()->getUserRepo()->persist($user);
 
         $oauser = new OAuthUser([
             'user' => $user,
@@ -74,7 +74,7 @@ abstract class BackHandler extends CommonHandler
             'identifier' => $info->identifier()
         ]);
 
-        $this->domain->getOAuthUserRepo()->persist($oauser);
+        $this->modules->oauth()->getOAuthUserRepo()->persist($oauser);
 
         return $user;
     }

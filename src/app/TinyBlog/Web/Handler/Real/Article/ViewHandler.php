@@ -6,7 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Web\RequestData\ArticleViewData;
-use TinyBlog\Domain\Exception\ArticleNotFound;
+use TinyBlog\Article\EArticleNotFound;
 
 class ViewHandler extends CommonHandler
 {
@@ -18,13 +18,13 @@ class ViewHandler extends CommonHandler
     public function handle(IServerRequest $request)
     {
         $data = ArticleViewData::createFromRequest($request);
-        $afinder = $this->domain->getArticleFinder();
-        $cfinder = $this->domain->getCommentFinder();
+        $afinder = $this->modules->article()->getArticleRepo();
+        $cfinder = $this->modules->comment()->getCommentRepo();
 
         try {
             $article = $afinder->getArticleById($data->getArticleId());
             $comments = $cfinder->getArticleComments($article);
-        } catch (ArticleNotFound $ex) {
+        } catch (EArticleNotFound $ex) {
             return $this->notFound();
         };
 

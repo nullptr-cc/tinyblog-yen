@@ -3,13 +3,13 @@
 namespace TinyBlog\Web\Presenter\Base;
 
 use Yen\Util\Contract\IClassResolver;
-use TinyBlog\Web\WebRegistry;
+use TinyBlog\Web\ModuleWeb;
 
 class PluginRegistry extends \Yen\Util\PluginRegistry
 {
     protected $web;
 
-    public function __construct(WebRegistry $web, IClassResolver $resolver)
+    public function __construct(ModuleWeb $web, IClassResolver $resolver)
     {
         parent::__construct($resolver);
         $this->web = $web;

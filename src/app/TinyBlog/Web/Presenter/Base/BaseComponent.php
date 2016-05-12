@@ -2,7 +2,7 @@
 
 namespace TinyBlog\Web\Presenter\Base;
 
-use TinyBlog\Web\WebRegistry;
+use TinyBlog\Web\ModuleWeb;
 
 abstract class BaseComponent
 {
@@ -12,7 +12,7 @@ abstract class BaseComponent
     protected $authenticator;
     protected $settings;
 
-    public function __construct(WebRegistry $web, ComponentRegistry $components)
+    public function __construct(ModuleWeb $web, ComponentRegistry $components)
     {
         $this->web = $web;
         $this->components = $components;

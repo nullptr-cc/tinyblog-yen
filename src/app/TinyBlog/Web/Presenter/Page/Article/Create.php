@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Presenter\Page\Article;
 
 use TinyBlog\Web\Presenter\Base\CommonPage;
-use TinyBlog\Type\Article;
+use TinyBlog\Article\Article;
 
 class Create extends CommonPage
 {

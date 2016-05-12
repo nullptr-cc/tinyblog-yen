@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Presenter\Component;
 
 use TinyBlog\Web\Presenter\Base\BaseComponent;
-use TinyBlog\Type\User;
+use TinyBlog\User\User;
 
 class MainMenu extends BaseComponent
 {

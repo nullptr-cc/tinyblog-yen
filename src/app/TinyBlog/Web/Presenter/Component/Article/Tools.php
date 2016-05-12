@@ -3,7 +3,7 @@
 namespace TinyBlog\Web\Presenter\Component\Article;
 
 use TinyBlog\Web\Presenter\Base\BaseComponent;
-use TinyBlog\Type\Article;
+use TinyBlog\Article\Article;
 
 class Tools extends BaseComponent
 {

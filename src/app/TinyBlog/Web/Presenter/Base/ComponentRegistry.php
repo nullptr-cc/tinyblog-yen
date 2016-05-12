@@ -4,13 +4,13 @@ namespace TinyBlog\Web\Presenter\Base;
 
 use Yen\Util\Contract\IClassResolver;
 use Yen\Util\CommonRegistry;
-use TinyBlog\Web\WebRegistry;
+use TinyBlog\Web\ModuleWeb;
 
 class ComponentRegistry extends CommonRegistry
 {
     protected $web;
 
-    public function __construct(WebRegistry $web, IClassResolver $resolver)
+    public function __construct(ModuleWeb $web, IClassResolver $resolver)
     {
         parent::__construct($resolver);
         $this->web = $web;

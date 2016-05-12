@@ -17,5 +17,5 @@ $sarray = array_merge_recursive(
 
 $settings = new Yen\Settings\SettingsArray($sarray);
 
-$app = new TinyBlog\Core\WebApplication($settings);
+$app = new TinyBlog\WebApplication($settings);
 $app->run();

@@ -4,23 +4,20 @@ namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Util\Contract\IClassResolver;
 use Yen\Handler\HandlerRegistry as YenHandlerRegistry;
-use TinyBlog\Web\WebRegistry;
-use TinyBlog\Domain\DomainRegistry;
+use TinyBlog\Modules;
 
 class HandlerRegistry extends YenHandlerRegistry
 {
-    protected $web;
-    protected $domain;
+    protected $modules;
 
-    public function __construct(WebRegistry $web, DomainRegistry $domain, IClassResolver $resolver)
+    public function __construct(Modules $modules, IClassResolver $resolver)
     {
         parent::__construct($resolver);
-        $this->web = $web;
-        $this->domain = $domain;
+        $this->modules = $modules;
     }
 
     protected function createExistent($classname)
     {
-        return new $classname($this->web, $this->domain);
+        return new $classname($this->modules);
     }
 }
