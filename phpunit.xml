@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="test/loader.php">
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/app</directory>
+        </whitelist>
+    </filter>
+    <testsuites>
+        <testsuite name="all">
+            <directory>test/TinyBlogTest</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

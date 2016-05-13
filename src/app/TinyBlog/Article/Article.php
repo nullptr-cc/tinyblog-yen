@@ -107,32 +107,44 @@ class Article
 
     public function withId($id)
     {
-        return $this->with(['id' => $id]);
+        $clone = clone $this;
+        $clone->setId($id);
+        return $clone;
     }
 
     public function withAuthor(User $author)
     {
-        return $this->with(['user' => $author]);
+        $clone = clone $this;
+        $clone->setAuthor($author);
+        return $clone;
     }
 
     public function withTitle($title)
     {
-        return $this->with(['title' => $title]);
+        $clone = clone $this;
+        $clone->setTitle($title);
+        return $clone;
     }
 
     public function withBody(Content $body)
     {
-        return $this->with(['body' => $body]);
+        $clone = clone $this;
+        $clone->setBody($body);
+        return $clone;
     }
 
     public function withTeaser($teaser)
     {
-        return $this->with(['teaser' => $teaser]);
+        $clone = clone $this;
+        $clone->setTeaser($teaser);
+        return $clone;
     }
 
     public function withCreatedAt(DateTimeInterface $dt)
     {
-        return $this->with(['created_at' => $dt]);
+        $clone = clone $this;
+        $clone->setCreatedAt($dt);
+        return $clone;
     }
 
     public function id()
@@ -163,24 +175,5 @@ class Article
     public function created()
     {
         return $this->created_at;
-    }
-
-    protected function with(array $replacement)
-    {
-        return new self(
-            array_merge($this->parts(), $replacement)
-        );
-    }
-
-    protected function parts()
-    {
-        return [
-            'id' => $this->id,
-            'author' => $this->author,
-            'title' => $this->title,
-            'body' => $this->body,
-            'teaser' => $this->teaser,
-            'created_at' => $this->created_at
-        ];
     }
 }

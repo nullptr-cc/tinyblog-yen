@@ -105,27 +105,37 @@ class Comment
 
     public function withId($id)
     {
-        return $this->with(['id' => $id]);
+        $clone = clone $this;
+        $clone->setId($id);
+        return $clone;
     }
 
     public function withArticle(Article $article)
     {
-        return $this->with(['article' => $article]);
+        $clone = clone $this;
+        $clone->setArticle($article);
+        return $clone;
     }
 
     public function withAuthor(User $author)
     {
-        return $this->with(['author' => $author]);
+        $clone = clone $this;
+        $clone->setAuthor($author);
+        return $clone;
     }
 
     public function withBody($body)
     {
-        return $this->with(['body' => $body]);
+        $clone = clone $this;
+        $clone->setBody($body);
+        return $clone;
     }
 
     public function withCreatedAt(DateTimeInterface $created_at)
     {
-        return $this->with(['created_at' => $created_at]);
+        $clone = clone $this;
+        $clone->setCreatedAt($created_at);
+        return $clone;
     }
 
     public function id()
@@ -151,23 +161,5 @@ class Comment
     public function created()
     {
         return $this->getCreatedAt();
-    }
-
-    protected function with(array $replacement)
-    {
-        return new self(
-            array_merge($this->parts(), $replacement)
-        );
-    }
-
-    protected function parts()
-    {
-        return [
-            'id' => $this->id,
-            'article' => $this->article,
-            'author' => $this->author,
-            'body' => $this->body,
-            'created_at' => $this->created_at
-        ];
     }
 }

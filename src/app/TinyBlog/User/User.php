@@ -91,22 +91,30 @@ class User
 
     public function withId($id)
     {
-        return $this->with(['id' => $id]);
+        $clone = clone $this;
+        $clone->setId($id);
+        return $clone;
     }
 
     public function withNickname($nickname)
     {
-        return $this->with(['nickname' => $nickname]);
+        $clone = clone $this;
+        $clone->setNickname($nickname);
+        return $clone;
     }
 
     public function withUsername($username)
     {
-        return $this->with(['username' => $username]);
+        $clone = clone $this;
+        $clone->setUsername($username);
+        return $clone;
     }
 
     public function withPassword($password)
     {
-        return $this->with(['password' => $password]);
+        $clone = clone $this;
+        $clone->setPassword($password);
+        return $clone;
     }
 
     public function withRole($role)
@@ -139,22 +147,5 @@ class User
     public function role()
     {
         return $this->role;
-    }
-
-    protected function with(array $replacement)
-    {
-        return new self(
-            array_merge($this->parts(), $replacement)
-        );
-    }
-
-    protected function parts()
-    {
-        return [
-            'id' => $this->id,
-            'nickname' => $this->nickname,
-            'username' => $this->username,
-            'password' => $this->password
-        ];
     }
 }
