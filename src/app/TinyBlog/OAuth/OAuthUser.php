@@ -60,30 +60,22 @@ class OAuthUser
 
     public function withUser(User $user)
     {
-        return $this->with(['user' => $user]);
+        $clone = clone $this;
+        $clone->setUser($user);
+        return $clone;
     }
 
     public function withProvider($provider)
     {
-        return $this->with(['provider' => $provider]);
+        $clone = clone $this;
+        $clone->setProvider($provider);
+        return $clone;
     }
 
     public function withIdentifier($identifier)
     {
-        return $this->with(['identifier' => $identifier]);
-    }
-
-    protected function with(array $replacement)
-    {
-        return new self(array_merge($this->parts, $replacement));
-    }
-
-    protected function parts()
-    {
-        return [
-            'user' => $this->user,
-            'provider' => $this->provider,
-            'identifier' => $this->identifier
-        ];
+        $clone = clone $this;
+        $clone->setIdentifier($identifier);
+        return $clone;
     }
 }
