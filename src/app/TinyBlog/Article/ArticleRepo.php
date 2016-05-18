@@ -55,7 +55,7 @@ class ArticleRepo
 
         $return = (object)['page_count' => $page_count, 'articles' => []];
 
-        if ($page_num < 1 || ($page_count && $page_num > $page_count)) {
+        if (!$page_count || $page_num < 1 || $page_num > $page_count) {
             return $return;
         };
 
