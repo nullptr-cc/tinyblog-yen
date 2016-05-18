@@ -11,6 +11,9 @@
     "require": {
         "michelf/php-markdown": "^1.6"
     },
+    "require-dev": {
+        "facebook/webdriver": "^1"
+    },
     "autoload": {
         "psr-4": {
             "Yen\\": ["src/lib/Yen"],

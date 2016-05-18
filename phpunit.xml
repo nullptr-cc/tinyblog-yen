@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit bootstrap="test/loader.php">
+    <php>
+        <const name="SELENIUM_URL" value="http://192.168.25.41:4444/wd/hub"/>
+        <const name="WEBTEST_URL" value="http://tinyblog.nullptr.cc"/>
+    </php>
     <filter>
         <whitelist>
             <directory suffix=".php">src/app</directory>
@@ -8,6 +12,9 @@
     <testsuites>
         <testsuite name="unit">
             <directory>test/unit</directory>
+        </testsuite>
+        <testsuite name="web">
+            <directory>test/TinyBlogWebTest</directory>
         </testsuite>
     </testsuites>
 </phpunit>
