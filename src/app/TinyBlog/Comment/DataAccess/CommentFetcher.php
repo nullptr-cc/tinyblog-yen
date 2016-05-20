@@ -2,7 +2,8 @@
 
 namespace TinyBlog\Comment\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use Yada\Statement as SqlStatement;
 use TinyBlog\Article\Article;
 use TinyBlog\User\User;
 use TinyBlog\Comment\Comment;
@@ -12,7 +13,7 @@ class CommentFetcher
 {
     protected $driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $driver)
     {
         $this->driver = $driver;
     }
@@ -34,14 +35,14 @@ class CommentFetcher
                  ->bindInt(':article_id', $article->getId())
                  ->execute();
 
-        return $this->makeResult($stmt->fetchAll(), $article);
+        return $this->makeResult($stmt, $article);
     }
 
-    protected function makeResult(array $rows, Article $article)
+    protected function makeResult(SqlStatement $stmt, Article $article)
     {
         $comments = [];
 
-        foreach ($rows as $row) {
+        while ($row = $stmt->fetch()) {
             $comments[] = $this->makeCommentWithAuthor($row)->withArticle($article);
         };
 

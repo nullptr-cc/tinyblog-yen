@@ -2,14 +2,15 @@
 
 namespace TinyBlog\User\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use Yada\Statement as SqlStatement;
 use TinyBlog\User\User;
 
 class UserStore
 {
     protected $driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $driver)
     {
         $this->driver = $driver;
     }
@@ -27,7 +28,7 @@ class UserStore
                  ->bindInt(':id', $id)
                  ->execute();
 
-        return $this->makeResult($stmt->fetchAll());
+        return $this->makeResult($stmt);
     }
 
     /**
@@ -43,7 +44,7 @@ class UserStore
                  ->bindString(':username', $username)
                  ->execute();
 
-        return $this->makeResult($stmt->fetchAll());
+        return $this->makeResult($stmt);
     }
 
     /**
@@ -69,11 +70,11 @@ class UserStore
         ];
     }
 
-    protected function makeResult(array $rows)
+    protected function makeResult(SqlStatement $stmt)
     {
         $result = [];
 
-        foreach ($rows as $row) {
+        while ($row = $stmt->fetch()) {
             $result[] = $this->makeUser($row);
         };
 

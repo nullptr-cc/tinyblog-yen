@@ -2,7 +2,8 @@
 
 namespace TinyBlog\OAuth\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use Yada\Statement as SqlStatement;
 use TinyBlog\OAuth\OAuthUser;
 use TinyBlog\User\User;
 
@@ -10,7 +11,7 @@ class OAuthUserStore
 {
     protected $driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $driver)
     {
         $this->driver = $driver;
     }
@@ -56,7 +57,7 @@ class OAuthUserStore
             };
         };
 
-        return $this->makeResult($stmt->execute()->fetchAll());
+        return $this->makeResult($stmt->execute());
     }
 
     protected function makeWhere(array $cond)
@@ -73,10 +74,11 @@ class OAuthUserStore
         return implode(' and ', $where);
     }
 
-    protected function makeResult(array $rows)
+    protected function makeResult(SqlStatement $stmt)
     {
         $result = [];
-        foreach ($rows as $row) {
+        
+        while ($row = $stmt->fetch()) {
             $user = new User([
                 'id' => $row['user_id'],
                 'nickname' => $row['nickname']

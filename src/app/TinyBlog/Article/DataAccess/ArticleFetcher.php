@@ -2,7 +2,8 @@
 
 namespace TinyBlog\Article\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use Yada\Statement as SqlStatement;
 use TinyBlog\Article\Article;
 use TinyBlog\Article\Content;
 use TinyBlog\User\User;
@@ -12,7 +13,7 @@ class ArticleFetcher
 {
     protected $driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $driver)
     {
         $this->driver = $driver;
     }
@@ -34,7 +35,7 @@ class ArticleFetcher
                  ->bindInt(':id', $id)
                  ->execute();
 
-        return $this->makeResult($stmt->fetchAll());
+        return $this->makeResult($stmt);
     }
 
     /**
@@ -61,7 +62,7 @@ class ArticleFetcher
 
         $stmt = $this->driver->query($sql);
 
-        return $this->makeResult($stmt->fetchAll());
+        return $this->makeResult($stmt);
     }
 
     protected function makeOrderString(array $order)
@@ -87,11 +88,14 @@ class ArticleFetcher
         return sprintf('limit %d, %d', $skip, $limit);
     }
 
-    protected function makeResult(array $rows)
+    /**
+     * @return Article[]
+     */
+    protected function makeResult(SqlStatement $stmt)
     {
         $articles = [];
 
-        foreach ($rows as $row) {
+        while ($row = $stmt->fetch()) {
             $articles[] = $this->makeArticleWithUser($row);
         };
 
