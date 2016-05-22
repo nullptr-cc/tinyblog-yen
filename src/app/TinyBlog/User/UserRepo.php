@@ -18,12 +18,22 @@ class UserRepo
         return $user->withId($result->id);
     }
 
+    public function userExists($user_id)
+    {
+        return $this->store->count(['id' => $user_id]) != 0;
+    }
+
+    public function usernameExists($username)
+    {
+        return $this->store->count(['username' => $username]) != 0;
+    }
+
     public function getById($id)
     {
         $result = $this->store->fetchById($id);
 
         if (!count($result)) {
-            throw new \InvalidArgumentException('invalid user id');
+            throw new EUserNotExists();
         };
 
         return $result[0];
@@ -34,7 +44,7 @@ class UserRepo
         $result = $this->store->fetchByUsername($username);
 
         if (!count($result)) {
-            throw new \InvalidArgumentException('invalid username');
+            throw new EUserNotExists();
         };
 
         return $result[0];

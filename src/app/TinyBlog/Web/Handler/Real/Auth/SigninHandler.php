@@ -25,15 +25,16 @@ class SigninHandler extends AjaxHandler
 
         $data = SignInData::createFromRequest($request);
 
-        try {
-            $user = $authenticator->authenticate($data->username(), $data->password());
-        } catch (\InvalidArgumentException $ex) {
+        if (!$authenticator->authenticate($data->username(), $data->password())) {
             return $this->badParams(['msg' => 'Invalid credentials']);
         };
 
+        $user = $this->modules->user()->getUserRepo()->getByUsername($data->username());
         $this->modules->web()->getSession()->start();
         $authenticator->setAuthUser($user);
 
-        return $this->ok(['redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()]);
+        return $this->ok([
+            'redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()
+        ]);
     }
 }

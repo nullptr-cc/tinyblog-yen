@@ -16,6 +16,24 @@ class UserStore
     }
 
     /**
+     * @return int
+     */
+    public function count(array $cond)
+    {
+        $sql = sprintf(
+            'select count(*) from `user` where %s',
+            $this->makeWhere($cond)
+        );
+
+        return
+            $this->driver
+                 ->prepare($sql)
+                 ->bindAuto($cond)
+                 ->execute()
+                 ->fetchColumn();
+    }
+
+    /**
      * @return User[]
      */
     public function fetchById($id)
@@ -68,6 +86,24 @@ class UserStore
         return (object)[
             'id' => $this->driver->lastInsertId()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function makeWhere(array $cond)
+    {
+        if (!count($cond)) {
+            return '1';
+        };
+
+        $where = [];
+
+        foreach ($cond as $key => $val) {
+            $where[] = sprintf('%s = :%s', $key, $key);
+        };
+
+        return implode(' and ', $where);
     }
 
     protected function makeResult(SqlStatement $stmt)
