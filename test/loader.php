@@ -12,7 +12,7 @@ set_include_path(
 spl_autoload_register(
     function ($classname)
     {
-        $fname = str_repalce('\\', '/', $classname) . '.php';
+        $fname = str_replace('\\', '/', $classname) . '.php';
         if ($realpath = stream_resolve_include_path($fname)) {
             include_once $realpath;
             return true;

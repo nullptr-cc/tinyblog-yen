@@ -6,7 +6,7 @@ use TinyBlog\Article\ArticleRepo;
 use TinyBlog\Article\DataAccess\ArticleFetcher;
 use TinyBlog\Article\DataAccess\ArticleStore;
 use TinyBlog\Article\Article;
-use TinyBlog\Article\EArticleNotFound;
+use TinyBlog\Article\EArticleNotExists;
 
 class ArticleRepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +59,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
 
-        $fetcher->count()->willReturn(0);
+        $fetcher->countAll()->willReturn(0);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
         $result = $repo->getArticlesListRange([], 1, 10);
@@ -73,7 +73,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
 
-        $fetcher->count()->willReturn(16);
+        $fetcher->countAll()->willReturn(16);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
         $result = $repo->getArticlesListRange([], 0, 10);
@@ -87,7 +87,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
 
-        $fetcher->count()->willReturn(16);
+        $fetcher->countAll()->willReturn(16);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
         $result = $repo->getArticlesListRange([], 5, 10);
@@ -101,7 +101,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
 
-        $fetcher->count()->willReturn(16);
+        $fetcher->countAll()->willReturn(16);
         $fetcher->fetch([], 0, 10)->willReturn(array_fill(0, 10, new Article()));
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
@@ -128,7 +128,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetArticleByIdException()
     {
-        $this->expectException(EArticleNotFound::class);
+        $this->expectException(EArticleNotExists::class);
 
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
@@ -137,5 +137,17 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
         $article = $repo->getArticleById(42);
+    }
+
+    public function testArticleExists()
+    {
+        $fetcher = $this->prophesize(ArticleFetcher::class);
+        $store = $this->prophesize(ArticleStore::class);
+
+        $fetcher->count(['id' => 42])->willReturn(0);
+
+        $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
+
+        $this->assertFalse($repo->articleExists(42));
     }
 }

@@ -6,7 +6,6 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\CommonHandler;
 use TinyBlog\Web\RequestData\ArticleViewData;
-use TinyBlog\Article\EArticleNotFound;
 use TinyBlog\User\User;
 
 class EditHandler extends CommonHandler
@@ -26,11 +25,11 @@ class EditHandler extends CommonHandler
         $data = ArticleViewData::createFromRequest($request);
         $finder = $this->modules->article()->getArticleRepo();
 
-        try {
-            $article = $finder->getArticleById($data->getArticleId());
-        } catch (EArticleNotFound $ex) {
+        if (!$finder->articleExists($data->getArticleId())) {
             return $this->badParams('Invalid article ID');
         };
+
+        $article = $finder->getArticleById($data->getArticleId());
 
         if ($auth_user->getId() != $article->author()->getId()) {
             return $this->forbidden('');

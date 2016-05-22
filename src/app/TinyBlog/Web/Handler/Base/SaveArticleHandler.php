@@ -6,7 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\WebRegistry;
 use TinyBlog\Web\RequestData\ArticleData;
-use TinyBlog\Article\EArticleNotFound;
+use TinyBlog\Article\EArticleNotExists;
 use TinyBlog\User\User;
 
 abstract class SaveArticleHandler extends AjaxHandler
@@ -35,7 +35,7 @@ abstract class SaveArticleHandler extends AjaxHandler
 
         try {
             $article = $this->saveArticle($data);
-        } catch (EArticleNotFound $ex) {
+        } catch (EArticleNotExists $ex) {
             return $this->badParams(['article_id' => 'Invalid article ID']);
         } catch (\Exception $ex) {
             return $this->error('Try again later: ' . $ex->getMessage());

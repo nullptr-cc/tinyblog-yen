@@ -6,7 +6,6 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
-use TinyBlog\Article\EArticleNotFound;
 use TinyBlog\User\User;
 
 class DeleteHandler extends AjaxHandler
@@ -26,11 +25,14 @@ class DeleteHandler extends AjaxHandler
         $data = ArticleDeleteData::createFromRequest($request);
         $repo = $this->modules->article()->getArticleRepo();
 
-        try {
-            $article = $repo->getArticleById($data->getArticleId());
-            $repo->deleteArticle($article);
-        } catch (EArticleNotFound $ex) {
+        if (!$repo->articleExists($data->getArticleId())) {
             return $this->badParams(['article_id' => 'invalid article id']);
+        };
+
+        $article = $repo->getArticleById($data->getArticleId());
+        
+        try {
+            $repo->deleteArticle($article);
         } catch (\Exception $ex) {
             return $this->error('Something wrong: ' . $ex->getMessage());
         };

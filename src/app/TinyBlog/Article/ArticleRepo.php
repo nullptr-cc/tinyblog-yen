@@ -32,6 +32,14 @@ class ArticleRepo
     }
 
     /**
+     * @return bool
+     */
+    public function articleExists($article_id)
+    {
+        return $this->fetcher->count(['id' => $article_id]) != 0;
+    }
+
+    /**
      * @return Article
      */
     public function getArticleById($article_id)
@@ -39,7 +47,7 @@ class ArticleRepo
         $articles = $this->fetcher->fetchById($article_id);
 
         if (!count($articles)) {
-            throw new EArticleNotFound($article_id);
+            throw new EArticleNotExists($article_id);
         };
 
         return $articles[0];
@@ -50,7 +58,7 @@ class ArticleRepo
      */
     public function getArticlesListRange($order, $page_num, $per_page)
     {
-        $count = $this->fetcher->count();
+        $count = $this->fetcher->countAll();
         $page_count = ceil($count / $per_page);
 
         $return = (object)['page_count' => $page_count, 'articles' => []];

@@ -6,7 +6,6 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\Web\RequestData\CommentData;
-use TinyBlog\Article\EArticleNotFound;
 use TinyBlog\User\User;
 
 class InsertHandler extends AjaxHandler
@@ -29,16 +28,19 @@ class InsertHandler extends AjaxHandler
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
             return $this->badParams($vr->getErrors());
-        }
+        };
 
         $afinder = $this->modules->article()->getArticleRepo();
         $ceditor = $this->modules->web()->getCommentEditor();
 
-        try {
-            $article = $afinder->getArticleById($data->getArticleId());
-            $comment = $ceditor->createComment($data, $article, $auth_user, new \DateTimeImmutable());
-        } catch (EArticleNotFound $ex) {
+        if (!$afinder->articleExists($data->getArticleId())) {
             return $this->badParams(['article_id' => 'Invalid article id']);
+        };
+
+        $article = $afinder->getArticleById($data->getArticleId());
+
+        try {
+            $comment = $ceditor->createComment($data, $article, $auth_user, new \DateTimeImmutable());
         } catch (\Exception $ex) {
             return $this->error('Something wrong: ' . $ex->getMessage());
         };
