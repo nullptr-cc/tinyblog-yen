@@ -1,2 +1,3 @@
 vendor
 settings.ini
+test/dbopts/connection.ini

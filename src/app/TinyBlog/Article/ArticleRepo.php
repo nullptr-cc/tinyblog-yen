@@ -36,7 +36,7 @@ class ArticleRepo
      */
     public function articleExists($article_id)
     {
-        return $this->fetcher->count(['id' => $article_id]) != 0;
+        return $this->fetcher->countById($article_id) != 0;
     }
 
     /**

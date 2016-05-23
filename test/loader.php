@@ -21,3 +21,6 @@ spl_autoload_register(
         return false;
     }
 );
+
+define('DBOPTS_PATH', __DIR__ . '/dbopts');
+define('DBFIXT_PATH', DBOPTS_PATH . '/fixtures');

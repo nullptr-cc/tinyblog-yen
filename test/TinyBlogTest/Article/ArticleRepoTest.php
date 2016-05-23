@@ -144,7 +144,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
 
-        $fetcher->count(['id' => 42])->willReturn(0);
+        $fetcher->countById(42)->willReturn(0);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
 

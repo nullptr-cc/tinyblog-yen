@@ -49,17 +49,14 @@ class ArticleFetcher
     /**
      * @return int
      */
-    public function count(array $cond)
+    public function countById($id)
     {
-        $sql = sprintf(
-            'select count(*) from article where %s',
-            $this->makeWhere($cond)
-        );
+        $sql = 'select count(*) from article where id = :id';
 
         return
             $this->driver
                  ->prepare($sql)
-                 ->bindAuto($cond)
+                 ->bindInt(':id', $id)
                  ->execute()
                  ->fetchColumn();
     }
@@ -81,24 +78,6 @@ class ArticleFetcher
         $stmt = $this->driver->query($sql);
 
         return $this->makeResult($stmt);
-    }
-
-    /**
-     * @return string
-     */
-    protected function makeWhere(array $cond)
-    {
-        if (!count($cond)) {
-            return '1';
-        };
-
-        $where = [];
-
-        foreach ($cond as $key => $val) {
-            $where[] = sprintf('%s = :%s', $key, $key);
-        };
-
-        return implode(' and ', $where);
     }
 
     protected function makeOrderString(array $order)

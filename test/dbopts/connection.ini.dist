@@ -1,0 +1,4 @@
+host = "localhost"
+dbname = "tinyblog_test"
+username = "<USERNAME>"
+password = "<PASSWORD>"

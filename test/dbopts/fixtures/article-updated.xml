@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database>
+	<table_data name="article">
+        <row>
+            <field name="id">1</field>
+            <field name="author_id">1</field>
+            <field name="title">Test article</field>
+            <field name="body_raw">foo bar</field>
+            <field name="body_html">foo&lt;br&gt;bar</field>
+            <field name="teaser">foo</field>
+            <field name="created_at">2016-01-01 12:00:00</field>
+        </row>
+	</table_data>
+</database>
+</mysqldump>

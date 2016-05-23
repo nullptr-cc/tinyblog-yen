@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<dataset>
+    <table name="article">
+        <column>id</column>
+        <column>author_id</column>
+        <column>title</column>
+        <column>body_raw</column>
+        <column>body_html</column>
+        <column>teaser</column>
+        <column>created_at</column>
+    </table>
+</dataset>
