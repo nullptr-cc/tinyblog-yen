@@ -37,33 +37,13 @@ class CommentStore
         ];
     }
 
-    public function updateComment(Comment $comment)
-    {
-        $sql = 'update `comment`
-                set `article_id` = :article_id,
-                    `author_id` = :author_id,
-                    `body` = :body,
-                    `created_at` = :created_at
-                where id = :id';
-
-        $this->driver
-             ->preapre($sql)
-             ->bindInt(':article_id', $comment->getArticle()->getId())
-             ->bindInt(':author_id', $comment->getAuthor()->getId())
-             ->bindString(':body', $comment->getBody())
-             ->bindDateTime(':created_at', $comment->getCreatedAt())
-             ->execute();
-
-        return true;
-    }
-
     public function deleteComment(Comment $comment)
     {
         $sql = 'delete from `comment` where id = :id';
 
         $this->driver
              ->prepare($sql)
-             ->binInt(':id', $comment->getId())
+             ->bindInt(':id', $comment->getId())
              ->execute();
 
         return true;

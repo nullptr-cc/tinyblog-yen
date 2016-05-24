@@ -19,11 +19,6 @@ class CommentRepo
 
     public function persistComment(Comment $comment)
     {
-        if ($comment->getId() != 0) {
-            $this->store->updateComment($comment);
-            return $comment;
-        };
-
         $result = $this->store->insertComment($comment);
         return $comment->withId($result->id);
     }

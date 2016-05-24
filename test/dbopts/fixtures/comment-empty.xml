@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<dataset>
+    <table name="comment">
+        <column>id</column>
+        <column>article_id</column>
+        <column>author_id</column>
+        <column>body</column>
+        <column>created_at</column>
+    </table>
+</dataset>

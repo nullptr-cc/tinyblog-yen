@@ -27,22 +27,6 @@ class CommentRepoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test comment', $saved->getBody());
     }
 
-    public function testPersistCommentUpdate()
-    {
-        $store = $this->prophesize(CommentStore::class);
-        $fetcher = $this->prophesize(CommentFetcher::class);
-        $comment = new Comment(['id' => 99, 'body' => 'test comment']);
-
-        $store->updateComment($comment)->willReturn(true);
-
-        $repo = new CommentRepo($store->reveal(), $fetcher->reveal());
-        $saved = $repo->persistComment($comment);
-
-        $this->assertSame($saved, $comment);
-        $this->assertEquals(99, $saved->getId());
-        $this->assertEquals('test comment', $saved->getBody());
-    }
-
     public function testDeleteComment()
     {
         $store = $this->prophesize(CommentStore::class);
