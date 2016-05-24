@@ -1,46 +1,45 @@
 <?xml version="1.0"?>
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <database>
-	<table_data name="user">
-	<row>
-		<field name="id">1</field>
-		<field name="nickname">Mr. Demo</field>
-		<field name="username">demo</field>
-		<field name="password">$2y$10$o9uHy5pPRy4n314R2.uJnOP6uJKevtiVTmHB56peFnCX6Ui8qpXyy</field>
-		<field name="role">2</field>
-	</row>
-	</table_data>
-	<table_data name="article">
-	<row>
-		<field name="id">1</field>
-		<field name="author_id">1</field>
-		<field name="title">Welcome to demo</field>
-		<field name="body_raw">![Bear](https://placebear.com/780/320)
+    <table_data name="user">
+        <row>
+            <field name="id">1</field>
+            <field name="nickname">Mr. Demo</field>
+            <field name="username">demo</field>
+            <field name="password">$2y$10$o9uHy5pPRy4n314R2.uJnOP6uJKevtiVTmHB56peFnCX6Ui8qpXyy</field>
+            <field name="role">2</field>
+        </row>
+    </table_data>
+    <table_data name="article">
+        <row>
+            <field name="id">1</field>
+            <field name="author_id">1</field>
+            <field name="title">Welcome to demo</field>
+            <field name="body_raw">![Bear](https://placebear.com/780/320)
 
 You are on the demo blog site. Use **demo:openme** for sign in and write (or edit) articles. For enabling comments edit **siteid** attribute of the **disqus** section in the **settings.ini** file.</field>
-		<field name="body_html">&lt;p&gt;&lt;img src=&quot;https://placebear.com/780/320&quot; alt=&quot;Bear&quot; /&gt;&lt;/p&gt;
+            <field name="body_html">&lt;p&gt;&lt;img src=&quot;https://placebear.com/780/320&quot; alt=&quot;Bear&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You are on the demo blog site. Use &lt;strong&gt;demo:openme&lt;/strong&gt; for sign in and write (or edit) articles. For enabling comments edit &lt;strong&gt;siteid&lt;/strong&gt; attribute of the &lt;strong&gt;disqus&lt;/strong&gt; section in the &lt;strong&gt;settings.ini&lt;/strong&gt; file.&lt;/p&gt;
-</field>
-		<field name="teaser">&lt;p&gt;&lt;img src=&quot;https://placebear.com/780/320&quot; alt=&quot;Bear&quot;&gt;&lt;/p&gt;&lt;p&gt;You are on the demo blog site. Use &lt;strong&gt;demo:openme&lt;/strong&gt; for sign in and write (or edit) articles. For enabling comments edit &lt;strong&gt;siteid&lt;/strong&gt; attribute of the &lt;strong&gt;disqus&lt;/strong&gt; section in the &lt;strong&gt;settings.ini&lt;/strong&gt; file.&lt;/p&gt;</field>
-		<field name="created_at">2016-01-01 12:00:00</field>
-	</row>
-	</table_data>
-	<table_data name="comment">
-    <row>
-        <field name="id">1</field>
-        <field name="article_id">1</field>
-        <field name="author_id">1</field>
-        <field name="body">Demo article comment</field>
-        <field name="created_at">2016-01-01 12:05:15</field>
+&lt;p&gt;You are on the demo blog site. Use &lt;strong&gt;demo:openme&lt;/strong&gt; for sign in and write (or edit) articles. For enabling comments edit &lt;strong&gt;siteid&lt;/strong&gt; attribute of the &lt;strong&gt;disqus&lt;/strong&gt; section in the &lt;strong&gt;settings.ini&lt;/strong&gt; file.&lt;/p&gt;</field>
+        <field name="teaser">&lt;p&gt;&lt;img src=&quot;https://placebear.com/780/320&quot; alt=&quot;Bear&quot;&gt;&lt;/p&gt;&lt;p&gt;You are on the demo blog site. Use &lt;strong&gt;demo:openme&lt;/strong&gt; for sign in and write (or edit) articles. For enabling comments edit &lt;strong&gt;siteid&lt;/strong&gt; attribute of the &lt;strong&gt;disqus&lt;/strong&gt; section in the &lt;strong&gt;settings.ini&lt;/strong&gt; file.&lt;/p&gt;</field>
+        <field name="created_at">2016-01-01 12:00:00</field>
     </row>
-	</table_data>
-	<table_data name="oauth_user">
-    <row>
-        <field name="user_id">1</field>
-        <field name="provider">2</field>
-        <field name="identifier">2343215346</field>
-    </row>
-	</table_data>
+    </table_data>
+    <table_data name="comment">
+        <row>
+            <field name="id">1</field>
+            <field name="article_id">1</field>
+            <field name="author_id">1</field>
+            <field name="body">Demo article comment</field>
+            <field name="created_at">2016-01-01 12:05:15</field>
+        </row>
+    </table_data>
+    <table_data name="oauth_user">
+        <row>
+            <field name="user_id">1</field>
+            <field name="provider">2</field>
+            <field name="identifier">2343215346</field>
+        </row>
+    </table_data>
 </database>
 </mysqldump>
