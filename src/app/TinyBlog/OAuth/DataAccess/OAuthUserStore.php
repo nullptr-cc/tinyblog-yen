@@ -67,7 +67,8 @@ class OAuthUserStore
         };
 
         $where = [];
-        foreach (array_keys($cond) as $key) {
+        $keys = array_intersect(['user_id', 'provider', 'identifier'], array_keys($cond));
+        foreach ($keys as $key) {
             $where[] = sprintf('`%s` = :%s', $key, $key);
         };
 
@@ -77,7 +78,7 @@ class OAuthUserStore
     protected function makeResult(SqlStatement $stmt)
     {
         $result = [];
-        
+
         while ($row = $stmt->fetch()) {
             $user = new User([
                 'id' => $row['user_id'],

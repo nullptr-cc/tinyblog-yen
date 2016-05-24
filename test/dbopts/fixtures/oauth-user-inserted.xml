@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database>
+	<table_data name="oauth_user">
+        <row>
+            <field name="user_id">1</field>
+            <field name="provider">1</field>
+            <field name="identifier">19035</field>
+        </row>
+	</table_data>
+</database>
+</mysqldump>

@@ -36,6 +36,11 @@ You are on the demo blog site. Use **demo:openme** for sign in and write (or edi
     </row>
 	</table_data>
 	<table_data name="oauth_user">
+    <row>
+        <field name="user_id">1</field>
+        <field name="provider">2</field>
+        <field name="identifier">2343215346</field>
+    </row>
 	</table_data>
 </database>
 </mysqldump>
