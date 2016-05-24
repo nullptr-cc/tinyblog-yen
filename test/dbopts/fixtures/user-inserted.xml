@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database>
+	<table_data name="user">
+        <row>
+            <field name="id">2</field>
+            <field name="nickname">Foo Bar</field>
+            <field name="username">foobar</field>
+            <field name="password">xxx$yyy</field>
+            <field name="role">1</field>
+        </row>
+	</table_data>
+</database>
+</mysqldump>

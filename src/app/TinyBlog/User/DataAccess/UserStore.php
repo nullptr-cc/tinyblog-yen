@@ -18,17 +18,29 @@ class UserStore
     /**
      * @return int
      */
-    public function count(array $cond)
+    public function countById($id)
     {
-        $sql = sprintf(
-            'select count(*) from `user` where %s',
-            $this->makeWhere($cond)
-        );
+        $sql = 'select count(*) from `user` where id = :id';
 
         return
             $this->driver
                  ->prepare($sql)
-                 ->bindAuto($cond)
+                 ->bindInt(':id', $id)
+                 ->execute()
+                 ->fetchColumn();
+    }
+
+    /**
+     * @return int
+     */
+    public function countByUsername($username)
+    {
+        $sql = 'select count(*) from `user` where username = :username';
+
+        return
+            $this->driver
+                 ->prepare($sql)
+                 ->bindString(':username', $username)
                  ->execute()
                  ->fetchColumn();
     }
@@ -86,24 +98,6 @@ class UserStore
         return (object)[
             'id' => $this->driver->lastInsertId()
         ];
-    }
-
-    /**
-     * @return string
-     */
-    protected function makeWhere(array $cond)
-    {
-        if (!count($cond)) {
-            return '1';
-        };
-
-        $where = [];
-
-        foreach ($cond as $key => $val) {
-            $where[] = sprintf('%s = :%s', $key, $key);
-        };
-
-        return implode(' and ', $where);
     }
 
     protected function makeResult(SqlStatement $stmt)

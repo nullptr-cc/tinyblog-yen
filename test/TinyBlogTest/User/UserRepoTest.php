@@ -28,7 +28,7 @@ class UserRepoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->prophesize(UserStore::class);
 
-        $store->count(['id' => 42])->willReturn(1);
+        $store->countById(42)->willReturn(1);
 
         $repo = new UserRepo($store->reveal());
 
@@ -39,7 +39,7 @@ class UserRepoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->prophesize(UserStore::class);
 
-        $store->count(['username' => 'foobar'])->willReturn(0);
+        $store->countByUsername('foobar')->willReturn(0);
 
         $repo = new UserRepo($store->reveal());
 
@@ -87,7 +87,7 @@ class UserRepoTest extends \PHPUnit_Framework_TestCase
     public function testGetByUsernameException()
     {
         $this->expectException(EUserNotExists::class);
-        
+
         $store = $this->prophesize(UserStore::class);
 
         $store->fetchByUsername('foobar')->willReturn([]);

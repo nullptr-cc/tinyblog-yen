@@ -20,12 +20,12 @@ class UserRepo
 
     public function userExists($user_id)
     {
-        return $this->store->count(['id' => $user_id]) != 0;
+        return $this->store->countById($user_id) != 0;
     }
 
     public function usernameExists($username)
     {
-        return $this->store->count(['username' => $username]) != 0;
+        return $this->store->countByUsername($username) != 0;
     }
 
     public function getById($id)
