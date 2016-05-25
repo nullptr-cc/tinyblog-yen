@@ -6,8 +6,8 @@
         </whitelist>
     </filter>
     <testsuites>
-        <testsuite name="all">
-            <directory>test/TinyBlogTest</directory>
+        <testsuite name="unit">
+            <directory>test/unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>
