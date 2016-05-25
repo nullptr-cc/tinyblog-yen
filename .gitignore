@@ -1,3 +1,4 @@
 vendor
-settings.ini
+settings*.ini
 test/case-data/database/connection.ini
+test/case-data/web/connection.ini

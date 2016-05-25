@@ -7,7 +7,8 @@ set_include_path(
     __DIR__ . '/../src/app' . PATH_SEPARATOR .
     __DIR__ . '/../src/lib' . PATH_SEPARATOR .
     __DIR__ . '/ext' . PATH_SEPARATOR .
-    __DIR__ . '/unit'
+    __DIR__ . '/unit' . PATH_SEPARATOR .
+    __DIR__ . '/web'
 );
 
 spl_autoload_register(

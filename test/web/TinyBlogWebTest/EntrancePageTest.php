@@ -2,31 +2,16 @@
 
 namespace TinyBlogWebTest;
 
-use Facebook\WebDriver\Remote\RemoteWebDriver;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\WebDriverBy as By;
 
 /**
  * @large
  */
-class EntrancePageTest extends \PHPUnit_Framework_TestCase
+class EntrancePageTest extends \TestExt\WebTestCase
 {
-    private $wd;
-
-    public function setUp()
-    {
-        $this->wd = RemoteWebDriver::create(SELENIUM_URL, DesiredCapabilities::htmlUnitWithJS());
-    }
-
-    public function tearDown()
-    {
-        $this->wd->quit();
-        $this->wd = null;
-    }
-
     public function testFormView()
     {
-        $this->wd->get(WEBTEST_URL . '/auth/entrance');
+        $this->wd->get(self::$website_url . '/auth/entrance');
 
         $form = $this->wd->findElement(By::id('auth_form'));
         $inputs = $form->findElements(By::tagName('input'));
