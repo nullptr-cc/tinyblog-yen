@@ -24,3 +24,4 @@ spl_autoload_register(
 
 define('DBOPTS_PATH', __DIR__ . '/dbopts');
 define('DBFIXT_PATH', DBOPTS_PATH . '/fixtures');
+define('TCDATA_PATH', __DIR__ . '/case-data');

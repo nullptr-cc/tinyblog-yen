@@ -10,7 +10,7 @@ class ModuleTools
 
     public function getMarkdownTransformer()
     {
-        return new MarkdownTransformer();
+        return new MichelfMarkdownTransformer(new \Michelf\Markdown());
     }
 
     public function getTeaserMaker()

@@ -1,0 +1,3 @@
+<p>Simple teaser <a>maker test
+---- EXPECTED ----
+<p>Simple teaser <a>maker test</a></p>

@@ -1,0 +1,1 @@
+<div>Simple <b>teaser maker</b> test</div>
