@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-bdir=`dirname $0 | xargs realpath`
+bdir=`realpath $0 | xargs dirname | xargs dirname`
 ccdir=$bdir/assets/coverage
 mkdir -p $ccdir
 env TB_SETTINGS_INI=$bdir/settings-webtest.ini \

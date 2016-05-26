@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-bdir=`dirname $0 | xargs realpath`
+bdir=`realpath $0 | xargs dirname | xargs dirname`
 
 pushd $bdir >/dev/null
 
@@ -18,7 +18,7 @@ if [ -z $db_host ]; then db_host='localhost'; fi
 if [ -z $db_name ]; then db_name='tinyblog'; fi
 
 
-cat settings.ini-example |
+cat misc/settings.ini.dist |
     sed "s/<SITE_HOST>/${site_host}/g" |
     sed "s/<DB_HOST>/${db_host}/g" |
     sed "s/<DB_NAME>/${db_name}/g" |
