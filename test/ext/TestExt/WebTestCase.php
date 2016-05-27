@@ -4,36 +4,51 @@ namespace TestExt;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Yen\Http\Uri;
 
 abstract class WebTestCase extends \PHPUnit_Framework_TestCase
 {
-    protected static $selenium_url;
-    protected static $website_url;
-    protected $wd;
+    private $selenium_url;
+    private $web_driver;
     private $should_cc;
     private $ccid;
 
-    public static function setUpBeforeClass()
+    protected $website_url;
+
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
+        parent::__construct($name, $data, $dataName);
+
         $opts = parse_ini_file(TCDATA_PATH . '/web/connection.ini');
-        self::$selenium_url = $opts['selenium_url'];
-        self::$website_url = $opts['website_url'];
+        $this->selenium_url = Uri::createFromString($opts['selenium_url']);
+        $this->website_url = Uri::createFromString($opts['website_url']);
     }
 
-    public function setUp()
+    protected function getWebDriver()
     {
-        $this->wd = RemoteWebDriver::create(self::$selenium_url, DesiredCapabilities::htmlUnitWithJS());
+        return $this->web_driver;
+    }
+
+    protected function setUp()
+    {
+        try {
+            $this->web_driver = RemoteWebDriver::create($this->selenium_url, DesiredCapabilities::htmlUnitWithJS());
+        } catch (\Exception $ex) {
+            $this->markTestSkipped('Selenium server not available');
+        };
 
         if ($this->should_cc) {
-            $this->wd->get(self::$website_url . '/__cc/start');
-            $this->ccid = $this->wd->manage()->getCookieNamed('__ccid')['value'];
+            $this->web_driver->get($this->website_url->withPath('/__cc/start'));
+            $this->ccid = $this->web_driver->manage()->getCookieNamed('__ccid')['value'];
         };
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
-        $this->wd->quit();
-        $this->wd = null;
+        if ($this->web_driver) {
+            $this->web_driver->quit();
+            $this->web_driver = null;
+        };
     }
 
     public function run(\PHPUnit_Framework_TestResult $result = null)
@@ -43,7 +58,9 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
         $result = parent::run($result);
 
         if ($this->should_cc && !$this->hasFailed()) {
-            $url = self::$website_url . '/__cc/get?ccid=' . $this->ccid;
+            $url = $this->website_url
+                        ->withPath('/__cc/get')
+                        ->withJoinedQuery(['ccid' => $this->ccid]);
             $all_cc = json_decode(file_get_contents($url), true);
             $cc = $result->getCodeCoverage();
             foreach ($all_cc as $data) {

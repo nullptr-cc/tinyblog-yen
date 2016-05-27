@@ -11,9 +11,10 @@ class EntrancePageTest extends \TestExt\WebTestCase
 {
     public function testFormView()
     {
-        $this->wd->get(self::$website_url . '/auth/entrance');
+        $wd = $this->getWebDriver();
 
-        $form = $this->wd->findElement(By::id('auth_form'));
+        $wd->get($this->website_url->withPath('/auth/entrance'));
+        $form = $wd->findElement(By::id('auth_form'));
         $inputs = $form->findElements(By::tagName('input'));
         $buttons = $form->findElements(By::tagName('button'));
 
