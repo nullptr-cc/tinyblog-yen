@@ -8,7 +8,7 @@ use Yen\Http\Uri;
 
 abstract class WebTestCase extends \PHPUnit_Framework_TestCase
 {
-    private $selenium_url;
+    private $webdriver_url;
     private $web_driver;
     private $should_cc;
     private $ccid;
@@ -20,8 +20,14 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
         parent::__construct($name, $data, $dataName);
 
         $opts = parse_ini_file(TCDATA_PATH . '/web/connection.ini');
-        $this->selenium_url = Uri::createFromString($opts['selenium_url']);
+        $this->webdriver_url = Uri::createFromString($opts['webdriver_url']);
         $this->website_url = Uri::createFromString($opts['website_url']);
+    }
+
+    protected function createWebDriver()
+    {
+        $browser = DesiredCapabilities::chrome();
+        return RemoteWebDriver::create($this->webdriver_url, $browser);
     }
 
     protected function getWebDriver()
@@ -32,8 +38,9 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         try {
-            $this->web_driver = RemoteWebDriver::create($this->selenium_url, DesiredCapabilities::htmlUnitWithJS());
+            $this->web_driver = $this->createWebDriver();
         } catch (\Exception $ex) {
+            echo $ex->getMessage();
             $this->markTestSkipped('Selenium server not available');
         };
 

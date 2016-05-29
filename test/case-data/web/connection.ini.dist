@@ -1,2 +1,2 @@
-selenium_url = "<SELENIUM2_URL>"
+webdriver_url = "<WEBDRIVER_URL>"
 website_url = "<WEBSITE_URL>"
