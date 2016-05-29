@@ -13,8 +13,12 @@ class ArticleData
     protected $body;
     protected $created_at;
 
-    public function __construct($article_id = 0, $title = '', $body = '', $created_at = null)
-    {
+    public function __construct(
+        $article_id = 0,
+        $title = '',
+        $body = '',
+        DateTimeInterface $created_at = null
+    ) {
         $this->article_id = $article_id;
         $this->title = $title;
         $this->body = $body;
@@ -54,21 +58,8 @@ class ArticleData
 
     public function withCreatedAt(DateTimeInterface $created_at)
     {
-        return new self(
-            $this->article_id,
-            $this->title,
-            $this->body,
-            $created_at
-        );
-    }
-
-    public function dump()
-    {
-        return [
-            'article_id' => $this->article_id,
-            'title' => $this->title,
-            'body' => $this->body,
-            'created_at' => $this->created_at
-        ];
+        $clone = clone $this;
+        $clone->created_at = $created_at;
+        return $clone;
     }
 }
