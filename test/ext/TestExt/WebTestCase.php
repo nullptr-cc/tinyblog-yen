@@ -40,7 +40,6 @@ abstract class WebTestCase extends \PHPUnit_Framework_TestCase
         try {
             $this->web_driver = $this->createWebDriver();
         } catch (\Exception $ex) {
-            echo $ex->getMessage();
             $this->markTestSkipped('Selenium server not available');
         };
 
