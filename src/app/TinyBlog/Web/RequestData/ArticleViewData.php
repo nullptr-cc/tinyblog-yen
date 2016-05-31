@@ -3,6 +3,7 @@
 namespace TinyBlog\Web\RequestData;
 
 use Yen\Http\Contract\IServerRequest;
+use Yen\Util\Extractor;
 
 class ArticleViewData
 {
@@ -15,10 +16,7 @@ class ArticleViewData
 
     public static function createFromRequest(IServerRequest $request)
     {
-        $article_id = 0;
-        if (array_key_exists('article_id', $request->getQueryParams())) {
-            $article_id = intval($request->getQueryParams()['article_id']);
-        };
+        $article_id = Extractor::extractInt($request->getQueryParams(), 'article_id');
 
         return new self($article_id);
     }

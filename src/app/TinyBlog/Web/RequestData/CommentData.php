@@ -18,12 +18,12 @@ class CommentData
 
     public static function createFromRequest(IServerRequest $request)
     {
-        $post = $request->getParsedBody();
+        $data = $request->getParsedBody();
 
-        return new self(
-            Extractor::extractInt($post, 'article_id'),
-            Extractor::extractString($post, 'body')
-        );
+        $article_id = Extractor::extractInt($data, 'article_id');
+        $body = Extractor::extractString($data, 'body');
+
+        return new self($article_id, $body);
     }
 
     public function getArticleId()
