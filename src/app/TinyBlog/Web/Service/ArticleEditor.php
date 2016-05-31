@@ -6,6 +6,7 @@ use TinyBlog\Article\Article;
 use TinyBlog\Article\Content;
 use TinyBlog\User\User;
 use TinyBlog\Web\RequestData\ArticleData;
+use DateTimeInterface;
 
 class ArticleEditor
 {
@@ -20,11 +21,11 @@ class ArticleEditor
         $this->teaser_maker = $teaser_maker;
     }
 
-    public function createArticle(ArticleData $data, User $author)
+    public function createArticle(ArticleData $data, User $author, DateTimeInterface $created_at)
     {
         $init_data = [
             'author' => $author,
-            'created_at' => $data->getCreatedAt()
+            'created_at' => $created_at
         ];
 
         $article = $this->fillArticle(new Article($init_data), $data);

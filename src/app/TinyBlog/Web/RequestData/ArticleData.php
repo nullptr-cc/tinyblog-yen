@@ -11,18 +11,12 @@ class ArticleData
     protected $article_id;
     protected $title;
     protected $body;
-    protected $created_at;
 
-    public function __construct(
-        $article_id = 0,
-        $title = '',
-        $body = '',
-        DateTimeInterface $created_at = null
-    ) {
+    public function __construct($article_id, $title, $body)
+    {
         $this->article_id = $article_id;
         $this->title = $title;
         $this->body = $body;
-        $this->created_at = $created_at;
     }
 
     public static function createFromRequest(IServerRequest $request)
@@ -49,17 +43,5 @@ class ArticleData
     public function getBody()
     {
         return $this->body;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    public function withCreatedAt(DateTimeInterface $created_at)
-    {
-        $clone = clone $this;
-        $clone->created_at = $created_at;
-        return $clone;
     }
 }

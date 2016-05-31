@@ -4,6 +4,7 @@ namespace TinyBlog\Web\Handler\Real\Article;
 
 use TinyBlog\Web\Handler\Base\SaveArticleHandler;
 use TinyBlog\Web\RequestData\ArticleData;
+use DateTimeImmutable;
 
 class InsertHandler extends SaveArticleHandler
 {
@@ -11,9 +12,6 @@ class InsertHandler extends SaveArticleHandler
     {
         $editor = $this->modules->web()->getArticleEditor();
 
-        return $editor->createArticle(
-            $data->withCreatedAt(new \DateTimeImmutable()),
-            $this->getAuthUser()
-        );
+        return $editor->createArticle($data, $this->getAuthUser(), new DateTimeImmutable());
     }
 }
