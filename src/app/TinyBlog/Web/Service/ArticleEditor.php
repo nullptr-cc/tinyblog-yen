@@ -4,9 +4,12 @@ namespace TinyBlog\Web\Service;
 
 use TinyBlog\Article\Article;
 use TinyBlog\Article\Content;
+use TinyBlog\Article\ArticleRepo;
 use TinyBlog\User\User;
 use TinyBlog\Web\RequestData\ArticleData;
-use DateTimeInterface;
+use TinyBlog\Tools\IMarkdownTransformer;
+use TinyBlog\Tools\TeaserMaker;
+use DateTimeInterface as IDateTime;
 
 class ArticleEditor
 {
@@ -14,21 +17,24 @@ class ArticleEditor
     protected $md_transformer;
     protected $teaser_maker;
 
-    public function __construct($repo, $md_transformer, $teaser_maker)
-    {
+    public function __construct(
+        ArticleRepo $repo,
+        IMarkdownTransformer $md_transformer,
+        TeaserMaker $teaser_maker
+    ) {
         $this->repo = $repo;
         $this->md_transformer = $md_transformer;
         $this->teaser_maker = $teaser_maker;
     }
 
-    public function createArticle(ArticleData $data, User $author, DateTimeInterface $created_at)
+    public function createArticle(ArticleData $data, User $author, IDateTime $created_at)
     {
-        $init_data = [
+        $article = new Article([
             'author' => $author,
             'created_at' => $created_at
-        ];
+        ]);
 
-        $article = $this->fillArticle(new Article($init_data), $data);
+        $article = $this->fillArticle($article, $data);
 
         return $this->repo->persistArticle($article);
     }

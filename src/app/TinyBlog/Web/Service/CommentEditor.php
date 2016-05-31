@@ -7,7 +7,7 @@ use TinyBlog\Article\Article;
 use TinyBlog\User\User;
 use TinyBlog\Comment\Comment;
 use TinyBlog\Web\RequestData\CommentData;
-use DateTimeInterface;
+use DateTimeInterface as IDateTime;
 
 class CommentEditor
 {
@@ -22,7 +22,7 @@ class CommentEditor
         CommentData $data,
         Article $article,
         User $author,
-        DateTimeInterface $created_at
+        IDateTime $created_at
     ) {
         $init_data = [
             'article' => $article,
