@@ -16,6 +16,10 @@ class SignoutHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
+        if (!$this->checkReferer($request)) {
+            return $this->badParams();
+        };
+
         if ($this->getAuthUser()->getRole() == User::ROLE_NONE) {
             return $this->forbidden('Not signed in');
         };

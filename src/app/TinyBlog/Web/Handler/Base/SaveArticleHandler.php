@@ -20,6 +20,10 @@ abstract class SaveArticleHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
+        if (!$this->checkReferer($request)) {
+            return $this->badParams();
+        };
+
         $auth_user = $this->getAuthUser();
         if ($auth_user->getRole() < User::ROLE_AUTHOR) {
             return $this->forbidden('Not authorized');
