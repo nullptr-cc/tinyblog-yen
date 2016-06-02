@@ -5,9 +5,11 @@ $(function () {
 
     $('#auth_form').ajaxForm({
         dataType : 'json',
-        beforeSubmit : function () {
+        beforeSubmit : function (arr, frm, opts) {
             elems.attr('disabled', true);
             button.html(button.data('wait'));
+            var cg = frm.find('input[data-csrf-guard]');
+            opts.headers['x-' + cg.attr('name')] = cg.val();
             return true;
         },
         success : function (resp) {
@@ -17,7 +19,26 @@ $(function () {
             UIkit.notify(resp.responseJSON.msg, {status:'danger'});
             elems.attr('disabled', false);
             button.html(button.data('lbl'));
-        }
+        },
+        headers : {}
     });
 
+    $('a[data-oauth]').on('click', function () {
+        $('#oauth_form').ajaxSubmit({
+            dataType : 'json',
+            url : $(this).data('oauth'),
+            beforeSubmit : function (arr, frm, opts) {
+                var cg = frm.find('input[data-csrf-guard]');
+                opts.headers['x-' + cg.attr('name')] = cg.val();
+                return true;
+            },
+            success : function (resp) {
+                window.location.href = resp.redirect_url;
+            },
+            error : function (resp) {
+                UIkit.notify(resp.responseJSON.msg, {status:'danger'});
+            },
+            headers : {}
+        });
+    });
 });

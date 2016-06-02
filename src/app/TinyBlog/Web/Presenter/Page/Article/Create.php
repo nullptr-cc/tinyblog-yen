@@ -19,7 +19,10 @@ class Create extends CommonPage
     {
         return $this->renderer->render(
             'page/article/create',
-            ['article' => $article]
+            [
+                'article' => $article,
+                'csrf_guard' => $this->component('CsrfGuard')->present()
+            ]
         );
     }
 

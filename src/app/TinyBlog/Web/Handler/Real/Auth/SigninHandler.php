@@ -17,8 +17,9 @@ class SigninHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
-        if (!$this->checkReferer($request)) {
-            return $this->badParams();
+        $sentinel = $this->modules->web()->getSentinel();
+        if ($sentinel->shallNotPass($request)) {
+            return $this->forbidden('Blocked');
         };
 
         $authenticator = $this->modules->web()->getUserAuthenticator();

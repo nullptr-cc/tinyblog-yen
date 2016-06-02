@@ -4,10 +4,10 @@ namespace TinyBlog\Web\Handler\Real\Auth;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\AjaxHandler;
 use TinyBlog\User\User;
 
-class SignoutHandler extends CommonHandler
+class SignoutHandler extends AjaxHandler
 {
     public function getAllowedMethods()
     {
@@ -16,8 +16,9 @@ class SignoutHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        if (!$this->checkReferer($request)) {
-            return $this->badParams();
+        $sentinel = $this->modules->web()->getSentinel();
+        if ($sentinel->shallNotPass($request)) {
+            return $this->forbidden('Blocked');
         };
 
         if ($this->getAuthUser()->getRole() == User::ROLE_NONE) {
@@ -26,6 +27,8 @@ class SignoutHandler extends CommonHandler
 
         $this->modules->web()->getSession()->stop();
 
-        return $this->redirect($this->modules->web()->getUrlBuilder()->buildMainPageUrl());
+        return $this->ok([
+            'redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()
+        ]);
     }
 }

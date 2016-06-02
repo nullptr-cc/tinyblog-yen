@@ -20,8 +20,9 @@ abstract class SaveArticleHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
-        if (!$this->checkReferer($request)) {
-            return $this->badParams();
+        $sentinel = $this->modules->web()->getSentinel();
+        if ($sentinel->shallNotPass($request)) {
+            return $this->forbidden('Blocked');
         };
 
         $auth_user = $this->getAuthUser();

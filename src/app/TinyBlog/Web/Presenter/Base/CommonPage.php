@@ -14,7 +14,8 @@ abstract class CommonPage extends BaseComponent
             [
                 'content' => $content,
                 'main_menu' => $main_menu(),
-                'page_title' => $title
+                'page_title' => $title,
+                'base_url' => $this->web->getSettings()->get('base_url')
             ]
         );
     }

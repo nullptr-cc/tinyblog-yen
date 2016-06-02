@@ -1,4 +1,5 @@
 <form class="uk-form uk-form-stacked" method="post" action="article/<?= $action ?>" id="article_form">
+    <?= $csrf_guard ?>
 
     <input type="hidden" name="article_id" value="<?= $article->id() ?>">
 

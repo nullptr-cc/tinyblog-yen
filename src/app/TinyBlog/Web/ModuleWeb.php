@@ -163,4 +163,16 @@ class ModuleWeb
     {
         return new Service\CommentEditor($this->modules->comment()->getCommentRepo());
     }
+
+    public function getSentinel()
+    {
+        return $this->lazy('sentinel', [$this, 'makeSentinel']);
+    }
+
+    protected function makeSentinel()
+    {
+        return new Service\Sentinel(
+            Uri::createFromString($this->settings->get('base_url'))->getHost()
+        );
+    }
 }

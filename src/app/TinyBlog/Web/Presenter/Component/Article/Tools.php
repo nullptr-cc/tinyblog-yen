@@ -11,7 +11,10 @@ class Tools extends BaseComponent
     {
         return $this->renderer->render(
             'page/article/_tools',
-            ['article' => $article]
+            [
+                'article' => $article,
+                'csrf_guard' => $this->component('CsrfGuard')->present()
+            ]
         );
     }
 }

@@ -11,6 +11,7 @@
                 </a>
             </li>
             <li class="uk-dropdown-close">
+                <form action="article/delete" method="post"><?= $csrf_guard ?></form>
                 <a href="javascript:void(0)" data-article-delete="<?= $article->id() ?>">
                     <span class="uk-icon-remove"></span>
                     Delete

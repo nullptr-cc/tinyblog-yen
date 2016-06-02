@@ -1,22 +1,28 @@
 $(function () {
 
     $('[data-article-delete]').on('click', function (ev) {
-        var article_id = $(this).data('article-delete');
+        var elem = $(this);
         UIkit.modal.confirm(
             "Delete this article?",
             function () {
-                $.post(
-                    '/article/delete',
-                    {article_id : article_id},
-                    function (resp) {
+                elem.parent().find('form').ajaxSubmit({
+                    dataType : 'json',
+                    data : {
+                        article_id : elem.data('article-delete')
+                    },
+                    beforeSubmit : function (arr, frm, opts) {
+                        var cg = frm.find('input[data-csrf-guard]');
+                        opts.headers['x-' + cg.attr('name')] = cg.val();
+                        return true;
+                    },
+                    success : function (resp) {
                         window.location.href = resp.redirect_url;
                     },
-                    'json'
-                ).fail(
-                    function (resp) {
+                    error : function (resp) {
                         UIkit.notify(resp.responseJSON.msg, {status:'danger'});
-                    }
-                );
+                    },
+                    headers : {}
+                });
             }
         );
     });
@@ -25,6 +31,9 @@ $(function () {
         dataType : 'json',
         beforeSubmit : function (arr, frm, opts) {
             frm.find('input, button').attr('disabled', true);
+            var cg = frm.find('input[data-csrf-guard]');
+            opts.headers['x-' + cg.attr('name')] = cg.val();
+            return true;
         },
         success : function (resp) {
             window.location.href = resp.article_url;
@@ -35,7 +44,8 @@ $(function () {
             for (var k in errors) {
                 UIkit.notify(errors[k], {status:'danger'});
             };
-        }
+        },
+        headers : {}
     });
 
     $('#article_form button[data-cancel]').on('click', function () {
@@ -46,6 +56,9 @@ $(function () {
         dataType : 'json',
         beforeSubmit : function (arr, frm, opts) {
             frm.find('textarea, button').attr('disabled', true);
+            var cg = frm.find('input[data-csrf-guard]');
+            opts.headers['x-' + cg.attr('name')] = cg.val();
+            return true;
         },
         success : function (resp) {
             var frm = $('#comment_form');
@@ -62,7 +75,8 @@ $(function () {
             for (var k in errors) {
                 UIkit.notify(errors[k], {status:'danger'});
             };
-        }
+        },
+        headers : {}
     });
 
 });

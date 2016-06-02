@@ -1,7 +1,6 @@
 <ul class="uk-navbar-nav">
     <li>
-        <form method="post" action="auth/signout" id="sign_out_form"></form>
-        <a href="javascript:void(0)" id="sign_out_link">Sign Out</a>
+        <form method="post" action="auth/signout" id="sign_out_form"><?= $csrf_guard; ?></form>
+        <a href="javascript:void(0)" id="sign_out_link" data-lbl-wait="Please wait">Sign Out</a>
     </li>
 </ul>
-

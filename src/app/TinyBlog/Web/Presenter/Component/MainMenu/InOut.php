@@ -17,7 +17,10 @@ class InOut extends BaseComponent
 
         return $this->renderer->render(
             'component/main_menu/in_out/out',
-            ['user' => $user]
+            [
+                'user' => $user,
+                'csrf_guard' => $this->component('CsrfGuard')->present()
+            ]
         );
     }
 }

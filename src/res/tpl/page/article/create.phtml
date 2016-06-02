@@ -1,2 +1,2 @@
 <h2>Write new article</h2>
-<?= $this->render('page/article/_form', ['article' => $article, 'action' => 'insert']) ?>
+<?= $this->render('page/article/_form', ['article' => $article, 'action' => 'insert', 'csrf_guard' => $csrf_guard]) ?>

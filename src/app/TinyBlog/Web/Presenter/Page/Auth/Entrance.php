@@ -8,6 +8,12 @@ class Entrance extends BaseComponent
 {
     public function present()
     {
-        return $this->renderer->render('page/auth/entrance', []);
+        return $this->renderer->render(
+            'page/auth/entrance',
+            [
+                'base_url' => $this->web->getSettings()->get('base_url'),
+                'csrf_guard' => $this->component('CsrfGuard')->present()
+            ]
+        );
     }
 }

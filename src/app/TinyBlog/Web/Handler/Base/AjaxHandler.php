@@ -41,6 +41,6 @@ abstract class AjaxHandler extends Handler
     protected function forbidden($message)
     {
         $doc = $this->json_renderer->render(['msg' => $message]);
-        return $this->responseNotFound($doc);
+        return $this->responseForbidden($doc);
     }
 }

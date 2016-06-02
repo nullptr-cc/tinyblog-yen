@@ -1,2 +1,2 @@
 <h2>Edit article</h2>
-<?= $this->render('page/article/_form', ['article' => $article, 'action' => 'update']) ?>
+<?= $this->render('page/article/_form', ['article' => $article, 'action' => 'update', 'csrf_guard' => $csrf_guard]) ?>

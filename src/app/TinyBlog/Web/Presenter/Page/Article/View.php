@@ -30,7 +30,10 @@ class View extends CommonPage
         if ($auth_user->getRole() >= User::ROLE_CONSUMER) {
             $cform = $this->renderer->render(
                 'component/article/comment_form',
-                ['article' => $article]
+                [
+                    'article' => $article,
+                    'csrf_guard' => $this->component('CsrfGuard')->present()
+                ]
             );
         };
 

@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <base href="/">
+        <base href="<?= $base_url ?>">
         <title>Tiny Blog - sample application on Yen web-framework</title>
         <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 
@@ -26,6 +26,7 @@
             <div class="uk-vertical-align-middle" style="width: 250px;">
 
                 <form class="uk-panel uk-panel-box uk-form" method="post" action="auth/signin" id="auth_form">
+                    <?= $csrf_guard ?>
                     <div class="uk-form-row">
                         <input class="uk-width-1-1 uk-form-large" type="text" placeholder="Username" name="username" required>
                     </div>
@@ -42,8 +43,15 @@
                 </form>
 
                 <div class="tb-oauth-providers">
-                    <a href="auth/github/begin" class="uk-icon-hover uk-icon-github uk-icon-large" title="GitHub"></a>
-                    <a href="auth/google/begin" class="uk-icon-hover uk-icon-google uk-icon-large" title="Google"></a>
+                    <form id="oauth_form" method="post"><?= $csrf_guard ?></form>
+                    <a href="javascript:void(0)"
+                      class="uk-icon-hover uk-icon-github uk-icon-large"
+                      title="GitHub"
+                      data-oauth="auth/github/begin"></a>
+                    <a href="javascript:void(0)"
+                       class="uk-icon-hover uk-icon-google uk-icon-large"
+                       title="Google"
+                       data-oauth="auth/google/begin"></a>
                 </div>
 
             </div>

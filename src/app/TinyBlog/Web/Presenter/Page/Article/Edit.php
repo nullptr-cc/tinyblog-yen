@@ -19,7 +19,10 @@ class Edit extends CommonPage
     {
         return $this->renderer->render(
             'page/article/edit',
-            ['article' => $article]
+            [
+                'article' => $article,
+                'csrf_guard' => $this->component('CsrfGuard')->present()
+            ]
         );
     }
 

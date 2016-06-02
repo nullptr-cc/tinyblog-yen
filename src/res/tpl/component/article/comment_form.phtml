@@ -1,4 +1,5 @@
 <form action="comment/insert" method="post" class="uk-form uk-margin-large-top" id="comment_form">
+    <?= $csrf_guard ?>
 
     <input type="hidden" name="article_id" value="<?= $article->id() ?>">
 
