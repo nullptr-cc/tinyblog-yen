@@ -2,7 +2,7 @@
 
 namespace TinyBlog\Web\Presenter\Base;
 
-use Yen\Util\Contract\IClassResolver;
+use Yen\ClassResolver\Contract\IClassResolver;
 use TinyBlog\Web\ModuleWeb;
 
 class PluginRegistry extends \Yen\Util\PluginRegistry

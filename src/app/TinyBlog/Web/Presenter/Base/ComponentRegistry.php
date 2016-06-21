@@ -2,7 +2,7 @@
 
 namespace TinyBlog\Web\Presenter\Base;
 
-use Yen\Util\Contract\IClassResolver;
+use Yen\ClassResolver\Contract\IClassResolver;
 use Yen\Util\CommonRegistry;
 use TinyBlog\Web\ModuleWeb;
 

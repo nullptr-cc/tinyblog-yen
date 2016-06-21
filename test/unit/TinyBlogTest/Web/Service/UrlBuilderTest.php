@@ -5,6 +5,7 @@ namespace TinyBlogTest\Web\Service;
 use TinyBlog\Article\Article;
 use TinyBlog\Web\Service\UrlBuilder;
 use Yen\Router\Contract\IRouter;
+use Yen\Router\RoutePoint;
 use Yen\Http\Contract\IUri;
 use Yen\Http\Uri;
 
@@ -13,7 +14,7 @@ class UrlBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildArticleUrl()
     {
         $router = $this->prophesize(IRouter::class);
-        $resolved = (object)['uri' => '/a/42', 'args' => []];
+        $resolved = new RoutePoint('/a/42', []);
         $router->resolve('article', ['article_id' => 42])
                ->willReturn($resolved);
 

@@ -2,7 +2,7 @@
 
 namespace TinyBlog\Web\Handler\Base;
 
-use Yen\Util\Contract\IClassResolver;
+use Yen\ClassResolver\Contract\IClassResolver;
 use Yen\Handler\HandlerRegistry as YenHandlerRegistry;
 use TinyBlog\Modules;
 

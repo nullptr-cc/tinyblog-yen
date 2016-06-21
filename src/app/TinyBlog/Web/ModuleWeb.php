@@ -5,14 +5,16 @@ namespace TinyBlog\Web;
 use Yen\Settings\Contract\ISettings;
 use Yen\Router\Router;
 use Yen\Util\LazyContainer;
-use Yen\Util\FormatClassResolver;
+use Yen\ClassResolver\FormatClassResolver;
+use Yen\ClassResolver\FallbackClassResolver;
 use Yen\Session\Session;
 use Yen\Renderer\HtmlTemplateRenderer;
 use Yen\Renderer\JsonRenderer;
 use Yen\Http\Uri;
+use Yen\Handler\HandlerRegistry;
 
 use TinyBlog\Modules;
-use TinyBlog\Web\Handler\Base\HandlerRegistry;
+use TinyBlog\Web\Handler\Base\HandlerFactory;
 use TinyBlog\Web\Handler\MissedHandler;
 use TinyBlog\Web\Presenter\Base\TemplatePresenter;
 use TinyBlog\Web\Presenter\Base\ComponentRegistry;
@@ -23,8 +25,8 @@ class ModuleWeb
 {
     use LazyContainer;
 
-    protected $modules;
-    protected $settings;
+    private $modules;
+    private $settings;
 
     public function __construct(Modules $modules, ISettings $settings)
     {
@@ -44,7 +46,7 @@ class ModuleWeb
 
     protected function makeRouter()
     {
-        return Router::createFromRulesFile($this->settings->get('routing_rules'));
+        return Router::createFromRoutesFile($this->settings->get('routing_rules'));
     }
 
     public function getHandlerRegistry()
@@ -54,12 +56,11 @@ class ModuleWeb
 
     protected function makeHandlerRegistry()
     {
-        $resolver = new FormatClassResolver(
-            __NAMESPACE__ . '\\Handler\\Real\\%sHandler',
-            MissedHandler::class
-        );
+        $class_resolver = new FormatClassResolver(__NAMESPACE__ . '\\Handler\\Real\\%sHandler');
+        $fallback_resolver = new FallbackClassResolver($class_resolver, MissedHandler::class);
+        $handler_factory = new HandlerFactory($fallback_resolver, $this->modules);
 
-        return new HandlerRegistry($this->modules, $resolver);
+        return new HandlerRegistry($handler_factory);
     }
 
     public function getSession()
