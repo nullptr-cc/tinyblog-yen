@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Comment;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\AjaxHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 use TinyBlog\Web\RequestData\CommentData;
 use TinyBlog\User\User;
 
-class InsertHandler extends AjaxHandler
+class InsertHandler extends Handler
 {
     public function getAllowedMethods()
     {
@@ -17,14 +17,16 @@ class InsertHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
+        $responder = $this->modules->web()->getJsonResponder();
+
         $sentinel = $this->modules->web()->getSentinel();
         if ($sentinel->shallNotPass($request)) {
-            return $this->forbidden('Blocked');
+            return $responder->forbidden('Blocked');
         };
 
         $auth_user = $this->getAuthUser();
         if ($auth_user->getRole() < User::ROLE_CONSUMER) {
-            return $this->forbidden('Not authorized');
+            return $responder->forbidden('Not authorized');
         };
 
         $data = CommentData::createFromRequest($request);
@@ -32,14 +34,14 @@ class InsertHandler extends AjaxHandler
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
-            return $this->badParams($vr->getErrors());
+            return $responder->badParams($vr->getErrors());
         };
 
         $afinder = $this->modules->article()->getArticleRepo();
         $ceditor = $this->modules->web()->getCommentEditor();
 
         if (!$afinder->articleExists($data->getArticleId())) {
-            return $this->badParams(['article_id' => 'Invalid article id']);
+            return $responder->badParams(['article_id' => 'Invalid article id']);
         };
 
         $article = $afinder->getArticleById($data->getArticleId());
@@ -47,10 +49,10 @@ class InsertHandler extends AjaxHandler
         try {
             $comment = $ceditor->createComment($data, $article, $auth_user, new \DateTimeImmutable());
         } catch (\Exception $ex) {
-            return $this->error('Something wrong: ' . $ex->getMessage());
+            return $responder->error('Something wrong: ' . $ex->getMessage());
         };
 
         $html = $this->modules->web()->getHtmlRenderer()->render('component/article/_comment', ['comment' => $comment]);
-        return $this->ok(['comment_html' => $html->content()]);
+        return $responder->ok(['comment_html' => $html->content()]);
     }
 }

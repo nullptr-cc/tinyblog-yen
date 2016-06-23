@@ -9,9 +9,9 @@ class UpdateHandler extends SaveArticleHandler
 {
     protected function saveArticle(ArticleData $data)
     {
-        $finder = $this->modules->article()->getArticleRepo();
+        $repo = $this->modules->article()->getArticleRepo();
         $editor = $this->modules->web()->getArticleEditor();
-        $article = $finder->getArticleById($data->getArticleId());
+        $article = $repo->getArticleById($data->getArticleId());
 
         return $editor->updateArticle($article, $data);
     }

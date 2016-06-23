@@ -40,6 +40,14 @@ class ArticleRepo
     }
 
     /**
+     * @return bool
+     */
+    public function articleNotExists($article_id)
+    {
+        return !$this->articleExists($article_id);
+    }
+
+    /**
      * @return Article
      */
     public function getArticleById($article_id)

@@ -9,7 +9,7 @@ use TinyBlog\Web\RequestData\ArticleData;
 use TinyBlog\Article\EArticleNotExists;
 use TinyBlog\User\User;
 
-abstract class SaveArticleHandler extends AjaxHandler
+abstract class SaveArticleHandler extends Handler
 {
     abstract protected function saveArticle(ArticleData $data);
 
@@ -20,14 +20,16 @@ abstract class SaveArticleHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
+        $responder = $this->modules->web()->getJsonResponder();
+
         $sentinel = $this->modules->web()->getSentinel();
         if ($sentinel->shallNotPass($request)) {
-            return $this->forbidden('Blocked');
+            return $responder->forbidden('Blocked');
         };
 
         $auth_user = $this->getAuthUser();
         if ($auth_user->getRole() < User::ROLE_AUTHOR) {
-            return $this->forbidden('Not authorized');
+            return $responder->forbidden('Not authorized');
         };
 
         $data = ArticleData::createFromRequest($request);
@@ -35,18 +37,18 @@ abstract class SaveArticleHandler extends AjaxHandler
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
-            return $this->badParams($vr->getErrors());
+            return $responder->badParams($vr->getErrors());
         };
 
         try {
             $article = $this->saveArticle($data);
         } catch (EArticleNotExists $ex) {
-            return $this->badParams(['article_id' => 'Invalid article ID']);
+            return $responder->badParams(['article_id' => 'Invalid article ID']);
         } catch (\Exception $ex) {
-            return $this->error('Try again later: ' . $ex->getMessage());
+            return $responder->error('Try again later: ' . $ex->getMessage());
         };
 
-        return $this->ok([
+        return $responder->ok([
             'article_url' => $this->modules->web()->getUrlBuilder()->buildArticleUrl($article)
         ]);
     }

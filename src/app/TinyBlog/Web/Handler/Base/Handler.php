@@ -3,15 +3,10 @@
 namespace TinyBlog\Web\Handler\Base;
 
 use Yen\Handler\Contract\IHandler;
-use Yen\Handler\HandlerResponseHelpers;
-use Yen\Http\Contract\IServerRequest;
-use Yen\Http\Uri;
 use TinyBlog\Modules;
 
 abstract class Handler implements IHandler
 {
-    use HandlerResponseHelpers;
-
     protected $modules;
 
     public function __construct(Modules $modules)

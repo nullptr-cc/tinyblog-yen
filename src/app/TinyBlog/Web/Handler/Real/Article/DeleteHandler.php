@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\AjaxHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
 use TinyBlog\User\User;
 
-class DeleteHandler extends AjaxHandler
+class DeleteHandler extends Handler
 {
     public function getAllowedMethods()
     {
@@ -17,21 +17,23 @@ class DeleteHandler extends AjaxHandler
 
     public function handle(IServerRequest $request)
     {
+        $responder = $this->modules->web()->getJsonResponder();
+
         $sentinel = $this->modules->web()->getSentinel();
         if ($sentinel->shallNotPass($request)) {
-            return $this->forbidden('Blocked');
+            return $responder->forbidden('Blocked');
         };
 
         $auth_user = $this->getAuthUser();
         if ($auth_user->getRole() < User::ROLE_AUTHOR) {
-            return $this->forbidden('Not authorized');
+            return $responder->forbidden('Not authorized');
         };
 
         $data = ArticleDeleteData::createFromRequest($request);
         $repo = $this->modules->article()->getArticleRepo();
 
         if (!$repo->articleExists($data->getArticleId())) {
-            return $this->badParams(['article_id' => 'invalid article id']);
+            return $responder->badParams(['article_id' => 'invalid article id']);
         };
 
         $article = $repo->getArticleById($data->getArticleId());
@@ -39,10 +41,10 @@ class DeleteHandler extends AjaxHandler
         try {
             $repo->deleteArticle($article);
         } catch (\Exception $ex) {
-            return $this->error('Something wrong: ' . $ex->getMessage());
+            return $responder->error('Something wrong: ' . $ex->getMessage());
         };
 
-        return $this->ok([
+        return $responder->ok([
             'redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()
         ]);
     }

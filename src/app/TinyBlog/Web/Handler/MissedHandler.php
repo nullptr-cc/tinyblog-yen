@@ -4,9 +4,9 @@ namespace TinyBlog\Web\Handler;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 
-class MissedHandler extends CommonHandler
+class MissedHandler extends Handler
 {
     public function getAllowedMethods()
     {
@@ -15,6 +15,6 @@ class MissedHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        return $this->notFound('page not found');
+        return $this->modules->web()->getHtmlResponder()->notFound('page not found');
     }
 }

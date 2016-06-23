@@ -4,10 +4,10 @@ namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 use TinyBlog\Web\RequestData\ArticleViewData;
 
-class ViewHandler extends CommonHandler
+class ViewHandler extends Handler
 {
     public function getAllowedMethods()
     {
@@ -16,18 +16,20 @@ class ViewHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
-        $data = ArticleViewData::createFromRequest($request);
-        $afinder = $this->modules->article()->getArticleRepo();
-        $cfinder = $this->modules->comment()->getCommentRepo();
+        $responder = $this->modules->web()->getHtmlResponder();
 
-        if (!$afinder->articleExists($data->getArticleId())) {
-            return $this->notFound();
+        $data = ArticleViewData::createFromRequest($request);
+        $article_repo = $this->modules->article()->getArticleRepo();
+        $comment_repo = $this->modules->comment()->getCommentRepo();
+
+        if ($article_repo->articleNotExists($data->getArticleId())) {
+            return $responder->notFound();
         };
 
-        $article = $afinder->getArticleById($data->getArticleId());
-        $comments = $cfinder->getArticleComments($article);
+        $article = $article_repo->getArticleById($data->getArticleId());
+        $comments = $comment_repo->getArticleComments($article);
 
-        return $this->ok(
+        return $responder->ok(
             'Page/Article/View',
             [
                 'article' => $article,

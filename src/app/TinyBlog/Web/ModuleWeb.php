@@ -176,4 +176,33 @@ class ModuleWeb
             Uri::createFromString($this->settings->get('base_url'))->getHost()
         );
     }
+
+    public function getHtmlResponder()
+    {
+        return $this->lazy('html_responder', [$this, 'makeHtmlResponder']);
+    }
+
+    private function makeHtmlResponder()
+    {
+        return new Responder\HtmlResponder(
+            $this->getHtmlComponents()
+        );
+    }
+
+    public function getJsonResponder()
+    {
+        return $this->lazy('json_responder', [$this, 'makeJsonResponder']);
+    }
+
+    private function makeJsonResponder()
+    {
+        return new Responder\JsonResponder(
+            $this->getJsonRenderer()
+        );
+    }
+
+    public function getRedirectResponder()
+    {
+        return new Responder\RedirectResponder();
+    }
 }

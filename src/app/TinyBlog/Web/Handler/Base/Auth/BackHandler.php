@@ -4,13 +4,13 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 use TinyBlog\User\User;
 use TinyBlog\OAuth\OAuthUser;
 use TinyBlog\OAuth\IProvider;
 use TinyBlog\OAuth\UserInfo;
 
-abstract class BackHandler extends CommonHandler
+abstract class BackHandler extends Handler
 {
     abstract protected function getProvider();
 
@@ -21,25 +21,27 @@ abstract class BackHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
+        $responder = $this->modules->web()->getHtmlResponder();
+
         if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
-            return $this->forbidden('Already signed in');
+            return $responder->forbidden('Already signed in');
         };
 
         $provider = $this->getProvider();
 
         $code = $provider->grabAuthCode($request);
         if ($code == '') {
-            return $this->forbidden();
+            return $responder->forbidden();
         };
 
         $token = $provider->getAccessToken($code);
         if ($token == '') {
-            return $this->forbidden();
+            return $responder->forbidden();
         };
 
         $info = $provider->getUserInfo($token);
         if ($info->identifier() == 0) {
-            return $this->error();
+            return $responder->error();
         };
 
         $repo = $this->modules->oauth()->getOAuthUserRepo();
@@ -54,7 +56,9 @@ abstract class BackHandler extends CommonHandler
         $this->modules->web()->getSession()->start();
         $this->modules->web()->getUserAuthenticator()->setAuthUser($user);
 
-        return $this->redirect($this->modules->web()->getUrlBuilder()->buildMainPageUrl());
+        $redirector = $this->modules->web()->getRedirectResponder();
+
+        return $redirector->redirect($this->modules->web()->getUrlBuilder()->buildMainPageUrl());
     }
 
     protected function createUser(IProvider $provider, UserInfo $info)

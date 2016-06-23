@@ -5,9 +5,9 @@ namespace TinyBlog\Web\Handler\Real;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\RequestData\ArticleListData;
-use TinyBlog\Web\Handler\Base\CommonHandler;
+use TinyBlog\Web\Handler\Base\Handler;
 
-class MainHandler extends CommonHandler
+class MainHandler extends Handler
 {
     const ARTICLE_PER_PAGE = 3;
 
@@ -18,6 +18,8 @@ class MainHandler extends CommonHandler
 
     public function handle(IServerRequest $request)
     {
+        $responder = $this->modules->web()->getHtmlResponder();
+
         $data = ArticleListData::createFromRequest($request);
         $article_finder = $this->modules->article()->getArticleRepo();
 
@@ -28,10 +30,11 @@ class MainHandler extends CommonHandler
         );
 
         if ($result->page_count && !count($result->articles)) {
-            return $this->notFound();
+            return $responder->notFound();
         };
 
-        return $this->ok(
+
+        return $responder->ok(
             'Page/Main',
             [
                 'articles' => $result->articles,
