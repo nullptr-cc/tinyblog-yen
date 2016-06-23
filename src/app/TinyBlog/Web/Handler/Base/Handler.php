@@ -23,16 +23,4 @@ abstract class Handler implements IHandler
     {
         return $this->modules->web()->getUserAuthenticator()->getAuthUser();
     }
-
-    protected function checkReferer(IServerRequest $request)
-    {
-        if (!$request->hasHeader('referer')) {
-            return false;
-        };
-
-        $referer = Uri::createFromString($request->getHeader('referer'));
-        $base = Uri::createFromString($this->modules->web()->getSettings()->get('base_url'));
-
-        return $referer->getHost() == $base->getHost();
-    }
 }
