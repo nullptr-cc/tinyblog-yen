@@ -2,16 +2,17 @@
 
 namespace TinyBlog\Web;
 
-use Yen\Settings\Contract\ISettings;
-use Yen\Router\Router;
-use Yen\Util\LazyContainer;
+use Yen\Core\FrontController;
 use Yen\ClassResolver\FormatClassResolver;
 use Yen\ClassResolver\FallbackClassResolver;
-use Yen\Session\Session;
+use Yen\Handler\HandlerRegistry;
+use Yen\Http\Uri;
 use Yen\Renderer\HtmlTemplateRenderer;
 use Yen\Renderer\JsonRenderer;
-use Yen\Http\Uri;
-use Yen\Handler\HandlerRegistry;
+use Yen\Router\Router;
+use Yen\Session\Session;
+use Yen\Settings\Contract\ISettings;
+use Yen\Util\LazyContainer;
 
 use TinyBlog\Modules;
 use TinyBlog\Web\Handler\Base\HandlerFactory;
@@ -39,12 +40,25 @@ class ModuleWeb
         return $this->settings;
     }
 
+    public function getFrontController()
+    {
+        return $this->lazy('front_controller', [$this, 'makeFrontController']);
+    }
+
+    private function makeFrontController()
+    {
+        return new FrontController(
+            $this->getRouter(),
+            $this->getHandlerRegistry()
+        );
+    }
+
     public function getRouter()
     {
         return $this->lazy('router', [$this, 'makeRouter']);
     }
 
-    protected function makeRouter()
+    private function makeRouter()
     {
         return Router::createFromRoutesFile($this->settings->get('routing_rules'));
     }
@@ -54,7 +68,7 @@ class ModuleWeb
         return $this->lazy('handler_registry', [$this, 'makeHandlerRegistry']);
     }
 
-    protected function makeHandlerRegistry()
+    private function makeHandlerRegistry()
     {
         $class_resolver = new FormatClassResolver(__NAMESPACE__ . '\\Handler\\Real\\%sHandler');
         $fallback_resolver = new FallbackClassResolver($class_resolver, MissedHandler::class);
@@ -68,7 +82,7 @@ class ModuleWeb
         return $this->lazy('session', [$this, 'makeSession']);
     }
 
-    protected function makeSession()
+    private function makeSession()
     {
         return new Session();
     }
@@ -78,7 +92,7 @@ class ModuleWeb
         return $this->lazy('html_components', [$this, 'makeHtmlComponents']);
     }
 
-    protected function makeHtmlComponents()
+    private function makeHtmlComponents()
     {
         $resolver = new FormatClassResolver(__NAMESPACE__ . '\\Presenter\\%s');
 
@@ -90,7 +104,7 @@ class ModuleWeb
         return $this->lazy('html_renderer', [$this, 'makeHtmlRenderer']);
     }
 
-    protected function makeHtmlRenderer()
+    private function makeHtmlRenderer()
     {
         return new HtmlTemplateRenderer(
             $this->settings->get('templates'),
@@ -98,7 +112,7 @@ class ModuleWeb
         );
     }
 
-    protected function makeRendererPluginRegistry()
+    private function makeRendererPluginRegistry()
     {
         $resolver = new FormatClassResolver(__NAMESPACE__ . '\\Presenter\\Plugin\\%s');
 
@@ -110,7 +124,7 @@ class ModuleWeb
         return $this->lazy('json_renderer', [$this, 'makeJsonRenderer']);
     }
 
-    protected function makeJsonRenderer()
+    private function makeJsonRenderer()
     {
         return new JsonRenderer();
     }
@@ -120,7 +134,7 @@ class ModuleWeb
         return $this->lazy('url_builder', [$this, 'makeUrlBuilder']);
     }
 
-    protected function makeUrlBuilder()
+    private function makeUrlBuilder()
     {
         return new UrlBuilder(
             $this->getRouter(),
@@ -133,7 +147,7 @@ class ModuleWeb
         return $this->lazy('user_authenticator', [$this, 'makeUserAuthenticator']);
     }
 
-    protected function makeUserAuthenticator()
+    private function makeUserAuthenticator()
     {
         return new Service\UserAuthenticator(
             $this->getSession(),
@@ -162,7 +176,9 @@ class ModuleWeb
 
     public function getCommentEditor()
     {
-        return new Service\CommentEditor($this->modules->comment()->getCommentRepo());
+        return new Service\CommentEditor(
+            $this->modules->comment()->getCommentRepo()
+        );
     }
 
     public function getSentinel()
@@ -170,7 +186,7 @@ class ModuleWeb
         return $this->lazy('sentinel', [$this, 'makeSentinel']);
     }
 
-    protected function makeSentinel()
+    private function makeSentinel()
     {
         return new Service\Sentinel(
             Uri::createFromString($this->settings->get('base_url'))->getHost()

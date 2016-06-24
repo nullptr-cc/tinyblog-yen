@@ -6,27 +6,25 @@ use Yen\Http\Contract\IResponse;
 use Yen\Http\ServerRequest;
 use Yen\Http\Response;
 use Yen\Settings\Contract\ISettings;
-use Yen\Core\FrontController;
 use Exception;
 
 class WebApplication
 {
-    protected $settings;
+    private $modules;
 
     public function __construct(ISettings $settings)
     {
-        $this->settings = $settings;
+        $this->modules = $this->createModules($settings);
     }
 
     public function run()
     {
         $request = $this->createServerRequest();
-        $web = $this->createModules()->web();
+        $web = $this->modules->web();
 
         try {
-            $fc = $this->createFrontController($web);
             $web->getSession()->resume($request);
-            $response = $fc->processRequest($request);
+            $response = $web->getFrontController()->processRequest($request);
             $web->getSession()->suspend();
         } catch (Exception $error) {
             $response = $this->createErrorResponse($error);
@@ -35,7 +33,7 @@ class WebApplication
         return $this->emitHttpResponse($response);
     }
 
-    protected function emitHttpResponse(IResponse $response)
+    private function emitHttpResponse(IResponse $response)
     {
         while (ob_get_level()) {
             ob_end_clean();
@@ -48,7 +46,7 @@ class WebApplication
         printf('%s', $response->getBody());
     }
 
-    protected function createErrorResponse(Exception $error)
+    private function createErrorResponse(Exception $error)
     {
         $body = sprintf(
             "%s with '%s' in %s:%d\n%s",
@@ -59,24 +57,14 @@ class WebApplication
             $error->getTraceAsString()
         );
 
-        return new Response(
-            500,
-            ['Content-Type' => 'text/plain;charset=utf-8'],
-            $body
-        );
+        return Response::internalError()
+                ->withHeader('Content-Type', 'text/plain;charset=utf-8')
+                ->withBody($body);
     }
 
-    protected function createModules()
+    protected function createModules(ISettings $settings)
     {
-        return new Modules($this->settings);
-    }
-
-    protected function createFrontController($web)
-    {
-        return new FrontController(
-            $web->getRouter(),
-            $web->getHandlerRegistry()
-        );
+        return new Modules($settings);
     }
 
     protected function createServerRequest()

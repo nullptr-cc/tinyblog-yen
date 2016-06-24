@@ -16,7 +16,7 @@ class Modules
 {
     use LazyContainer;
 
-    protected $settings;
+    private $settings;
 
     public function __construct(ISettings $settings)
     {
@@ -28,9 +28,19 @@ class Modules
         return $this->lazy('user', [$this, 'makeModuleUser']);
     }
 
+    private function makeModuleUser()
+    {
+        return new ModuleUser($this->getSqlDriver());
+    }
+
     public function article()
     {
         return $this->lazy('article', [$this, 'makeModuleArticle']);
+    }
+
+    private function makeModuleArticle()
+    {
+        return new ModuleArticle($this->getSqlDriver());
     }
 
     public function comment()
@@ -38,9 +48,19 @@ class Modules
         return $this->lazy('comment', [$this, 'makeModuleComment']);
     }
 
+    private function makeModuleComment()
+    {
+        return new ModuleComment($this->getSqlDriver());
+    }
+
     public function oauth()
     {
         return $this->lazy('oauth', [$this, 'makeModuleOAuth']);
+    }
+
+    private function makeModuleOAuth()
+    {
+        return new ModuleOAuth($this->getSqlDriver(), $this->settings, $this->tools());
     }
 
     public function tools()
@@ -48,52 +68,32 @@ class Modules
         return $this->lazy('tools', [$this, 'makeModuleTools']);
     }
 
+    private function makeModuleTools()
+    {
+        return new ModuleTools();
+    }
+
     public function web()
     {
         return $this->lazy('web', [$this, 'makeModuleWeb']);
     }
 
-    protected function getSqlDriver()
+    private function makeModuleWeb()
+    {
+        return new ModuleWeb($this, $this->settings->get('web'));
+    }
+
+    private function getSqlDriver()
     {
         return $this->lazy('sql_driver', [$this, 'makeSqlDriver']);
     }
 
-    protected function makeSqlDriver()
+    private function makeSqlDriver()
     {
         return new SqlDriver(
             $this->settings->get('db.dsn'),
             $this->settings->get('db.username'),
             $this->settings->get('db.password')
         );
-    }
-
-    protected function makeModuleUser()
-    {
-        return new ModuleUser($this->getSqlDriver());
-    }
-
-    protected function makeModuleArticle()
-    {
-        return new ModuleArticle($this->getSqlDriver());
-    }
-
-    protected function makeModuleComment()
-    {
-        return new ModuleComment($this->getSqlDriver());
-    }
-
-    protected function makeModuleOAuth()
-    {
-        return new ModuleOAuth($this->getSqlDriver(), $this->settings, $this->tools());
-    }
-
-    protected function makeModuleTools()
-    {
-        return new ModuleTools();
-    }
-
-    protected function makeModuleWeb()
-    {
-        return new ModuleWeb($this, $this->settings->get('web'));
     }
 }
