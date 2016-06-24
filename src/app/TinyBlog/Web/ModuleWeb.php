@@ -71,10 +71,11 @@ class ModuleWeb
     private function makeHandlerRegistry()
     {
         $class_resolver = new FormatClassResolver(__NAMESPACE__ . '\\Handler\\Real\\%sHandler');
-        $fallback_resolver = new FallbackClassResolver($class_resolver, MissedHandler::class);
-        $handler_factory = new HandlerFactory($fallback_resolver, $this->modules);
+        $factory = new HandlerFactory($class_resolver, $this->modules);
+        $registry = new HandlerRegistry($factory);
+        $registry->setNotFoundHandler($factory->makeResolved(MissedHandler::class));
 
-        return new HandlerRegistry($handler_factory);
+        return $registry;
     }
 
     public function getSession()

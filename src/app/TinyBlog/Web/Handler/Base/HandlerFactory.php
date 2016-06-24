@@ -14,7 +14,7 @@ class HandlerFactory extends YenHandlerFactory
         $this->modules = $modules;
     }
 
-    protected function makeResolved($classname)
+    protected function make($classname)
     {
         return new $classname($this->modules);
     }
