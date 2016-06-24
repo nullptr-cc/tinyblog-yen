@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Comment;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\Web\RequestData\CommentData;
 use TinyBlog\User\User;
 
-class InsertHandler extends Handler
+class InsertHandler extends BaseHandler
 {
     public function getAllowedMethods()
     {

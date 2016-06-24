@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Auth;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\Web\RequestData\SignInData;
 use TinyBlog\User\User;
 
-class SigninHandler extends Handler
+class SigninHandler extends BaseHandler
 {
     public function getAllowedMethods()
     {

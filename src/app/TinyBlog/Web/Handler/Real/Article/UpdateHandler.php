@@ -2,10 +2,10 @@
 
 namespace TinyBlog\Web\Handler\Real\Article;
 
-use TinyBlog\Web\Handler\Base\SaveArticleHandler;
+use TinyBlog\Web\Handler\Base\Article\SaveHandler;
 use TinyBlog\Web\RequestData\ArticleData;
 
-class UpdateHandler extends SaveArticleHandler
+class UpdateHandler extends SaveHandler
 {
     protected function saveArticle(ArticleData $data)
     {

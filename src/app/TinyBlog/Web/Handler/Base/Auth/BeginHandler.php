@@ -4,10 +4,10 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\User\User;
 
-abstract class BeginHandler extends Handler
+abstract class BeginHandler extends BaseHandler
 {
     abstract protected function getProvider();
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace TinyBlog\Web\Handler\Base;
+namespace TinyBlog\Web\Handler;
 
 use Yen\Handler\Contract\IHandler;
 use TinyBlog\Modules;
 
-abstract class Handler implements IHandler
+abstract class BaseHandler implements IHandler
 {
     protected $modules;
 

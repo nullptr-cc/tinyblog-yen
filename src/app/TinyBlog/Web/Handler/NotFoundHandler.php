@@ -4,9 +4,9 @@ namespace TinyBlog\Web\Handler;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 
-class MissedHandler extends Handler
+class NotFoundHandler extends BaseHandler
 {
     public function getAllowedMethods()
     {

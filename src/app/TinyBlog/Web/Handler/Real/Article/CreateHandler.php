@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\Article\Article;
 use TinyBlog\User\User;
 
-class CreateHandler extends Handler
+class CreateHandler extends BaseHandler
 {
     public function getAllowedMethods()
     {

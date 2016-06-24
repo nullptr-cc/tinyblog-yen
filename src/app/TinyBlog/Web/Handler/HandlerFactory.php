@@ -1,6 +1,6 @@
 <?php
 
-namespace TinyBlog\Web\Handler\Base;
+namespace TinyBlog\Web\Handler;
 
 use Yen\Handler\HandlerFactory as YenHandlerFactory;
 

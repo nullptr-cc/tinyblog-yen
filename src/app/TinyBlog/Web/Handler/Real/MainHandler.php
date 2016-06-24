@@ -5,9 +5,9 @@ namespace TinyBlog\Web\Handler\Real;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\RequestData\ArticleListData;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 
-class MainHandler extends Handler
+class MainHandler extends BaseHandler
 {
     const ARTICLE_PER_PAGE = 3;
 

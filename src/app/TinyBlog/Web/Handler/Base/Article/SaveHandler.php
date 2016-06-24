@@ -1,6 +1,6 @@
 <?php
 
-namespace TinyBlog\Web\Handler\Base;
+namespace TinyBlog\Web\Handler\Base\Article;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
@@ -8,8 +8,9 @@ use TinyBlog\Web\WebRegistry;
 use TinyBlog\Web\RequestData\ArticleData;
 use TinyBlog\Article\EArticleNotExists;
 use TinyBlog\User\User;
+use TinyBlog\Web\Handler\BaseHandler;
 
-abstract class SaveArticleHandler extends Handler
+abstract class SaveHandler extends BaseHandler
 {
     abstract protected function saveArticle(ArticleData $data);
 

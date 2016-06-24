@@ -4,13 +4,13 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\User\User;
 use TinyBlog\OAuth\OAuthUser;
 use TinyBlog\OAuth\IProvider;
 use TinyBlog\OAuth\UserInfo;
 
-abstract class BackHandler extends Handler
+abstract class BackHandler extends BaseHandler
 {
     abstract protected function getProvider();
 

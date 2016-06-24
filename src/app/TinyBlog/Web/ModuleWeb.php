@@ -15,8 +15,8 @@ use Yen\Settings\Contract\ISettings;
 use Yen\Util\LazyContainer;
 
 use TinyBlog\Modules;
-use TinyBlog\Web\Handler\Base\HandlerFactory;
-use TinyBlog\Web\Handler\MissedHandler;
+use TinyBlog\Web\Handler\HandlerFactory;
+use TinyBlog\Web\Handler\NotFoundHandler;
 use TinyBlog\Web\Presenter\Base\TemplatePresenter;
 use TinyBlog\Web\Presenter\Base\ComponentRegistry;
 use TinyBlog\Web\Presenter\Base\PluginRegistry;
@@ -73,7 +73,7 @@ class ModuleWeb
         $class_resolver = new FormatClassResolver(__NAMESPACE__ . '\\Handler\\Real\\%sHandler');
         $factory = new HandlerFactory($class_resolver, $this->modules);
         $registry = new HandlerRegistry($factory);
-        $registry->setNotFoundHandler($factory->makeResolved(MissedHandler::class));
+        $registry->setNotFoundHandler($factory->makeResolved(NotFoundHandler::class));
 
         return $registry;
     }

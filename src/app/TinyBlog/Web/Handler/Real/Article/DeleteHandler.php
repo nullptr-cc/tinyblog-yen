@@ -4,11 +4,11 @@ namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\Base\Handler;
+use TinyBlog\Web\Handler\BaseHandler;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
 use TinyBlog\User\User;
 
-class DeleteHandler extends Handler
+class DeleteHandler extends BaseHandler
 {
     public function getAllowedMethods()
     {
