@@ -6,11 +6,11 @@ use TinyBlog\Article\ArticleRepo;
 use TinyBlog\Article\DataAccess\ArticleFetcher;
 use TinyBlog\Article\DataAccess\ArticleStore;
 use TinyBlog\Article\Article;
-use TinyBlog\Article\EArticleNotExists;
+use TinyBlog\Article\Exception\ArticleNotExists;
 
 class ArticleRepoTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPersistInsert()
+    public function testInsert()
     {
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
@@ -19,14 +19,14 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $store->insertArticle($article)->willReturn((object)['id' => 42]);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
-        $saved = $repo->persistArticle($article);
+        $saved = $repo->insertArticle($article);
 
         $this->assertNotSame($article, $saved);
         $this->assertEquals(42, $saved->getId());
         $this->assertEquals('test', $saved->getTitle());
     }
 
-    public function testPersistUpdate()
+    public function testUpdate()
     {
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);
@@ -35,7 +35,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
         $store->updateArticle($article)->willReturn(true);
 
         $repo = new ArticleRepo($store->reveal(), $fetcher->reveal());
-        $saved = $repo->persistArticle($article);
+        $saved = $repo->updateArticle($article);
 
         $this->assertSame($article, $saved);
     }
@@ -128,7 +128,7 @@ class ArticleRepoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetArticleByIdException()
     {
-        $this->expectException(EArticleNotExists::class);
+        $this->expectException(ArticleNotExists::class);
 
         $fetcher = $this->prophesize(ArticleFetcher::class);
         $store = $this->prophesize(ArticleStore::class);

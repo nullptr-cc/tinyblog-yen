@@ -36,14 +36,14 @@ class ArticleEditor
 
         $article = $this->fillArticle($article, $data);
 
-        return $this->repo->persistArticle($article);
+        return $this->repo->insertArticle($article);
     }
 
     public function updateArticle(Article $article, ArticleData $data)
     {
         $article = $this->fillArticle($article, $data);
 
-        return $this->repo->persistArticle($article);
+        return $this->repo->updateArticle($article);
     }
 
     protected function fillArticle(Article $article, ArticleData $data)

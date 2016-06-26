@@ -6,7 +6,7 @@ use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\RequestData\ArticleData;
-use TinyBlog\Article\EArticleNotExists;
+use TinyBlog\Article\Exception\ArticleNotExists;
 use TinyBlog\User\User;
 
 abstract class SaveHandler extends CommandHandler
@@ -32,7 +32,7 @@ abstract class SaveHandler extends CommandHandler
 
         try {
             $article = $this->saveArticle($data);
-        } catch (EArticleNotExists $ex) {
+        } catch (ArticleNotExists $ex) {
             return $this->getResponder()->badParams(['article_id' => 'Invalid article ID']);
         } catch (\Exception $ex) {
             return $this->getResponder()->error('Try again later: ' . $ex->getMessage());

@@ -2,28 +2,31 @@
 
 namespace TinyBlog\Article;
 
+use TinyBlog\Article\DataAccess\ArticleFetcher;
+use TinyBlog\Article\DataAccess\ArticleStore;
+use TinyBlog\Article\Exception\ArticleNotExists;
+
 class ArticleRepo
 {
-    protected $store;
-    protected $fetcher;
+    private $store;
+    private $fetcher;
 
-    public function __construct(
-        DataAccess\ArticleStore $store,
-        DataAccess\ArticleFetcher $fetcher
-    ) {
+    public function __construct(ArticleStore $store, ArticleFetcher $fetcher)
+    {
         $this->store = $store;
         $this->fetcher = $fetcher;
     }
 
-    public function persistArticle(Article $article)
+    public function insertArticle(Article $article)
     {
-        if ($article->getId() != 0) {
-            $this->store->updateArticle($article);
-            return $article;
-        };
-
         $result = $this->store->insertArticle($article);
         return $article->withId($result->id);
+    }
+
+    public function updateArticle(Article $article)
+    {
+        $this->store->updateArticle($article);
+        return $article;
     }
 
     public function deleteArticle(Article $article)
@@ -55,7 +58,7 @@ class ArticleRepo
         $articles = $this->fetcher->fetchById($article_id);
 
         if (!count($articles)) {
-            throw new EArticleNotExists($article_id);
+            throw new ArticleNotExists($article_id);
         };
 
         return $articles[0];

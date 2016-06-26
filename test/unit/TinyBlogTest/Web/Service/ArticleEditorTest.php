@@ -38,7 +38,7 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
             'created_at' => new DateTimeImmutable('@112233'),
             'author' => new User(['id' => 11])
         ]);
-        $repo->persistArticle(Argument::that($check_func))
+        $repo->insertArticle(Argument::that($check_func))
              ->willReturn($ret_article);
 
         $mdt = $this->prophesize(IMarkdownTransformer::class);
@@ -81,7 +81,7 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals(11, $article->getAuthor()->getId());
                 return true;
             };
-        $repo->persistArticle(Argument::that($check_func))
+        $repo->updateArticle(Argument::that($check_func))
              ->willReturnArgument(0);
 
         $mdt = $this->prophesize(IMarkdownTransformer::class);
