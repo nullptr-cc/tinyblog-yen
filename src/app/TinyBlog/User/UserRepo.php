@@ -2,11 +2,14 @@
 
 namespace TinyBlog\User;
 
+use TinyBlog\User\DataAccess\UserStore;
+use TinyBlog\User\Exception\UserNotExists;
+
 class UserRepo
 {
     private $store;
 
-    public function __construct(DataAccess\UserStore $store)
+    public function __construct(UserStore $store)
     {
         $this->store = $store;
     }
@@ -33,7 +36,7 @@ class UserRepo
         $result = $this->store->fetchById($id);
 
         if (!count($result)) {
-            throw new EUserNotExists();
+            throw new UserNotExists();
         };
 
         return $result[0];
@@ -44,7 +47,7 @@ class UserRepo
         $result = $this->store->fetchByUsername($username);
 
         if (!count($result)) {
-            throw new EUserNotExists();
+            throw new UserNotExists();
         };
 
         return $result[0];

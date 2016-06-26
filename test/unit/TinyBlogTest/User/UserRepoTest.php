@@ -5,7 +5,7 @@ namespace TinyBlogTest\User;
 use TinyBlog\User\UserRepo;
 use TinyBlog\User\DataAccess\UserStore;
 use TinyBlog\User\User;
-use TinyBlog\User\EUserNotExists;
+use TinyBlog\User\Exception\UserNotExists;
 
 class UserRepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class UserRepoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetByIdException()
     {
-        $this->expectException(EUserNotExists::class);
+        $this->expectException(UserNotExists::class);
 
         $store = $this->prophesize(UserStore::class);
 
@@ -86,7 +86,7 @@ class UserRepoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetByUsernameException()
     {
-        $this->expectException(EUserNotExists::class);
+        $this->expectException(UserNotExists::class);
 
         $store = $this->prophesize(UserStore::class);
 
