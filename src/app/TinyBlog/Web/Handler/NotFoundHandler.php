@@ -8,13 +8,13 @@ use TinyBlog\Web\Handler\BaseHandler;
 
 class NotFoundHandler extends BaseHandler
 {
-    public function getAllowedMethods()
+    protected function getResponder()
     {
-        return [IRequest::METHOD_GET];
+        return $this->modules->web()->getHtmlResponder();
     }
 
-    public function handle(IServerRequest $request)
+    protected function handleRequest(IServerRequest $request)
     {
-        return $this->modules->web()->getHtmlResponder()->notFound('page not found');
+        return $this->getResponder()->notFound('page not found');
     }
 }

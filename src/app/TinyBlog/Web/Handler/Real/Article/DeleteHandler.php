@@ -3,37 +3,27 @@
 namespace TinyBlog\Web\Handler\Real\Article;
 
 use Yen\Http\Contract\IServerRequest;
-use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\BaseHandler;
+use TinyBlog\Web\Handler\CommandHandler;
+use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\Web\RequestData\ArticleDeleteData;
 use TinyBlog\User\User;
 
-class DeleteHandler extends BaseHandler
+class DeleteHandler extends CommandHandler
 {
-    public function getAllowedMethods()
+    protected function checkAccess(IServerRequest $request)
     {
-        return [IRequest::METHOD_POST];
+        if ($this->getAuthUser()->getRole() < User::ROLE_AUTHOR) {
+            throw new AccessDenied('Not authorized');
+        };
     }
 
-    public function handle(IServerRequest $request)
+    protected function handleRequest(IServerRequest $request)
     {
-        $responder = $this->modules->web()->getJsonResponder();
-
-        $sentinel = $this->modules->web()->getSentinel();
-        if ($sentinel->shallNotPass($request)) {
-            return $responder->forbidden('Blocked');
-        };
-
-        $auth_user = $this->getAuthUser();
-        if ($auth_user->getRole() < User::ROLE_AUTHOR) {
-            return $responder->forbidden('Not authorized');
-        };
-
         $data = ArticleDeleteData::createFromRequest($request);
         $repo = $this->modules->article()->getArticleRepo();
 
         if (!$repo->articleExists($data->getArticleId())) {
-            return $responder->badParams(['article_id' => 'invalid article id']);
+            return $this->getResponder()->badParams(['article_id' => 'invalid article id']);
         };
 
         $article = $repo->getArticleById($data->getArticleId());
@@ -41,10 +31,10 @@ class DeleteHandler extends BaseHandler
         try {
             $repo->deleteArticle($article);
         } catch (\Exception $ex) {
-            return $responder->error('Something wrong: ' . $ex->getMessage());
+            return $this->getResponder()->error('Something wrong: ' . $ex->getMessage());
         };
 
-        return $responder->ok([
+        return $this->getResponder()->ok([
             'redirect_url' => $this->modules->web()->getUrlBuilder()->buildMainPageUrl()
         ]);
     }

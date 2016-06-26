@@ -4,24 +4,21 @@ namespace TinyBlog\Web\Handler\Real\Auth;
 
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
-use TinyBlog\Web\Handler\BaseHandler;
+use TinyBlog\Web\Handler\QueryHandler;
+use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\User\User;
 
-class EntranceHandler extends BaseHandler
+class EntranceHandler extends QueryHandler
 {
-    public function getAllowedMethods()
+    protected function checkAccess(IServerRequest $request)
     {
-        return [IRequest::METHOD_GET];
+        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+            throw new AccessDenied('Already signed in');
+        };
     }
 
-    public function handle(IServerRequest $request)
+    protected function handleRequest(IServerRequest $request)
     {
-        $responder = $this->modules->web()->getHtmlResponder();
-
-        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
-            return $responder->forbidden('Already signed in');
-        };
-
-        return $responder->ok('Page/Auth/Entrance');
+        return $this->getResponder()->ok('Page/Auth/Entrance');
     }
 }

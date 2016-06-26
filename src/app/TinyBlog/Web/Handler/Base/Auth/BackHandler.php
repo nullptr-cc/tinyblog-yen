@@ -4,44 +4,43 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 
 use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\BaseHandler;
+use TinyBlog\Web\Handler\Exception\AccessDenied;
+use TinyBlog\Web\Handler\QueryHandler;
 use TinyBlog\User\User;
 use TinyBlog\OAuth\OAuthUser;
 use TinyBlog\OAuth\IProvider;
 use TinyBlog\OAuth\UserInfo;
 
-abstract class BackHandler extends BaseHandler
+abstract class BackHandler extends QueryHandler
 {
     abstract protected function getProvider();
 
-    public function getAllowedMethods()
+    protected function checkAccess(IServerRequest $request)
     {
-        return [IRequest::METHOD_GET];
-    }
-
-    public function handle(IServerRequest $request)
-    {
-        $responder = $this->modules->web()->getHtmlResponder();
+        parent::checkAccess($request);
 
         if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
-            return $responder->forbidden('Already signed in');
+            throw new AccessDenied('Already signed in');
         };
+    }
 
+    protected function handleRequest(IServerRequest $request)
+    {
         $provider = $this->getProvider();
 
         $code = $provider->grabAuthCode($request);
         if ($code == '') {
-            return $responder->forbidden();
+            return $this->getResponder()->forbidden();
         };
 
         $token = $provider->getAccessToken($code);
         if ($token == '') {
-            return $responder->forbidden();
+            return $this->getResponder()->forbidden();
         };
 
         $info = $provider->getUserInfo($token);
         if ($info->identifier() == 0) {
-            return $responder->error();
+            return $this->getResponder()->error();
         };
 
         $repo = $this->modules->oauth()->getOAuthUserRepo();

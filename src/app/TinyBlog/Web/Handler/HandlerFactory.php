@@ -3,12 +3,14 @@
 namespace TinyBlog\Web\Handler;
 
 use Yen\Handler\HandlerFactory as YenHandlerFactory;
+use Yen\ClassResolver\Contract\IClassResolver;
+use TinyBlog\Modules;
 
 class HandlerFactory extends YenHandlerFactory
 {
     private $modules;
 
-    public function __construct($resolver, $modules)
+    public function __construct(IClassResolver $resolver, Modules $modules)
     {
         parent::__construct($resolver);
         $this->modules = $modules;

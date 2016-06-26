@@ -2,33 +2,28 @@
 
 namespace TinyBlog\Web\Handler\Base\Auth;
 
-use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
-use TinyBlog\Web\Handler\BaseHandler;
+use TinyBlog\Web\Handler\CommandHandler;
+use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\User\User;
 
-abstract class BeginHandler extends BaseHandler
+abstract class BeginHandler extends CommandHandler
 {
     abstract protected function getProvider();
 
-    public function getAllowedMethods()
+    protected function checkAccess(IServerRequest $request)
     {
-        return [IRequest::METHOD_POST];
-    }
-
-    public function handle(IServerRequest $request)
-    {
-        $responder = $this->modules->web()->getJsonResponder();
-
-        $sentinel = $this->modules->web()->getSentinel();
-        if ($sentinel->shallNotPass($request)) {
-            return $responder->forbidden('Blocked');
-        };
+        parent::checkAccess($request);
 
         if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
-            return $responder->forbidden('Already signed in');
+            throw new AccessDenied('Already signed in');
         };
+    }
 
-        return $responder->ok(['redirect_url' => $this->getProvider()->getAuthUrl()]);
+    protected function handleRequest(IServerRequest $request)
+    {
+        return $this->getResponder()->ok([
+            'redirect_url' => $this->getProvider()->getAuthUrl()
+        ]);
     }
 }
