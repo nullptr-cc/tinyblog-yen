@@ -6,6 +6,7 @@ $(function () {
     $('#auth_form').ajaxForm({
         dataType : 'json',
         beforeSubmit : function (arr, frm, opts) {
+            UIkit.notify.closeAll();
             elems.attr('disabled', true);
             button.html(button.data('wait'));
             var cg = frm.find('input[data-csrf-guard]');
