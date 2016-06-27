@@ -27,5 +27,4 @@ class ModuleComment
     {
         return new DataAccess\CommentFetcher($this->sql_driver);
     }
-
 }

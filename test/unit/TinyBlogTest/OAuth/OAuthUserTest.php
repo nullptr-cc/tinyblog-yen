@@ -98,5 +98,4 @@ class OAuthUserTest extends \PHPUnit_Framework_TestCase
 
         return $oa_user;
     }
-
 }

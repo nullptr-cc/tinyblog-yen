@@ -18,18 +18,6 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
     public function testCreateArticle()
     {
         $repo = $this->prophesize(ArticleRepo::class);
-        $check_func =
-            function (Article $article)
-            {
-                $this->assertNull($article->getId());
-                $this->assertEquals('Test title', $article->getTitle());
-                $this->assertEquals('Test body **foo** bar', $article->getBody()->getSource());
-                $this->assertEquals('Test body <b>foo</b> bar', $article->getBody()->getHtml());
-                $this->assertEquals(112233, $article->getCreatedAt()->getTimestamp());
-                $this->assertEquals('Test teaser', $article->getTeaser());
-                $this->assertEquals(11, $article->getAuthor()->getId());
-                return true;
-            };
         $ret_article = new Article([
             'id' => 42,
             'title' => 'Test title',
@@ -38,7 +26,7 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
             'created_at' => new DateTimeImmutable('@112233'),
             'author' => new User(['id' => 11])
         ]);
-        $repo->insertArticle(Argument::that($check_func))
+        $repo->insertArticle(Argument::that([$this, 'prpCheckNewArticle']))
              ->willReturn($ret_article);
 
         $mdt = $this->prophesize(IMarkdownTransformer::class);
@@ -66,22 +54,22 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(11, $result->getAuthor()->getId());
     }
 
+    public function prpCheckNewArticle(Article $article)
+    {
+        $this->assertNull($article->getId());
+        $this->assertEquals('Test title', $article->getTitle());
+        $this->assertEquals('Test body **foo** bar', $article->getBody()->getSource());
+        $this->assertEquals('Test body <b>foo</b> bar', $article->getBody()->getHtml());
+        $this->assertEquals(112233, $article->getCreatedAt()->getTimestamp());
+        $this->assertEquals('Test teaser', $article->getTeaser());
+        $this->assertEquals(11, $article->getAuthor()->getId());
+        return true;
+    }
+
     public function testUpdateArticle()
     {
         $repo = $this->prophesize(ArticleRepo::class);
-        $check_func =
-            function (Article $article)
-            {
-                $this->assertEquals(42, $article->getId());
-                $this->assertEquals('Test title [UPD]', $article->getTitle());
-                $this->assertEquals('Test body **foo** bar. UPD.', $article->getBody()->getSource());
-                $this->assertEquals('Test body <b>foo</b> bar. UPD.', $article->getBody()->getHtml());
-                $this->assertEquals(112233, $article->getCreatedAt()->getTimestamp());
-                $this->assertEquals('Test teaser (upd)', $article->getTeaser());
-                $this->assertEquals(11, $article->getAuthor()->getId());
-                return true;
-            };
-        $repo->updateArticle(Argument::that($check_func))
+        $repo->updateArticle(Argument::that([$this, 'prpCheckExistentArticle']))
              ->willReturnArgument(0);
 
         $mdt = $this->prophesize(IMarkdownTransformer::class);
@@ -113,5 +101,17 @@ class ArticleEditorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(112233, $result->getCreatedAt()->getTimestamp());
         $this->assertEquals('Test teaser (upd)', $result->getTeaser());
         $this->assertEquals(11, $result->getAuthor()->getId());
+    }
+
+    public function prpCheckExistentArticle(Article $article)
+    {
+        $this->assertEquals(42, $article->getId());
+        $this->assertEquals('Test title [UPD]', $article->getTitle());
+        $this->assertEquals('Test body **foo** bar. UPD.', $article->getBody()->getSource());
+        $this->assertEquals('Test body <b>foo</b> bar. UPD.', $article->getBody()->getHtml());
+        $this->assertEquals(112233, $article->getCreatedAt()->getTimestamp());
+        $this->assertEquals('Test teaser (upd)', $article->getTeaser());
+        $this->assertEquals(11, $article->getAuthor()->getId());
+        return true;
     }
 }

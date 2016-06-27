@@ -16,16 +16,6 @@ class CommentEditorTest extends \PHPUnit_Framework_TestCase
     public function testCreateComment()
     {
         $repo = $this->prophesize(CommentRepo::class);
-        $check_func =
-            function (Comment $comment)
-            {
-                $this->assertNull($comment->getId());
-                $this->assertEquals('Test comment body', $comment->getBody());
-                $this->assertEquals(11, $comment->getAuthor()->getId());
-                $this->assertEquals(42, $comment->getArticle()->getId());
-                $this->assertEquals(112233, $comment->getCreatedAt()->getTimestamp());
-                return true;
-            };
         $ret_comment = new Comment([
             'id' => 7891,
             'body' => 'Test comment body',
@@ -33,7 +23,7 @@ class CommentEditorTest extends \PHPUnit_Framework_TestCase
             'article' => new Article(['id' => 42]),
             'created_at' => new DateTimeImmutable('@112233')
         ]);
-        $repo->persistComment(Argument::that($check_func))
+        $repo->persistComment(Argument::that([$this, 'prpCheckComment']))
              ->willReturn($ret_comment);
 
         $data = new CommentData(42, 'Test comment body');
@@ -50,5 +40,15 @@ class CommentEditorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(11, $result->getAuthor()->getId());
         $this->assertEquals(42, $result->getArticle()->getId());
         $this->assertEquals(112233, $result->getCreatedAt()->getTimestamp());
+    }
+
+    public function prpCheckComment(Comment $comment)
+    {
+        $this->assertNull($comment->getId());
+        $this->assertEquals('Test comment body', $comment->getBody());
+        $this->assertEquals(11, $comment->getAuthor()->getId());
+        $this->assertEquals(42, $comment->getArticle()->getId());
+        $this->assertEquals(112233, $comment->getCreatedAt()->getTimestamp());
+        return true;
     }
 }
