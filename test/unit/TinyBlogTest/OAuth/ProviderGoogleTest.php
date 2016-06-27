@@ -4,6 +4,10 @@ namespace TinyBlogTest\OAuth;
 
 use TinyBlog\OAuth\ProviderGoogle;
 use TinyBlog\OAuth\UserInfo;
+use TinyBlog\OAuth\Exception\AuthCodeNotTaken;
+use TinyBlog\OAuth\Exception\AccessTokenNotTaken;
+use TinyBlog\OAuth\Exception\UserInfoNotTaken;
+
 use Yen\Http\Contract\IUri;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
@@ -33,8 +37,8 @@ class ProviderGoogleTest extends \PHPUnit_Framework_TestCase
         $settings->get('client_secret')->willReturn('test-client-secret');
         $settings->get('redirect_uri')->willReturn('test-redirect-uri');
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-        $auth_url = $github->getAuthUrl();
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $auth_url = $google->getAuthUrl();
 
         $eurl = 'https://accounts.google.com/o/oauth2/v2/auth?' .
                 'client_id=test-client-id&' .
@@ -50,14 +54,25 @@ class ProviderGoogleTest extends \PHPUnit_Framework_TestCase
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
         $request = $this->prophesize(IServerRequest::class);
-
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-
         $request->getQueryParams()->willReturn(['code' => 'test-auth-code']);
-        $this->assertEquals('test-auth-code', $github->grabAuthCode($request->reveal()));
 
-        $request->getQueryParams()->willReturn([]);
-        $this->assertEquals('', $github->grabAuthCode($request->reveal()));
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $code = $google->grabAuthCode($request->reveal());
+
+        $this->assertEquals('test-auth-code', $code);
+    }
+
+    public function testGrabAuthCodeException()
+    {
+        $this->expectException(AuthCodeNotTaken::class);
+
+        $settings = $this->prophesize(ISettings::class);
+        $http_client = $this->prophesize(IHttpClient::class);
+        $request = $this->prophesize(IServerRequest::class);
+        $request->getQueryParams()->willReturn();
+
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $code = $google->grabAuthCode($request->reveal());
     }
 
     public function testGetAccessToken()
@@ -67,48 +82,51 @@ class ProviderGoogleTest extends \PHPUnit_Framework_TestCase
         $settings->get('client_secret')->willReturn('test-client-secret');
         $settings->get('redirect_uri')->willReturn('test-redirect-uri');
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"access_token":"test-access-token"}');
+        $response = Response::ok()->withBody('{"access_token":"test-access-token"}');
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $token = $google->getAccessToken('test-auth-code');
 
-        $this->assertEquals('test-access-token', $github->getAccessToken('test-auth-code'));
+        $this->assertEquals('test-access-token', $token);
     }
 
     public function testGetAccessTokenFailRequest()
     {
+        $this->expectException(AccessTokenNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $settings->get('client_id')->willReturn('test-client-id');
         $settings->get('client_secret')->willReturn('test-client-secret');
         $settings->get('redirect_uri')->willReturn('test-redirect-uri');
 
-        $response = new Response(IResponse::STATUS_BAD_REQUEST, [], '');
+        $response = Response::badRequest();
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-
-        $this->assertEquals('', $github->getAccessToken('test-auth-code'));
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $token = $google->getAccessToken('test-auth-code');
     }
 
     public function testGetAccessTokenBrokenResponse()
     {
+        $this->expectException(AccessTokenNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $settings->get('client_id')->willReturn('test-client-id');
         $settings->get('client_secret')->willReturn('test-client-secret');
         $settings->get('redirect_uri')->willReturn('test-redirect-uri');
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"access_token":"test-');
+        $response = Response::ok()->withBody('{"access_token":"test-');
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-
-        $this->assertEquals('', $github->getAccessToken('test-auth-code'));
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $token = $google->getAccessToken('test-auth-code');
     }
 
     public function testGetUserInfo()
@@ -116,12 +134,12 @@ class ProviderGoogleTest extends \PHPUnit_Framework_TestCase
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"id":123,"name":"FooBar"}');
+        $response = Response::ok()->withBody('{"id":123,"name":"FooBar"}');
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-        $user_info = $github->getUserInfo('test-access-token');
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $user_info = $google->getUserInfo('test-access-token');
 
         $this->assertInstanceOf(UserInfo::class, $user_info);
         $this->assertEquals(123, $user_info->identifier());
@@ -131,38 +149,32 @@ class ProviderGoogleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserInfoFailResponse()
     {
+        $this->expectException(UserInfoNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_BAD_REQUEST, [], '');
+        $response = Response::badRequest();
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-        $user_info = $github->getUserInfo('test-access-token');
-
-        $this->assertInstanceOf(UserInfo::class, $user_info);
-        $this->assertEquals(0, $user_info->identifier());
-        $this->assertEquals('', $user_info->name());
-        $this->assertEquals('', $user_info->email());
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $user_info = $google->getUserInfo('test-access-token');
     }
 
     public function testGetUserInfoBrokenResponse()
     {
+        $this->expectException(UserInfoNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"id":123,"name":"FooB');
+        $response = Response::ok()->withBody('{"id":123,"name":"FooB');
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
-        $github = new ProviderGoogle($settings->reveal(), $http_client->reveal());
-        $user_info = $github->getUserInfo('test-access-token');
-
-        $this->assertInstanceOf(UserInfo::class, $user_info);
-        $this->assertEquals(0, $user_info->identifier());
-        $this->assertEquals('', $user_info->name());
-        $this->assertEquals('', $user_info->email());
+        $google = new ProviderGoogle($settings->reveal(), $http_client->reveal());
+        $user_info = $google->getUserInfo('test-access-token');
     }
 
     public function prpCheckTokenRequest(IRequest $request)

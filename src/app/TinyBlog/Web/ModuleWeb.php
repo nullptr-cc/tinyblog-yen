@@ -222,4 +222,17 @@ class ModuleWeb
     {
         return new Responder\RedirectResponder();
     }
+
+    public function getOAuthUserCreator()
+    {
+        return $this->lazy('oauth_user_creator', [$this, 'makeOAuthUserCreator']);
+    }
+
+    private function makeOAuthUserCreator()
+    {
+        return new Service\OAuthUserCreator(
+            $this->modules->user()->getUserRepo(),
+            $this->modules->oauth()->getOAuthUserRepo()
+        );
+    }
 }

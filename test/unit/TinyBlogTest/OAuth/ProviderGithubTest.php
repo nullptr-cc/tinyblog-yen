@@ -4,6 +4,10 @@ namespace TinyBlogTest\OAuth;
 
 use TinyBlog\OAuth\ProviderGithub;
 use TinyBlog\OAuth\UserInfo;
+use TinyBlog\OAuth\Exception\AuthCodeNotTaken;
+use TinyBlog\OAuth\Exception\AccessTokenNotTaken;
+use TinyBlog\OAuth\Exception\UserInfoNotTaken;
+
 use Yen\Http\Contract\IUri;
 use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
@@ -47,14 +51,25 @@ class ProviderGithubTest extends \PHPUnit_Framework_TestCase
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
         $request = $this->prophesize(IServerRequest::class);
+        $request->getQueryParams()->willReturn(['code' => 'test-auth-code']);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
+        $code = $github->grabAuthCode($request->reveal());
 
-        $request->getQueryParams()->willReturn(['code' => 'test-auth-code']);
-        $this->assertEquals('test-auth-code', $github->grabAuthCode($request->reveal()));
+        $this->assertEquals('test-auth-code', $code);
+    }
 
+    public function testGrabAuthCodeException()
+    {
+        $this->expectException(AuthCodeNotTaken::class);
+
+        $settings = $this->prophesize(ISettings::class);
+        $http_client = $this->prophesize(IHttpClient::class);
+        $request = $this->prophesize(IServerRequest::class);
         $request->getQueryParams()->willReturn([]);
-        $this->assertEquals('', $github->grabAuthCode($request->reveal()));
+
+        $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
+        $code = $github->grabAuthCode($request->reveal());
     }
 
     public function testGetAccessToken()
@@ -63,46 +78,49 @@ class ProviderGithubTest extends \PHPUnit_Framework_TestCase
         $settings->get('client_id')->willReturn('test-client-id');
         $settings->get('client_secret')->willReturn('test-client-secret');
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"access_token":"test-access-token"}');
+        $response = Response::ok()->withBody('{"access_token":"test-access-token"}');
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
+        $token = $github->getAccessToken('test-auth-code');
 
-        $this->assertEquals('test-access-token', $github->getAccessToken('test-auth-code'));
+        $this->assertEquals('test-access-token', $token);
     }
 
     public function testGetAccessTokenFailResponse()
     {
+        $this->expectException(AccessTokenNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $settings->get('client_id')->willReturn('test-client-id');
         $settings->get('client_secret')->willReturn('test-client-secret');
 
-        $response = new Response(IResponse::STATUS_BAD_REQUEST, [], '');
+        $response = Response::badRequest();
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
-
-        $this->assertEquals('', $github->getAccessToken('test-auth-code'));
+        $token = $github->getAccessToken('test-auth-code');
     }
 
     public function testGetAccessTokenBrokenResponse()
     {
+        $this->expectException(AccessTokenNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $settings->get('client_id')->willReturn('test-client-id');
         $settings->get('client_secret')->willReturn('test-client-secret');
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"access_token":"test-');
+        $response = Response::ok()->withBody('{"access_token":"test-');
         $http_client = $this->prophesize(IHttpClient::class);
         $http_client->send(Argument::that([$this, 'prpCheckTokenRequest']))
                     ->willReturn($response);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
-
-        $this->assertEquals('', $github->getAccessToken('test-auth-code'));
+        $token = $github->getAccessToken('test-auth-code');
     }
 
     public function testGetUserInfo()
@@ -110,7 +128,7 @@ class ProviderGithubTest extends \PHPUnit_Framework_TestCase
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"id":123,"name":"FooBar","email":"foo@bar.net"}');
+        $response = Response::ok()->withBody('{"id":123,"name":"FooBar","email":"foo@bar.net"}');
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
@@ -125,38 +143,32 @@ class ProviderGithubTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserInfoFailResponse()
     {
+        $this->expectException(UserInfoNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_BAD_REQUEST, [], '');
+        $response = Response::badRequest();
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
         $user_info = $github->getUserInfo('test-access-token');
-
-        $this->assertInstanceOf(UserInfo::class, $user_info);
-        $this->assertEquals(0, $user_info->identifier());
-        $this->assertEquals('', $user_info->name());
-        $this->assertEquals('', $user_info->email());
     }
 
     public function testGetUserInfoBrokenResponse()
     {
+        $this->expectException(UserInfoNotTaken::class);
+
         $settings = $this->prophesize(ISettings::class);
         $http_client = $this->prophesize(IHttpClient::class);
 
-        $response = new Response(IResponse::STATUS_OK, [], '{"id":123,"name":"FooB');
+        $response = Response::ok()->withBody('{"id":123,"name":"FooB');
         $http_client->send(Argument::that([$this, 'prpCheckUserInfoRequest']))
                     ->willReturn($response);
 
         $github = new ProviderGithub($settings->reveal(), $http_client->reveal());
         $user_info = $github->getUserInfo('test-access-token');
-
-        $this->assertInstanceOf(UserInfo::class, $user_info);
-        $this->assertEquals(0, $user_info->identifier());
-        $this->assertEquals('', $user_info->name());
-        $this->assertEquals('', $user_info->email());
     }
 
     public function prpCheckTokenRequest(IRequest $request)

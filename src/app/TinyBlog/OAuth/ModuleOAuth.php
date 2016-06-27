@@ -2,9 +2,10 @@
 
 namespace TinyBlog\OAuth;
 
+use Yada\Driver as SqlDriver;
 use Yen\Settings\Contract\ISettings;
-use Yada\Driver;
 use TinyBlog\Tools\ModuleTools;
+use TinyBlog\OAuth\DataAccess\OAuthUserStore;
 
 class ModuleOAuth
 {
@@ -13,7 +14,7 @@ class ModuleOAuth
     private $tools;
 
     public function __construct(
-        Driver $sql_driver,
+        SqlDriver $sql_driver,
         ISettings $settings,
         ModuleTools $tools
     ) {
@@ -45,6 +46,6 @@ class ModuleOAuth
 
     private function getOAuthUserStore()
     {
-        return new DataAccess\OAuthUserStore($this->sql_driver);
+        return new OAuthUserStore($this->sql_driver);
     }
 }

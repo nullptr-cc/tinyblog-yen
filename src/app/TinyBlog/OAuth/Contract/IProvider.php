@@ -1,6 +1,6 @@
 <?php
 
-namespace TinyBlog\OAuth;
+namespace TinyBlog\OAuth\Contract;
 
 use Yen\Http\Contract\IServerRequest;
 

@@ -10,6 +10,11 @@ use Yen\Http\Request;
 use Yen\HttpClient\Contract\IHttpClient;
 use Yen\Settings\Contract\ISettings;
 
+use TinyBlog\OAuth\Contract\IProvider;
+use TinyBlog\OAuth\Exception\AuthCodeNotTaken;
+use TinyBlog\OAuth\Exception\AccessTokenNotTaken;
+use TinyBlog\OAuth\Exception\UserInfoNotTaken;
+
 class ProviderGoogle implements IProvider
 {
     const ID = 2;
@@ -59,7 +64,12 @@ class ProviderGoogle implements IProvider
     public function grabAuthCode(IServerRequest $request)
     {
         $query = $request->getQueryParams();
-        return isset($query['code']) ? $query['code'] : '';
+
+        if (!isset($query['code'])) {
+            throw new AuthCodeNotTaken();
+        }
+
+        return $query['code'];
     }
 
     /**
@@ -83,13 +93,13 @@ class ProviderGoogle implements IProvider
         $response = $this->http_client->send($request);
 
         if ($response->getStatusCode() != IResponse::STATUS_OK) {
-            return '';
+            throw new AccessTokenNotTaken();
         };
 
         $json = json_decode($response->getBody());
 
         if ($json == null) {
-            return '';
+            throw new AccessTokenNotTaken();
         };
 
         return $json->access_token;
@@ -107,13 +117,13 @@ class ProviderGoogle implements IProvider
         $response = $this->http_client->send($request);
 
         if ($response->getStatusCode() != IResponse::STATUS_OK) {
-            return new UserInfo(0, '', '');
+            throw new UserInfoNotTaken();
         };
 
         $json = json_decode($response->getBody());
 
         if ($json == null) {
-            return new UserInfo(0, '', '');
+            throw new UserInfoNotTaken();
         };
 
         return new UserInfo($json->id, $json->name, '');

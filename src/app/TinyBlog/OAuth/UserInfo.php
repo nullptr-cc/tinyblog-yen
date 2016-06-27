@@ -4,9 +4,9 @@ namespace TinyBlog\OAuth;
 
 class UserInfo
 {
-    protected $identifier;
-    protected $name;
-    protected $email;
+    private $identifier;
+    private $name;
+    private $email;
 
     public function __construct($identifier, $name, $email)
     {
