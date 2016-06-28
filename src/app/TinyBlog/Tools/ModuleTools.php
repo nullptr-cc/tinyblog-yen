@@ -25,4 +25,9 @@ class ModuleTools
             'timeout' => 4
         ]);
     }
+
+    public function getChrono()
+    {
+        return new Chrono();
+    }
 }

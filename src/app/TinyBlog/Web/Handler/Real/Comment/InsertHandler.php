@@ -10,7 +10,6 @@ use TinyBlog\Web\RequestData\CommentData;
 use TinyBlog\User\User;
 use TinyBlog\Article\Exception\ArticleNotExists;
 use TinyBlog\Comment\Comment;
-use DateTimeImmutable;
 
 class InsertHandler extends CommandHandler
 {
@@ -53,9 +52,10 @@ class InsertHandler extends CommandHandler
     {
         $article_repo = $this->modules->article()->getArticleRepo();
         $comment_editor = $this->modules->web()->getCommentEditor();
-        
+        $chrono = $this->modules->tools()->getChrono();
+
         $article = $article_repo->getArticleById($data->getArticleId());
-        $comment = $comment_editor->createComment($data, $article, $this->getAuthUser(), new DateTimeImmutable());
+        $comment = $comment_editor->createComment($data, $article, $this->getAuthUser(), $chrono->now());
 
         return $comment;
     }
