@@ -2,9 +2,9 @@
 
 namespace TinyBlog\Web\Handler\Real\Auth\Github;
 
-use TinyBlog\Web\Handler\Base\Auth\BackHandler as BaseBackHandler;
+use TinyBlog\Web\Handler\Base\Auth\OAuthBackHandler;
 
-class BackHandler extends BaseBackHandler
+class BackHandler extends OAuthBackHandler
 {
     protected function getProvider()
     {

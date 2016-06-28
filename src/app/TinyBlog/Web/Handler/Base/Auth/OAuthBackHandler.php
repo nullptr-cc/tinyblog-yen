@@ -2,19 +2,16 @@
 
 namespace TinyBlog\Web\Handler\Base\Auth;
 
-use Yen\Http\Contract\IRequest;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\Web\Handler\QueryHandler;
 use TinyBlog\User\User;
-use TinyBlog\OAuth\OAuthUser;
-use TinyBlog\OAuth\IProvider;
 use TinyBlog\OAuth\UserInfo;
 use TinyBlog\OAuth\Exception\AuthCodeNotTaken;
 use TinyBlog\OAuth\Exception\AccessTokenNotTaken;
 use TinyBlog\OAuth\Exception\UserInfoNotTaken;
 
-abstract class BackHandler extends QueryHandler
+abstract class OAuthBackHandler extends QueryHandler
 {
     abstract protected function getProvider();
 

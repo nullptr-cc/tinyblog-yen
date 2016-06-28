@@ -7,7 +7,7 @@ use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\User\User;
 
-abstract class BeginHandler extends CommandHandler
+abstract class OAuthBeginHandler extends CommandHandler
 {
     abstract protected function getProvider();
 
