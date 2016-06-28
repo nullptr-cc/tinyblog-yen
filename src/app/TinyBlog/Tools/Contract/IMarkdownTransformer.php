@@ -1,6 +1,6 @@
 <?php
 
-namespace TinyBlog\Tools;
+namespace TinyBlog\Tools\Contract;
 
 interface IMarkdownTransformer
 {

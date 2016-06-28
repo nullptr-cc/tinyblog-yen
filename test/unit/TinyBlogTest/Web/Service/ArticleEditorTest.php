@@ -5,7 +5,7 @@ namespace TinyBlogTest\Web\Service;
 use TinyBlog\Article\Article;
 use TinyBlog\Article\ArticleRepo;
 use TinyBlog\Article\Content;
-use TinyBlog\Tools\IMarkdownTransformer;
+use TinyBlog\Tools\Contract\IMarkdownTransformer;
 use TinyBlog\Tools\TeaserMaker;
 use TinyBlog\User\User;
 use TinyBlog\Web\RequestData\ArticleData;

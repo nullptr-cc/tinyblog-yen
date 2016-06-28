@@ -3,7 +3,7 @@
 namespace TinyBlogTest\Tools;
 
 use TinyBlog\Tools\ModuleTools;
-use TinyBlog\Tools\IMarkdownTransformer;
+use TinyBlog\Tools\Contract\IMarkdownTransformer;
 use TinyBlog\Tools\TeaserMaker;
 use Yen\HttpClient\Contract\IHttpClient;
 

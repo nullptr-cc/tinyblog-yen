@@ -7,7 +7,7 @@ use TinyBlog\Article\Content;
 use TinyBlog\Article\ArticleRepo;
 use TinyBlog\User\User;
 use TinyBlog\Web\RequestData\ArticleData;
-use TinyBlog\Tools\IMarkdownTransformer;
+use TinyBlog\Tools\Contract\IMarkdownTransformer;
 use TinyBlog\Tools\TeaserMaker;
 use DateTimeInterface as IDateTime;
 

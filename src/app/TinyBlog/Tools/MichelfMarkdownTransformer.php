@@ -2,6 +2,7 @@
 
 namespace TinyBlog\Tools;
 
+use TinyBlog\Tools\Contract\IMarkdownTransformer;
 use Michelf\MarkdownInterface;
 
 class MichelfMarkdownTransformer implements IMarkdownTransformer
