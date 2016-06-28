@@ -5,8 +5,12 @@ namespace TinyBlog\Web\Handler\Real\Comment;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
+use TinyBlog\Web\Handler\Exception\InvalidData;
 use TinyBlog\Web\RequestData\CommentData;
 use TinyBlog\User\User;
+use TinyBlog\Article\Exception\ArticleNotExists;
+use TinyBlog\Comment\Comment;
+use DateTimeImmutable;
 
 class InsertHandler extends CommandHandler
 {
@@ -19,30 +23,48 @@ class InsertHandler extends CommandHandler
 
     protected function handleRequest(IServerRequest $request)
     {
+        try {
+            $data = $this->takeAndValidateData($request);
+            $comment = $this->saveComment($data);
+        } catch (InvalidData $ex) {
+            return $this->getResponder()->badParams($ex->getErrors());
+        } catch (ArticleNotExists $ex) {
+            return $this->getResponder()->badParams(['article_id' => 'Invalid article id']);
+        };
+
+        $html = $this->renderComment($comment);
+        return $this->getResponder()->ok(['comment_html' => $html]);
+    }
+
+    private function takeAndValidateData(IServerRequest $request)
+    {
         $data = CommentData::createFromRequest($request);
         $validator = $this->modules->web()->getCommentDataValidator();
 
         $vr = $validator->validate($data);
         if (!$vr->valid()) {
-            return $this->getResponder()->badParams($vr->getErrors());
+            throw new InvalidData($vr->getErrors());
         };
 
-        $afinder = $this->modules->article()->getArticleRepo();
-        $ceditor = $this->modules->web()->getCommentEditor();
+        return $data;
+    }
 
-        if (!$afinder->articleExists($data->getArticleId())) {
-            return $this->getResponder()->badParams(['article_id' => 'Invalid article id']);
-        };
+    private function saveComment(CommentData $data)
+    {
+        $article_repo = $this->modules->article()->getArticleRepo();
+        $comment_editor = $this->modules->web()->getCommentEditor();
+        
+        $article = $article_repo->getArticleById($data->getArticleId());
+        $comment = $comment_editor->createComment($data, $article, $this->getAuthUser(), new DateTimeImmutable());
 
-        $article = $afinder->getArticleById($data->getArticleId());
+        return $comment;
+    }
 
-        try {
-            $comment = $ceditor->createComment($data, $article, $this->getAuthUser(), new \DateTimeImmutable());
-        } catch (\Exception $ex) {
-            return $this->getResponder()->error('Something wrong: ' . $ex->getMessage());
-        };
+    private function renderComment(Comment $comment)
+    {
+        $renderer = $this->modules->web()->getHtmlRenderer();
+        $doc = $renderer->render('component/article/_comment', ['comment' => $comment]);
 
-        $html = $this->modules->web()->getHtmlRenderer()->render('component/article/_comment', ['comment' => $comment]);
-        return $this->getResponder()->ok(['comment_html' => $html->content()]);
+        return $doc->content();
     }
 }

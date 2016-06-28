@@ -30,6 +30,7 @@ $(function () {
     $('#article_form').ajaxForm({
         dataType : 'json',
         beforeSubmit : function (arr, frm, opts) {
+            UIkit.notify.closeAll();
             frm.find('input, button').attr('disabled', true);
             var cg = frm.find('input[data-csrf-guard]');
             opts.headers['x-' + cg.attr('name')] = cg.val();
