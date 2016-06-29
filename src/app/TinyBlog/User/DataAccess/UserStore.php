@@ -5,6 +5,7 @@ namespace TinyBlog\User\DataAccess;
 use Yada\Driver as SqlDriver;
 use Yada\Statement as SqlStatement;
 use TinyBlog\User\User;
+use TinyBlog\User\UserRole;
 
 class UserStore
 {
@@ -92,7 +93,7 @@ class UserStore
              ->bindString(':username', $user->getUsername())
              ->bindString(':nickname', $user->getNickname())
              ->bindString(':password', $user->getPassword())
-             ->bindString(':role', $user->getRole())
+             ->bindString(':role', $user->getRole()->value())
              ->execute();
 
         return (object)[
@@ -113,6 +114,8 @@ class UserStore
 
     protected function makeUser(array $raw)
     {
+        $raw['role'] = UserRole::fromValue($raw['role']);
+        
         return new User($raw);
     }
 }

@@ -5,7 +5,6 @@ namespace TinyBlog\Web\Handler\Base\Auth;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
-use TinyBlog\User\User;
 
 abstract class OAuthBeginHandler extends CommandHandler
 {
@@ -15,7 +14,7 @@ abstract class OAuthBeginHandler extends CommandHandler
     {
         parent::checkAccess($request);
 
-        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+        if ($this->getAuthUser()->isNotGuest()) {
             throw new AccessDenied('Already signed in');
         };
     }

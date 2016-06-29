@@ -19,7 +19,7 @@ abstract class OAuthBackHandler extends QueryHandler
     {
         parent::checkAccess($request);
 
-        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+        if ($this->getAuthUser()->isNotGuest()) {
             throw new AccessDenied('Already signed in');
         };
     }

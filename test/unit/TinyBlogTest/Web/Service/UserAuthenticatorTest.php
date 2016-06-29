@@ -124,6 +124,6 @@ class UserAuthenticatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(User::class, $result);
         $this->assertNull($result->getId());
         $this->assertEquals('', $result->getUsername());
-        $this->assertEquals(User::ROLE_NONE, $result->getRole());
+        $this->assertTrue($result->isGuest());
     }
 }

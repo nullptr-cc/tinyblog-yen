@@ -3,7 +3,6 @@
 namespace TinyBlog\Web\Presenter\Component;
 
 use TinyBlog\Web\Presenter\Base\BaseComponent;
-use TinyBlog\User\User;
 
 class MainMenu extends BaseComponent
 {
@@ -11,7 +10,7 @@ class MainMenu extends BaseComponent
     {
         $in_out = $this->component('MainMenu/InOut');
         $create_item = '';
-        if ($this->authenticator->getAuthUser()->getRole() >= User::ROLE_AUTHOR) {
+        if ($this->authenticator->getAuthUser()->isAuthor()) {
             $create_item = $this->component('MainMenu/Create')->present();
         };
 

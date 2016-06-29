@@ -8,8 +8,8 @@ use TinyBlog\User\User;
 
 class UserAuthenticator
 {
-    protected $session;
-    protected $user_srv;
+    private $session;
+    private $user_srv;
 
     public function __construct(ISession $session, UserRepo $user_srv)
     {
@@ -53,7 +53,7 @@ class UserAuthenticator
         $user_id = $this->session->getStorage('auth')->get('user_id', 0);
 
         if (!$this->user_srv->userExists($user_id)) {
-            return new User(['role' => User::ROLE_NONE]);
+            return User::guest();
         };
 
         return $this->user_srv->getById($user_id);

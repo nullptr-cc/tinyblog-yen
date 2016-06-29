@@ -3,6 +3,7 @@
 namespace TinyBlogTest\User;
 
 use TinyBlog\User\User;
+use TinyBlog\User\UserRole;
 
 /**
  * @small
@@ -17,7 +18,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($user->getNickname());
         $this->assertNull($user->getUsername());
         $this->assertNull($user->getPassword());
-        $this->assertEquals(User::ROLE_NONE, $user->getRole());
+        $this->assertEquals(UserRole::GUEST, $user->getRole()->value());
     }
 
     public function testGetters()
@@ -27,7 +28,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
         $this->assertEquals(42, $user->id());
@@ -38,8 +39,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->password());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->role());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->role()->value());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 
     public function testWithId()
@@ -49,7 +50,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
         $clone = $user->withId(999);
@@ -58,13 +59,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Foo Bar', $clone->getNickname());
         $this->assertEquals('foobar', $clone->getUsername());
         $this->assertEquals('pas$WoRd', $clone->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $clone->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $clone->getRole()->value());
 
         $this->assertEquals(42, $user->getId());
         $this->assertEquals('Foo Bar', $user->getNickname());
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 
     public function testWithNickname()
@@ -74,7 +75,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
         $clone = $user->withNickname('John Doe');
@@ -83,13 +84,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('John Doe', $clone->getNickname());
         $this->assertEquals('foobar', $clone->getUsername());
         $this->assertEquals('pas$WoRd', $clone->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $clone->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $clone->getRole()->value());
 
         $this->assertEquals(42, $user->getId());
         $this->assertEquals('Foo Bar', $user->getNickname());
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 
     public function testWithUsername()
@@ -99,7 +100,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
         $clone = $user->withUsername('johndoe');
@@ -108,13 +109,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Foo Bar', $clone->getNickname());
         $this->assertEquals('johndoe', $clone->getUsername());
         $this->assertEquals('pas$WoRd', $clone->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $clone->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $clone->getRole()->value());
 
         $this->assertEquals(42, $user->getId());
         $this->assertEquals('Foo Bar', $user->getNickname());
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 
     public function testWithPassword()
@@ -124,7 +125,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
         $clone = $user->withPassword('$ecRet');
@@ -133,13 +134,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Foo Bar', $clone->getNickname());
         $this->assertEquals('foobar', $clone->getUsername());
         $this->assertEquals('$ecRet', $clone->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $clone->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $clone->getRole()->value());
 
         $this->assertEquals(42, $user->getId());
         $this->assertEquals('Foo Bar', $user->getNickname());
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 
     public function testWithRole()
@@ -149,21 +150,21 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
             'password' => 'pas$WoRd',
-            'role' => User::ROLE_CONSUMER
+            'role' => UserRole::CONSUMER()
         ]);
 
-        $clone = $user->withRole(User::ROLE_AUTHOR);
+        $clone = $user->withRole(UserRole::AUTHOR());
 
         $this->assertEquals(42, $clone->getId());
         $this->assertEquals('Foo Bar', $clone->getNickname());
         $this->assertEquals('foobar', $clone->getUsername());
         $this->assertEquals('pas$WoRd', $clone->getPassword());
-        $this->assertEquals(User::ROLE_AUTHOR, $clone->getRole());
+        $this->assertEquals(UserRole::AUTHOR, $clone->getRole()->value());
 
         $this->assertEquals(42, $user->getId());
         $this->assertEquals('Foo Bar', $user->getNickname());
         $this->assertEquals('foobar', $user->getUsername());
         $this->assertEquals('pas$WoRd', $user->getPassword());
-        $this->assertEquals(User::ROLE_CONSUMER, $user->getRole());
+        $this->assertEquals(UserRole::CONSUMER, $user->getRole()->value());
     }
 }

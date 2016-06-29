@@ -5,7 +5,6 @@ namespace TinyBlog\Web\Handler\Real\Auth;
 use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
-use TinyBlog\User\User;
 
 class SignoutHandler extends CommandHandler
 {
@@ -13,7 +12,7 @@ class SignoutHandler extends CommandHandler
     {
         parent::checkAccess($request);
 
-        if ($this->getAuthUser()->getRole() == User::ROLE_NONE) {
+        if ($this->getAuthUser()->isGuest()) {
             throw new AccessDenied('Not signed in');
         };
     }

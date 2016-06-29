@@ -7,7 +7,6 @@ use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\Web\Handler\Exception\InvalidData;
 use TinyBlog\Web\RequestData\CommentData;
-use TinyBlog\User\User;
 use TinyBlog\Article\Exception\ArticleNotExists;
 use TinyBlog\Comment\Comment;
 
@@ -15,7 +14,7 @@ class InsertHandler extends CommandHandler
 {
     protected function checkAccess(IServerRequest $request)
     {
-        if ($this->getAuthUser()->getRole() < User::ROLE_CONSUMER) {
+        if ($this->getAuthUser()->isGuest()) {
             throw new AccessDenied('Not authorized');
         };
     }

@@ -3,7 +3,6 @@
 namespace TinyBlog\Web\Presenter\Component\MainMenu;
 
 use TinyBlog\Web\Presenter\Base\BaseComponent;
-use TinyBlog\User\User;
 
 class InOut extends BaseComponent
 {
@@ -11,7 +10,7 @@ class InOut extends BaseComponent
     {
         $user = $this->authenticator->getAuthUser();
 
-        if ($user->getRole() == User::ROLE_NONE) {
+        if ($user->isGuest()) {
             return $this->renderer->render('component/main_menu/in_out/in', []);
         };
 

@@ -22,11 +22,10 @@ class OAuthUserCreator
 
     public function createUser(IProvider $provider, UserInfo $info)
     {
-        $user = new User([
+        $user = User::consumer([
             'username' => sprintf('oauth:%d:%s', $provider->getId(), $info->identifier()),
             'nickname' => $info->name(),
-            'password' => 'xxx',
-            'role'     => User::ROLE_CONSUMER
+            'password' => 'xxx'
         ]);
 
         $user = $this->user_repo->persist($user);

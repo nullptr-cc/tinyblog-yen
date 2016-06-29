@@ -27,7 +27,7 @@ class ArticleTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($article->getAuthor()->getNickname());
         $this->assertNull($article->getAuthor()->getUsername());
         $this->assertNull($article->getAuthor()->getPassword());
-        $this->assertEquals(User::ROLE_NONE, $article->getAuthor()->getRole());
+        $this->assertTrue($article->getAuthor()->isGuest());
     }
 
     public function testGetters()

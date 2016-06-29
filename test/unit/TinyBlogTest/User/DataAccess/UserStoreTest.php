@@ -51,11 +51,10 @@ class UserStoreTest extends \TestExt\DatabaseTestCase
 
     public function testInsert()
     {
-        $user = new User([
+        $user = User::consumer([
             'nickname' => 'Foo Bar',
             'username' => 'foobar',
-            'password' => 'xxx$yyy',
-            'role' => User::ROLE_CONSUMER
+            'password' => 'xxx$yyy'
         ]);
         $store = new UserStore($this->getSqlDriver());
         $result = $store->insert($user);

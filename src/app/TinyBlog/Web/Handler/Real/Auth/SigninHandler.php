@@ -6,7 +6,6 @@ use Yen\Http\Contract\IServerRequest;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
 use TinyBlog\Web\RequestData\SignInData;
-use TinyBlog\User\User;
 
 class SigninHandler extends CommandHandler
 {
@@ -14,7 +13,7 @@ class SigninHandler extends CommandHandler
     {
         parent::checkAccess($request);
 
-        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+        if ($this->getAuthUser()->isNotGuest()) {
             throw new AccessDenied('Already signed in');
         };
     }

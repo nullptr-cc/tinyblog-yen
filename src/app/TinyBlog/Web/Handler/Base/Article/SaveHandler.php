@@ -8,13 +8,12 @@ use TinyBlog\Web\Handler\Exception\InvalidData;
 use TinyBlog\Web\Handler\CommandHandler;
 use TinyBlog\Web\RequestData\ArticleData;
 use TinyBlog\Article\Exception\ArticleNotExists;
-use TinyBlog\User\User;
 
 abstract class SaveHandler extends CommandHandler
 {
     protected function checkAccess(IServerRequest $request)
     {
-        if ($this->getAuthUser()->getRole() < User::ROLE_AUTHOR) {
+        if ($this->getAuthUser()->isNotAuthor()) {
             throw new AccessDenied('Not authorized');
         };
     }

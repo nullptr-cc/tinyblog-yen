@@ -6,13 +6,12 @@ use Yen\Http\Contract\IServerRequest;
 use Yen\Http\Contract\IRequest;
 use TinyBlog\Web\Handler\QueryHandler;
 use TinyBlog\Web\Handler\Exception\AccessDenied;
-use TinyBlog\User\User;
 
 class EntranceHandler extends QueryHandler
 {
     protected function checkAccess(IServerRequest $request)
     {
-        if ($this->getAuthUser()->getRole() > User::ROLE_NONE) {
+        if ($this->getAuthUser()->isNotGuest()) {
             throw new AccessDenied('Already signed in');
         };
     }

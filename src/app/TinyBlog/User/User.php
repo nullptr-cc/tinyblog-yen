@@ -4,15 +4,11 @@ namespace TinyBlog\User;
 
 class User
 {
-    const ROLE_NONE     = 0;
-    const ROLE_CONSUMER = 1;
-    const ROLE_AUTHOR   = 2;
-
-    protected $id;
-    protected $nickname;
-    protected $username;
-    protected $password;
-    protected $role;
+    private $id;
+    private $nickname;
+    private $username;
+    private $password;
+    private $role;
 
     public function __construct(array $init_data = [])
     {
@@ -35,31 +31,31 @@ class User
         if (isset($init_data['role'])) {
             $this->setRole($init_data['role']);
         } else {
-            $this->setRole(self::ROLE_NONE);
+            $this->setRole(UserRole::guest());
         };
     }
 
-    protected function setId($id)
+    private function setId($id)
     {
         $this->id = intval($id);
     }
 
-    protected function setNickname($nickname)
+    private function setNickname($nickname)
     {
         $this->nickname = $nickname;
     }
 
-    protected function setUsername($username)
+    private function setUsername($username)
     {
         $this->username = $username;
     }
 
-    protected function setPassword($password)
+    private function setPassword($password)
     {
         $this->password = $password;
     }
 
-    protected function setRole($role)
+    private function setRole(UserRole $role)
     {
         $this->role = $role;
     }
@@ -117,7 +113,7 @@ class User
         return $clone;
     }
 
-    public function withRole($role)
+    public function withRole(UserRole $role)
     {
         $clone = clone $this;
         $clone->setRole($role);
@@ -147,5 +143,48 @@ class User
     public function role()
     {
         return $this->role;
+    }
+
+    public function isGuest()
+    {
+        return $this->role->value() == UserRole::GUEST;
+    }
+
+    public function isConsumer()
+    {
+        return $this->role->value() == UserRole::CONSUMER;
+    }
+
+    public function isAuthor()
+    {
+        return $this->role->value() == UserRole::AUTHOR;
+    }
+
+    public function isNotGuest()
+    {
+        return !$this->isGuest();
+    }
+
+    public function isNotAuthor()
+    {
+        return !$this->isAuthor();
+    }
+
+    public static function guest(array $init_data = [])
+    {
+        $init_data['role'] = UserRole::GUEST();
+        return new self($init_data);
+    }
+
+    public static function consumer(array $init_data = [])
+    {
+        $init_data['role'] = UserRole::CONSUMER();
+        return new self($init_data);
+    }
+
+    public static function author(array $init_data = [])
+    {
+        $init_data['role'] = UserRole::AUTHOR();
+        return new self($init_data);
     }
 }
