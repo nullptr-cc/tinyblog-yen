@@ -213,7 +213,7 @@ class ModuleWeb
 
     private function makeJsonResponder()
     {
-        return new Responder\JsonResponder(
+        return new Responder\DataResponder(
             $this->getJsonRenderer()
         );
     }
