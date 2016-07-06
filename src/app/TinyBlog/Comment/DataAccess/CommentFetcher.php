@@ -11,11 +11,11 @@ use DateTimeImmutable;
 
 class CommentFetcher
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(SqlDriver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     public function fetchByArticle(Article $article, array $order = [])
@@ -30,7 +30,7 @@ class CommentFetcher
         );
 
         $stmt =
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindInt(':article_id', $article->getId())
                  ->execute();
@@ -38,7 +38,7 @@ class CommentFetcher
         return $this->makeResult($stmt, $article);
     }
 
-    protected function makeResult(SqlStatement $stmt, Article $article)
+    private function makeResult(SqlStatement $stmt, Article $article)
     {
         $comments = [];
 
@@ -49,7 +49,7 @@ class CommentFetcher
         return $comments;
     }
 
-    protected function makeCommentWithAuthor(array $row)
+    private function makeCommentWithAuthor(array $row)
     {
         $author = new User([
             'id' => $row['author_id'],
@@ -66,7 +66,7 @@ class CommentFetcher
         return $comment;
     }
 
-    protected function makeOrderString(array $order)
+    private function makeOrderString(array $order)
     {
         if (!count($order)) {
             return '';

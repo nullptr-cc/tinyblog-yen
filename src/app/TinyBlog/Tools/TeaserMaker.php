@@ -3,7 +3,6 @@
 namespace TinyBlog\Tools;
 
 use DOMDocument;
-use DOMXPath;
 
 class TeaserMaker
 {

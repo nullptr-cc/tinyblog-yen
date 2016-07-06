@@ -11,11 +11,11 @@ use DateTimeImmutable;
 
 class ArticleFetcher
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(SqlDriver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     /**
@@ -30,7 +30,7 @@ class ArticleFetcher
             'where a.id = :id';
 
         $stmt =
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindInt(':id', $id)
                  ->execute();
@@ -43,7 +43,7 @@ class ArticleFetcher
      */
     public function countAll()
     {
-        return $this->driver->query('select count(*) from article')->fetchColumn();
+        return $this->sql_driver->query('select count(*) from article')->fetchColumn();
     }
 
     /**
@@ -54,7 +54,7 @@ class ArticleFetcher
         $sql = 'select count(*) from article where id = :id';
 
         return
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindInt(':id', $id)
                  ->execute()
@@ -75,12 +75,12 @@ class ArticleFetcher
             $this->makeLimitString($skip, $limit)
         );
 
-        $stmt = $this->driver->query($sql);
+        $stmt = $this->sql_driver->query($sql);
 
         return $this->makeResult($stmt);
     }
 
-    protected function makeOrderString(array $order)
+    private function makeOrderString(array $order)
     {
         if (!count($order)) {
             return '';
@@ -94,7 +94,7 @@ class ArticleFetcher
         return 'order by ' . implode(', ', $str);
     }
 
-    protected function makeLimitString($skip = null, $limit = null)
+    private function makeLimitString($skip = null, $limit = null)
     {
         if ($limit == null && $skip == null) {
             return '';
@@ -106,7 +106,7 @@ class ArticleFetcher
     /**
      * @return Article[]
      */
-    protected function makeResult(SqlStatement $stmt)
+    private function makeResult(SqlStatement $stmt)
     {
         $articles = [];
 
@@ -117,7 +117,7 @@ class ArticleFetcher
         return $articles;
     }
 
-    protected function makeArticleWithUser(array $data)
+    private function makeArticleWithUser(array $data)
     {
         $author = new User([
             'id' => $data['author_id'],

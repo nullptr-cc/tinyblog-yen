@@ -2,13 +2,14 @@
 
 namespace TinyBlog\User;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use TinyBlog\User\DataAccess\UserStore;
 
 class ModuleUser
 {
     private $sql_driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(SqlDriver $sql_driver)
     {
         $this->sql_driver = $sql_driver;
     }
@@ -20,6 +21,6 @@ class ModuleUser
 
     private function getUserStore()
     {
-        return new DataAccess\UserStore($this->sql_driver);
+        return new UserStore($this->sql_driver);
     }
 }

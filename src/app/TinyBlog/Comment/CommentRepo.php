@@ -3,16 +3,16 @@
 namespace TinyBlog\Comment;
 
 use TinyBlog\Article\Article;
+use TinyBlog\Comment\DataAccess\CommentFetcher;
+use TinyBlog\Comment\DataAccess\CommentStore;
 
 class CommentRepo
 {
-    protected $store;
-    protected $fetcher;
+    private $store;
+    private $fetcher;
 
-    public function __construct(
-        DataAccess\CommentStore $store,
-        DataAccess\CommentFetcher $fetcher
-    ) {
+    public function __construct(CommentStore $store, CommentFetcher $fetcher)
+    {
         $this->store = $store;
         $this->fetcher = $fetcher;
     }

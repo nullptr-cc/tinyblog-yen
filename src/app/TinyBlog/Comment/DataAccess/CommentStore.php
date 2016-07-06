@@ -2,16 +2,16 @@
 
 namespace TinyBlog\Comment\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
 use TinyBlog\Comment\Comment;
 
 class CommentStore
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     /**
@@ -24,7 +24,7 @@ class CommentStore
                values
                (:article_id, :author_id, :body, :created_at)';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindInt(':article_id', $comment->getArticle()->getId())
              ->bindInt(':author_id', $comment->getAuthor()->getId())
@@ -33,7 +33,7 @@ class CommentStore
              ->execute();
 
         return (object)[
-            'id' => $this->driver->lastInsertId()
+            'id' => $this->sql_driver->lastInsertId()
         ];
     }
 
@@ -41,7 +41,7 @@ class CommentStore
     {
         $sql = 'delete from `comment` where id = :id';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindInt(':id', $comment->getId())
              ->execute();

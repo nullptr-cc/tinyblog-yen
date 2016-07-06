@@ -9,11 +9,11 @@ use TinyBlog\User\UserRole;
 
 class UserStore
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(SqlDriver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     /**
@@ -24,7 +24,7 @@ class UserStore
         $sql = 'select count(*) from `user` where id = :id';
 
         return
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindInt(':id', $id)
                  ->execute()
@@ -39,7 +39,7 @@ class UserStore
         $sql = 'select count(*) from `user` where username = :username';
 
         return
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindString(':username', $username)
                  ->execute()
@@ -54,7 +54,7 @@ class UserStore
         $sql = 'select * from user where id = :id';
 
         $stmt =
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindInt(':id', $id)
                  ->execute();
@@ -70,7 +70,7 @@ class UserStore
         $sql = 'select * from user where username = :username';
 
         $stmt =
-            $this->driver
+            $this->sql_driver
                  ->prepare($sql)
                  ->bindString(':username', $username)
                  ->execute();
@@ -88,7 +88,7 @@ class UserStore
                 values
                 (:username, :nickname, :password, :role)';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindString(':username', $user->getUsername())
              ->bindString(':nickname', $user->getNickname())
@@ -97,11 +97,11 @@ class UserStore
              ->execute();
 
         return (object)[
-            'id' => $this->driver->lastInsertId()
+            'id' => $this->sql_driver->lastInsertId()
         ];
     }
 
-    protected function makeResult(SqlStatement $stmt)
+    private function makeResult(SqlStatement $stmt)
     {
         $result = [];
 
@@ -112,10 +112,10 @@ class UserStore
         return $result;
     }
 
-    protected function makeUser(array $raw)
+    private function makeUser(array $raw)
     {
         $raw['role'] = UserRole::fromValue($raw['role']);
-        
+
         return new User($raw);
     }
 }

@@ -2,16 +2,16 @@
 
 namespace TinyBlog\Article\DataAccess;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
 use TinyBlog\Article\Article;
 
 class ArticleStore
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(Driver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     public function insertArticle(Article $article)
@@ -22,7 +22,7 @@ class ArticleStore
              values
              (:author_id, :title, :body_raw, :body_html, :teaser, :created_at)';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindInt(':author_id', $article->getAuthor()->getId())
              ->bindString(':title', $article->getTitle())
@@ -33,7 +33,7 @@ class ArticleStore
              ->execute();
 
         return (object)[
-            'id' => $this->driver->lastInsertId()
+            'id' => $this->sql_driver->lastInsertId()
         ];
     }
 
@@ -47,7 +47,7 @@ class ArticleStore
                  `teaser` = :teaser
              where id = :id';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindString(':title', $article->getTitle())
              ->bindString(':body_raw', $article->getBody()->getSource())
@@ -63,7 +63,7 @@ class ArticleStore
     {
         $sql = 'delete from `article` where `id` = :id';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindInt(':id', $article->getId())
              ->execute();

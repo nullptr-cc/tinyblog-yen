@@ -2,11 +2,13 @@
 
 namespace TinyBlog\OAuth;
 
+use TinyBlog\OAuth\DataAccess\OAuthUserStore;
+
 class OAuthUserRepo
 {
-    protected $store;
+    private $store;
 
-    public function __construct(DataAccess\OAuthUserStore $store)
+    public function __construct(OAuthUserStore $store)
     {
         $this->store = $store;
     }

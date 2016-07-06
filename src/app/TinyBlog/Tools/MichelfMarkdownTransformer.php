@@ -7,7 +7,7 @@ use Michelf\MarkdownInterface;
 
 class MichelfMarkdownTransformer implements IMarkdownTransformer
 {
-    protected $lib;
+    private $lib;
 
     public function __construct(MarkdownInterface $lib)
     {

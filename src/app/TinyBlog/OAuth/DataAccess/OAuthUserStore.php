@@ -9,11 +9,11 @@ use TinyBlog\User\User;
 
 class OAuthUserStore
 {
-    protected $driver;
+    private $sql_driver;
 
-    public function __construct(SqlDriver $driver)
+    public function __construct(SqlDriver $sql_driver)
     {
-        $this->driver = $driver;
+        $this->sql_driver = $sql_driver;
     }
 
     public function insert(OAuthUser $oauser)
@@ -22,7 +22,7 @@ class OAuthUserStore
                 values
                 (:user_id, :provider, :identifier)';
 
-        $this->driver
+        $this->sql_driver
              ->prepare($sql)
              ->bindInt(':user_id', $oauser->getUser()->getId())
              ->bindInt(':provider', $oauser->getProvider())
@@ -42,7 +42,7 @@ class OAuthUserStore
             $this->makeWhere($cond)
         );
 
-        $stmt = $this->driver->prepare($sql);
+        $stmt = $this->sql_driver->prepare($sql);
         foreach ($cond as $key => $value) {
             switch ($key) {
                 case 'user_id':
@@ -60,7 +60,7 @@ class OAuthUserStore
         return $this->makeResult($stmt->execute());
     }
 
-    protected function makeWhere(array $cond)
+    private function makeWhere(array $cond)
     {
         if (!count($cond)) {
             return 1;
@@ -75,7 +75,7 @@ class OAuthUserStore
         return implode(' and ', $where);
     }
 
-    protected function makeResult(SqlStatement $stmt)
+    private function makeResult(SqlStatement $stmt)
     {
         $result = [];
 

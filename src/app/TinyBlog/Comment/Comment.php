@@ -8,11 +8,11 @@ use DateTimeInterface;
 
 class Comment
 {
-    protected $id;
-    protected $article;
-    protected $author;
-    protected $body;
-    protected $created_at;
+    private $id;
+    private $article;
+    private $author;
+    private $body;
+    private $created_at;
 
     public function __construct(array $init_data = [])
     {
@@ -43,35 +43,35 @@ class Comment
         };
     }
 
-    protected function setId($id)
+    private function setId($id)
     {
         $this->id = $id;
 
         return $this;
     }
 
-    protected function setArticle(Article $article)
+    private function setArticle(Article $article)
     {
         $this->article = $article;
 
         return $this;
     }
 
-    protected function setAuthor(User $author)
+    private function setAuthor(User $author)
     {
         $this->author = $author;
 
         return $this;
     }
 
-    protected function setBody($body)
+    private function setBody($body)
     {
         $this->body = $body;
 
         return $this;
     }
 
-    protected function setCreatedAt(DateTimeInterface $created_at)
+    private function setCreatedAt(DateTimeInterface $created_at)
     {
         $this->created_at = $created_at;
 

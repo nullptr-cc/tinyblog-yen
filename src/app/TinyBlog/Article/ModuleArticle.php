@@ -2,13 +2,15 @@
 
 namespace TinyBlog\Article;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use TinyBlog\Article\DataAccess\ArticleFetcher;
+use TinyBlog\Article\DataAccess\ArticleStore;
 
 class ModuleArticle
 {
     private $sql_driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(SqlDriver $sql_driver)
     {
         $this->sql_driver = $sql_driver;
     }
@@ -20,11 +22,11 @@ class ModuleArticle
 
     private function getArticleStore()
     {
-        return new DataAccess\ArticleStore($this->sql_driver);
+        return new ArticleStore($this->sql_driver);
     }
 
     private function getArticleFetcher()
     {
-        return new DataAccess\ArticleFetcher($this->sql_driver);
+        return new ArticleFetcher($this->sql_driver);
     }
 }

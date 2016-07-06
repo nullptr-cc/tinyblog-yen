@@ -4,8 +4,8 @@ namespace TinyBlog\Validation;
 
 class ValidationResult
 {
-    protected $valid;
-    protected $errors;
+    private $valid;
+    private $errors;
 
     public function __construct($valid, array $errors = [])
     {

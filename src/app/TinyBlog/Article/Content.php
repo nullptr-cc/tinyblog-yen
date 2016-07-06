@@ -4,8 +4,8 @@ namespace TinyBlog\Article;
 
 class Content
 {
-    protected $source;
-    protected $html;
+    private $source;
+    private $html;
 
     public function __construct($source = '', $html = '')
     {

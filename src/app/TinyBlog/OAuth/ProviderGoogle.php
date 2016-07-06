@@ -23,10 +23,10 @@ class ProviderGoogle implements IProvider
     const TOKEN_URL    = 'https://www.googleapis.com/oauth2/v4/token';
     const USER_API_URL = 'https://www.googleapis.com/userinfo/v2/me';
 
-    protected $client_id;
-    protected $client_secret;
-    protected $redirect_uri;
-    protected $http_client;
+    private $client_id;
+    private $client_secret;
+    private $redirect_uri;
+    private $http_client;
 
     public function __construct(ISettings $settings, IHttpClient $http_client)
     {

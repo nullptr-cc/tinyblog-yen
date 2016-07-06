@@ -62,12 +62,12 @@ class WebApplication
                 ->withBody($body);
     }
 
-    protected function createModules(ISettings $settings)
+    private function createModules(ISettings $settings)
     {
         return new Modules($settings);
     }
 
-    protected function createServerRequest()
+    private function createServerRequest()
     {
         return ServerRequest::createFromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
     }

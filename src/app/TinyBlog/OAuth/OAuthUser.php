@@ -6,9 +6,9 @@ use TinyBlog\User\User;
 
 class OAuthUser
 {
-    protected $user;
-    protected $provider;
-    protected $identifier;
+    private $user;
+    private $provider;
+    private $identifier;
 
     public function __construct(array $init_data = [])
     {
@@ -25,19 +25,19 @@ class OAuthUser
         };
     }
 
-    protected function setUser(User $user)
+    private function setUser(User $user)
     {
         $this->user = $user;
         return $this;
     }
 
-    protected function setProvider($provider)
+    private function setProvider($provider)
     {
         $this->provider = $provider;
         return $this;
     }
 
-    protected function setIdentifier($identifier)
+    private function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
         return $this;

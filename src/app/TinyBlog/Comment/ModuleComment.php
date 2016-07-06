@@ -2,13 +2,15 @@
 
 namespace TinyBlog\Comment;
 
-use Yada\Driver;
+use Yada\Driver as SqlDriver;
+use TinyBlog\Comment\DataAccess\CommentFetcher;
+use TinyBlog\Comment\DataAccess\CommentStore;
 
 class ModuleComment
 {
-    protected $sql_driver;
+    private $sql_driver;
 
-    public function __construct(Driver $sql_driver)
+    public function __construct(SqlDriver $sql_driver)
     {
         $this->sql_driver = $sql_driver;
     }
@@ -20,11 +22,11 @@ class ModuleComment
 
     private function getCommentStore()
     {
-        return new DataAccess\CommentStore($this->sql_driver);
+        return new CommentStore($this->sql_driver);
     }
 
     private function getCommentFetcher()
     {
-        return new DataAccess\CommentFetcher($this->sql_driver);
+        return new CommentFetcher($this->sql_driver);
     }
 }
