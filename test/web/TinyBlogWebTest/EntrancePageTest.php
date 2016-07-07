@@ -16,20 +16,17 @@ class EntrancePageTest extends \TestExt\WebTestCase
 
         $wd->get($this->website_url->withPath('/auth/entrance'));
         $form = $wd->findElement(By::id('auth_form'));
-        $inputs = $form->findElements(By::tagName('input'));
-        $buttons = $form->findElements(By::tagName('button'));
+        $inp_username = $form->findElement(By::name('username'));
+        $inp_password = $form->findElement(By::name('password'));
+        $btn_submit = $form->findElement(By::cssSelector('button[type="submit"]'));
 
         $this->assertTrue($form->isDisplayed());
-
-        $this->assertCount(2, $inputs);
-        foreach ($inputs as $input) {
-            $this->assertTrue($input->isDisplayed());
-            $this->assertTrue($input->isEnabled());
-        };
-
-        $this->assertCount(1, $buttons);
-        $this->assertTrue($buttons[0]->isDisplayed());
-        $this->assertTrue($buttons[0]->isEnabled());
+        $this->assertTrue($inp_username->isDisplayed());
+        $this->assertTrue($inp_username->isEnabled());
+        $this->assertTrue($inp_password->isDisplayed());
+        $this->assertTrue($inp_password->isEnabled());
+        $this->assertTrue($btn_submit->isDisplayed());
+        $this->assertTrue($btn_submit->isEnabled());
     }
 
     public function testAuthSuccess()
